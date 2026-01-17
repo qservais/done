@@ -185,7 +185,6 @@ export function LeadWizard() {
                       placeholder="Ex: Architecte, Coach, Restaurant..."
                       value={data.activity}
                       onChange={(e) => updateData("activity", e.target.value)}
-                      autoFocus
                    />
                  </label>
                  <label className="block">

@@ -1,0 +1,291 @@
+TU ES REPLIT AI. OBJECTIF : Générer une V1 complète (design + code) du site vitrine de notre studio de création de sites web “premium accessibles”.
+Le site doit être MOBILE-FIRST (priorité absolue), ultra fluide, avec des animations propres (subtiles, pas gadget), et une expérience UX/UI moderne.
+
+========================
+1) CONTEXTE & OBJECTIFS
+========================
+Nous lançons un service de création de sites web à prix cassés, avec abonnement obligatoire pour l’hébergement + maintenance.
+Positionnement : studio créatif premium, ton transparent + légèrement décalé mais pro.
+Cible : indépendants / TPE / PME (Belgique, France, Luxembourg), langue principale FR.
+Promesse : “un site propre, rapide, au goût du jour, sans se ruiner”.
+
+But principal : générer des leads qualifiés via un formulaire multi-étapes (et CTA clairs).
+But secondaire : crédibilité (réalisations), transparence (packs + abonnement + règles), rassurance (process + FAQ).
+
+Inspirations graphiques/animations (ne pas copier, s’en inspirer pour l’esprit) :
+- minimalisme + animations clean
+- typographie forte, sections très structurées, menu overlay, micro-interactions, marqueurs 01/02/03
+- scrollytelling léger, reveal au scroll, sliders/projects
+
+========================
+2) STACK TECHNIQUE
+========================
+Choisir un stack robuste et rapide sur Replit :
+- Next.js (App Router) + TypeScript
+- TailwindCSS
+- Animations : Framer Motion (reveal, transitions, menu overlay). Optionnel : simple “smooth scroll” léger.
+- Pas de dépendances lourdes inutiles.
+- SEO de base : metadata par page, OpenGraph.
+- Accessibilité : aria, focus states, contraste OK, “prefers-reduced-motion” respecté.
+
+Architecture :
+- Site principalement en 1 page (landing longue) + pages légères : /realisations, /mentions, /privacy (ou sections ancrées si tu préfères).
+- Multilingue : prévoir la structure technique pour 2 langues max (FR + EN) MAIS afficher par défaut FR. (Un toggle FR/EN en haut.) Contenus EN peuvent être simples placeholders.
+
+========================
+3) VARIABLES / PLACEHOLDERS À METTRE EN CONFIG
+========================
+Créer un fichier /src/config/brand.ts avec :
+- STUDIO_NAME = "NomDuStudio" (placeholder)
+- TAGLINE = "Sites premium. Prix accessibles."
+- CONTACT_EMAIL = "hello@nomdustudio.com"
+- PHONE = "+32 ..."
+- WHATSAPP = "+32 ..."
+- INSTAGRAM_URL = "https://instagram.com/..."
+- CALENDAR_URL = "https://calendly.com/..." (ou lien Google Agenda)
+- SERVICE_AREA = "Belgique • France • Luxembourg"
+- BASE_LANGUAGE = "fr"
+- LANGUAGES = ["fr","en"] (max 2)
+- FAIR_USE_EUR = 5 (seuil infra)
+- SLA_HOURS = 48
+
+IMPORTANT : Tout doit fonctionner même si les infos sont placeholders.
+
+========================
+4) DESIGN SYSTEM (MOBILE FIRST)
+========================
+Style : premium minimal, beaucoup d’air, contrastes nets, typographie marquée.
+- Couleurs : noir/blanc + 1 accent (ex: lime / electric blue / warm orange). Définir dans tailwind config.
+- Typo : une sans moderne (ex Inter) + une serif optionnelle pour les titres (ou uniquement sans si plus simple). 
+- Grille : sections claires, spacing généreux, max-width.
+- Composants : boutons (primary/secondary/ghost), pills, cards, accordéon FAQ, badge “À partir de”, stepper pour formulaire.
+- Micro-interactions : hover, press, reveal.
+
+Mobile-first :
+- Chaque section doit être parfaite sur mobile (375px) avant desktop.
+- Menu : hamburger -> overlay plein écran très clean (avec animations) + CTA visible.
+- CTA sticky sur mobile (petit bandeau “Demander mon site” qui apparaît après scroll, discret).
+
+Animation rules (important performance) :
+- Animations subtiles, pas de gros effets sur mobile.
+- Désactiver ou réduire si prefers-reduced-motion.
+- Révélations au scroll : fade + translate léger.
+- Un “marquee” (texte qui défile) très léger (CSS) possible.
+- Parallax : uniquement si léger et performant, sinon simuler par transform minimal.
+
+========================
+5) STRUCTURE DU SITE (HOME = landing longue)
+========================
+Header (sticky, minimal) :
+- Logo/nom (placeholder)
+- Liens : Offres, Réalisations, Process, FAQ, Contact
+- Toggle langue FR/EN
+- CTA bouton : “Demander mon site”
+
+Hero (section 1) :
+- Gros titre impactant (transparent + léger humour) :
+  Ex : “Un site qui charge vite. Et qui coûte moins qu’un logo.”
+- Sous-texte : promesse + zone + délai “V1 en 24–48h possible”
+- 2 CTA :
+  - Primary : “Demander mon site”
+  - Secondary : “Voir les packs”
+- Mini preuves : “Mobile-first”, “Design premium”, “Abonnement tout inclus”
+- Petite ligne transparente : “À partir de 199€ + abonnement (obligatoire).”
+
+Section “Pourquoi” (section 2) :
+- 3 cards :
+  1) “Pas de blabla” (structure claire, conversion)
+  2) “Rapide” (24–48h)
+  3) “Propre” (perf + SEO de base)
+- Ton un peu décalé mais pro (1 phrase max par card).
+
+Section “Packs” (section 3) — ULTRA claire
+Afficher 3 packs (TVAC), avec “à partir de” et inclus/exclus.
+Pack 1 — Landing Express — 199€ :
+- 1 page, jusqu’à 6 sections, design premium mobile-first
+- CTA (tel/mail/itinéraire)
+- 1 langue (FR)
+- 1 round de corrections inclus
+Pack 2 — Vitrine Contact — 299€ :
+- 1 page, jusqu’à 8 sections
+- Formulaire simple + anti-spam + email
+- 1 langue (FR)
+- 1 round
+Pack 3 — Multi-page Premium — 499€ :
+- jusqu’à 5 pages
+- formulaire contact
+- animations légères
+- SEO de base (structure)
+- 1 round
+
+Ajouter une ligne sous les packs :
+- “Multilingue inclus : max 2 langues.”
+- “Au-delà / fonctionnalités avancées : devis.”
+
+Section “Abonnement obligatoire” (section 4) :
+Afficher 2 plans :
+- 24,99€/mois : domaine + hébergement + maintenance + 2 tickets/mois
+- 19,99€/mois : si domaine déjà géré ailleurs + maintenance + 2 tickets/mois
+Inclure une box “Fair use” :
+- Hébergement inclus pour usage normal vitrine
+- Coût infra couvert jusqu’à 5€/mois de variable
+- Au-delà : optimisation ou facturation complémentaire après validation
+
+Section “Tickets & maintenance, en français simple” (section 5) :
+Définition officielle :
+- 2 tickets/mois
+- 1 ticket = lot de changements
+- max 30 minutes
+- 1 aller-retour inclus
+- tickets cumulables 1 mois max
+Inclus : textes/images, styles, liens/CTA, champs de formulaire simples, ajustements d’animations existantes, petites évolutions si <30 min
+Hors scope (devis) : nouvelles fonctionnalités (paiement, espace membre, API, automations, newsletter complexe), refonte majeure, blog (rédaction/publication), tracking avancé (GA4/Meta/datalayer complet), nouveaux templates lourds.
+
+Section “Process” (section 6) :
+Étapes numérotées 01/02/03/04, très lisibles :
+01 Qualification (form multi-étapes)
+02 Contenu (logo, photos, infos)
+03 V1 en 24–48h
+04 1 round de corrections + mise en ligne
+Ajouter une note transparente : “On va vite, mais on va propre.”
+
+Section “Réalisations” (section 7) :
+Grille de cartes + hover, et sur mobile slider horizontal (snap) :
+- https://maisonvagabonde.be/
+- https://aste-esthetique.be/
+- https://dissocle.space/
+- http://mouvup.be/
+- https://examtir.be/
+- https://valorisermonentreprise.be/
+- https://vegetalpetale.be/
+- https://www.sosplantes.be/
+Mettre “Voir le site” + tag (vitrine / landing / etc. si tu veux placeholders).
+
+Section “Options à partir de” (section 8) :
+Affichage simple, menu pricing (pas trop long) :
+- Formulaire multi-étapes : à partir de 149€
+- Page supplémentaire (si template existant) : à partir de 99€
+- Langue supplémentaire (>2) : à partir de 99€
+- SEO avancé : à partir de 249€
+- Tracking / datalayer propre : à partir de 199€
+- Newsletter setup simple : à partir de 149€
+- E-commerce Shopify : à partir de 749€
++ microcopy : “Si c’est clair et simple, on fixe un prix. Si c’est du sur-mesure, on chiffre.”
+
+Section FAQ (section 9) :
+Accordéon avec questions courtes, réponses claires :
+- “Pourquoi l’abonnement est obligatoire ?”
+- “C’est quoi un ticket ?”
+- “Que se passe-t-il si je veux une nouvelle fonctionnalité ?”
+- “Vous répondez en combien de temps ?” (48h)
+- “Multilingue inclus ?” (2 langues max)
+- “Le SEO est inclus ?” (base oui, avancé option)
+- “Vous faites l’email pro ?” (selon domaine / besoin, sinon option)
+- “Et si mon site a beaucoup de trafic ?” (fair-use 5€)
+- “Puis-je résilier ?” (réponse simple, sans mettre trop en avant)
+
+Section Contact + CTA final (section 10) :
+- Titre : “On le fait ?”
+- 2 CTA :
+  1) “Remplir le formulaire (2 min)”
+  2) “Réserver un appel”
+- Contacts : email, tel, WhatsApp, zone.
+- Petit clin d’œil pro : “Promis, on répond. Même le dimanche. (Mais on dort parfois.)”
+
+Footer :
+- liens : Mentions, Politique de confidentialité, Cookies (placeholder)
+- réseaux
+- tagline
+
+========================
+6) FORMULAIRE MULTI-ÉTAPES (LEAD QUALIFICATION) — CRITIQUE
+========================
+Créer un composant <LeadWizard /> avec étapes, barre de progression, validation, UX nickel sur mobile.
+
+Étapes proposées (avec logique):
+Étape 1 — Ton activité :
+- type de business (liste + “autre”)
+- zone (BE/FR/LU, ville)
+Étape 2 — Ton besoin :
+- type de site : landing / vitrine / multi-pages
+- nombre de pages (1 / 2-5 / 6+)
+- besoin formulaire : oui/non + “simple” ou “multi-étapes”
+Étape 3 — Langues :
+- 1 ou 2 langues (max 2)
+- langues (FR/EN/NL autre) mais bloquer à 2
+Étape 4 — Domaine :
+- j’ai déjà un domaine / non
+- je veux une adresse mail pro : oui/non
+Étape 5 — Timing & budget :
+- délai : 24-48h / 1 semaine / flexible
+- budget création : 199 / 299 / 499 / 749+ (si e-commerce)
+Étape 6 — Coordonnées :
+- nom, email, tel
+- message libre
+
+Sortie du wizard :
+- afficher un écran “Résumé” avec :
+  - pack recommandé (auto) :
+    - si 1 page sans form -> 199
+    - si 1 page avec form -> 299
+    - si 2-5 pages -> 499
+    - si e-commerce -> 749+
+  - abonnement recommandé :
+    - domaine à gérer -> 24,99
+    - sinon -> 19,99
+  - rappel : 2 tickets/mois, fair-use 5€
+- CTA : “Envoyer ma demande” + “Réserver un appel”
+
+Envoi :
+- Créer une route API /api/lead
+- Pour V1 : stocker les leads dans un fichier JSON local ou une DB simple (optionnel).
+- BONUS : prévoir l’envoi par email via SMTP (nodemailer) avec variables d’environnement (ne pas hardcoder).
+- Afficher message de succès + fallback si échec.
+
+========================
+7) UX DETAILS IMPORTANT
+========================
+- Sticky header qui se compacte au scroll (sur mobile aussi)
+- Sections ancrées : scroll fluide vers ancres
+- Boutons CTA présents très tôt + répétés
+- États de focus et validation form propres
+- Images : utiliser des placeholders (blur) + lazy loading
+- Performance : pas d’animations lourdes, pas de vidéos en autoplay sur mobile
+
+========================
+8) PAGES LÉGALES (placeholders)
+========================
+Créer /mentions, /privacy, /cookies avec contenu placeholder clair.
+
+========================
+9) CONTENU (COPY) — FR, transparent, un peu décalé mais pro
+========================
+Écrire des textes courts, punchy, sans bullshit.
+Interdits : promesses floues, jargon inutile.
+Autorisé : petites phrases humaines, mais pas clownesque.
+
+Exemples de tone (à intégrer ici et là) :
+- “On ne vend pas un site. On vend un site qui sert.”
+- “Design propre, chargement rapide, prix simple.”
+- “Deux tickets par mois : de quoi garder le site vivant sans y passer tes dimanches.”
+
+========================
+10) LIVRABLES & ACCEPTANCE CHECKLIST
+========================
+Le projet doit contenir :
+- code compilable et runnable
+- UI complète (mobile-first)
+- animations (subtiles) + respect reduced motion
+- landing longue complète + réalisations + pages légales
+- wizard multi-étapes fonctionnel + endpoint /api/lead
+- config centralisée (brand.ts)
+- README avec :
+  - comment lancer
+  - où configurer email, calendrier, contacts
+  - comment changer le nom du studio
+  - comment ajouter/modifier les packs/prix facilement
+
+IMPORTANT :
+- Ne pas bloquer sur les images réelles : utiliser placeholders.
+- Tout doit être facile à éditer (config + data arrays).
+- Priorité à la V1 : claire, belle, rapide, convertissante.

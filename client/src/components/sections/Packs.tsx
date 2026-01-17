@@ -2,6 +2,7 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { BRAND } from "@/config/brand";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const packs = [
   {
@@ -46,16 +47,16 @@ const packs = [
 export function Packs() {
   return (
     <Section id="packs">
-      <div className="text-center mb-16">
+      <FadeIn className="text-center mb-16">
         <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">Nos Packs</h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
           Clairs, nets et précis. Tout le monde déteste les devis compliqués.
         </p>
-      </div>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {packs.map((pack, index) => (
-          <div
+          <FadeIn
             key={index}
             className={`relative p-8 rounded-2xl border ${
               pack.popular
@@ -100,15 +101,15 @@ export function Packs() {
               variant={pack.popular ? "default" : "outline"}
               asChild
             >
-              <a href="#contact">Choisir ce pack</a>
+              <a href="#wizard">Choisir ce pack</a>
             </Button>
-          </div>
+          </FadeIn>
         ))}
-      </div>
+      </StaggerChildren>
 
-      <div className="mt-12 text-center text-sm text-muted-foreground">
+      <FadeIn delay={0.3} className="mt-12 text-center text-sm text-muted-foreground">
         <p>Multilingue inclus : max 2 langues. • Au-delà / fonctionnalités avancées : sur devis.</p>
-      </div>
+      </FadeIn>
     </Section>
   );
 }

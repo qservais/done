@@ -1,12 +1,13 @@
 import { Section } from "@/components/ui/section";
 import { Check, Info } from "lucide-react";
 import { BRAND } from "@/config/brand";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 export function Subscription() {
   return (
     <Section className="bg-primary text-primary-foreground">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div>
+        <FadeIn direction="right">
           <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">
             Abonnement obligatoire.
             <br />
@@ -26,10 +27,10 @@ export function Subscription() {
               Au-delà (trafic énorme), on optimise ou on facture le surplus (en toute transparence).
             </p>
           </div>
-        </div>
+        </FadeIn>
 
-        <div className="space-y-6">
-          <div className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+        <StaggerChildren className="space-y-6">
+          <FadeIn className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
               <h3 className="text-xl font-bold">Pack Complet</h3>
               <p className="text-gray-400 text-sm">Domaine + Hébergement + Maintenance</p>
@@ -38,9 +39,9 @@ export function Subscription() {
               <span className="text-3xl font-bold text-accent">{BRAND.PRICING.SUB_FULL}€</span>
               <span className="text-sm text-gray-400">/mois</span>
             </div>
-          </div>
+          </FadeIn>
 
-          <div className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+          <FadeIn className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
               <h3 className="text-xl font-bold">Pack Light</h3>
               <p className="text-gray-400 text-sm">Si vous gérez déjà votre domaine</p>
@@ -49,9 +50,9 @@ export function Subscription() {
               <span className="text-3xl font-bold text-accent">{BRAND.PRICING.SUB_LIGHT}€</span>
               <span className="text-sm text-gray-400">/mois</span>
             </div>
-          </div>
+          </FadeIn>
 
-          <div className="pt-6 border-t border-white/10">
+          <FadeIn className="pt-6 border-t border-white/10">
             <h4 className="font-bold mb-4">Inclus dans l'abonnement :</h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-300">
               <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> Hébergement rapide</li>
@@ -59,8 +60,8 @@ export function Subscription() {
               <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> Mises à jour techniques</li>
               <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> 2 tickets support / mois</li>
             </ul>
-          </div>
-        </div>
+          </FadeIn>
+        </StaggerChildren>
       </div>
     </Section>
   );

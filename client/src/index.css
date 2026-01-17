@@ -96,6 +96,10 @@
   --ring: 0 0% 83.1%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   * {
     @apply border-border;

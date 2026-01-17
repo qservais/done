@@ -1,6 +1,7 @@
 import { Section } from "@/components/ui/section";
 import { Zap, Layout, Search } from "lucide-react";
 import { motion } from "framer-motion";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const features = [
   {
@@ -23,14 +24,10 @@ const features = [
 export function Why() {
   return (
     <Section className="bg-secondary/30">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {features.map((feature, index) => (
-          <motion.div
+          <FadeIn
             key={index}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
             className="bg-background p-8 rounded-xl border border-border/50 hover:border-accent/50 transition-colors shadow-sm"
           >
             <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-6 text-accent-foreground">
@@ -40,9 +37,9 @@ export function Why() {
             <p className="text-muted-foreground leading-relaxed">
               {feature.description}
             </p>
-          </motion.div>
+          </FadeIn>
         ))}
-      </div>
+      </StaggerChildren>
     </Section>
   );
 }

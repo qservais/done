@@ -1,4 +1,5 @@
 import { Section } from "@/components/ui/section";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const steps = [
   {
@@ -26,22 +27,22 @@ const steps = [
 export function Process() {
   return (
     <Section id="process" className="bg-background">
-      <div className="mb-16">
+      <FadeIn className="mb-16">
         <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">Comment ça marche ?</h2>
         <p className="text-muted-foreground text-lg">On va vite, mais on va propre.</p>
-      </div>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {steps.map((step, index) => (
-          <div key={index} className="relative p-6 border-l border-border hover:border-accent transition-colors pl-8">
+          <FadeIn key={index} className="relative p-6 border-l border-border hover:border-accent transition-colors pl-8">
             <span className="text-6xl font-serif font-bold text-muted/40 absolute -top-4 left-4 -z-10 select-none">
               {step.number}
             </span>
             <h3 className="text-xl font-bold mb-2 pt-2">{step.title}</h3>
             <p className="text-muted-foreground">{step.description}</p>
-          </div>
+          </FadeIn>
         ))}
-      </div>
+      </StaggerChildren>
     </Section>
   );
 }

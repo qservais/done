@@ -1,0 +1,150 @@
+TU ES REPLIT AI. OBJECTIF : Corriger la V1 du site “done” pour :
+1) Revenir à une promesse HERO 100% orientée “site web” (pas Ads / pas Tracking dans le hero)
+2) Refaire la section “Pourquoi tant d’indépendants…” pour qu’elle soit PREMIUM (pas un gros bloc bleu avec puces rouges)
+3) Tout doit être MOBILE-FIRST, clean, et cohérent avec l’identité actuelle (bleu premium, fond clair, typo forte).
+
+NE PAS repartir de zéro. Modifier l’existant. Garder les sections globales (packs, abonnement, process, wizard, FAQ, CTA final).
+IMPORTANT : Supprimer totalement du HERO toute mention de “Web Ads / Google Ads / Meta Ads / tracking GA4”.
+Le tracking doit rester seulement comme OPTION dans “Options à la carte” (si présent), pas dans le hero.
+
+========================
+A) FIX 1 — HERO COPY (OBLIGATOIRE)
+========================
+PROBLÈME ACTUEL :
+Le hero affiche un copy type “Web. Ads. Tracking. Done.” + une ligne mentionnant Ads/Tracking. Ce n’est pas la cible.
+
+OBJECTIF HERO :
+- Cible = sites web / landing pages uniquement
+- Ton transparent + un peu décalé mais pro
+- Promesse forte : “moins qu’un logo”
+- Garder les chips : Rendu premium / Mobile-first / V1 en 72h / 19.99€/mois
+- CTA : “Démarrer mon projet” + “Voir les packs”
+- Ligne de transparence en bas : “À partir de 197€ + abonnement mensuel”
+
+ACTION TECH :
+1) Localiser la source du texte HERO (probablement dans un composant Hero.tsx ou data/copy.ts ou config/brand.ts).
+2) Centraliser le contenu dans un fichier data (si ce n’est pas déjà le cas) :
+   /src/data/copy.ts avec export const hero = { title, subtitle, kicker, chips, ctaPrimary, ctaSecondary, disclaimer }
+3) Remplacer le contenu EXACTEMENT par :
+
+H1 (title) :
+"Un site premium qui coûte moins qu’un logo."
+
+Sous-titre (subtitle) :
+"Sites web & landing pages au rendu haut de gamme, pensés mobile-first, livrés en 72h. Simple, beau, efficace."
+
+Chips (4) :
+- "Rendu premium"
+- "Mobile-first"
+- "V1 en 72h"
+- "19.99€/mois"
+
+Boutons :
+Primary = "Démarrer mon projet"
+Secondary = "Voir les packs"
+
+Disclaimer bas de hero :
+"À partir de 197€ + abonnement mensuel"
+
+IMPORTANT STYLING :
+- Le H1 doit être ultra lisible sur mobile : pas de casse moche, pas de mots inutiles.
+- Le mot “logo” peut être légèrement souligné (underline fin), mais pas trop “cartoon”.
+- Supprimer TOUTE mention Ads/Tracking du hero (y compris dans meta/og si un ancien texte traîne).
+
+CONTRÔLE OBLIGATOIRE :
+- Faire une recherche globale dans le code des chaînes :
+  "Web. Ads", "Tracking", "Google Ads", "Meta Ads", "GA4"
+  -> si trouvé dans le HERO, supprimer/remplacer.
+  -> s’ils existent ailleurs (ex: options), OK uniquement si clairement en option.
+
+========================
+B) FIX 2 — SECTION “POURQUOI…” (REFONTE DESIGN PREMIUM)
+========================
+PROBLÈME ACTUEL :
+Gros bloc bleu clair, bordure épaisse, puces rouges = pas premium, ça fait “template”.
+
+OBJECTIF :
+Refaire la section en PREMIUM MINIMAL :
+- fond clair (blanc / off-white)
+- micro-bordure très fine ou shadow très douce
+- accent bleu utilisé avec parcimonie (pas en gros liseré à gauche)
+- typographie + spacing = sensation “agence”
+- bullet points élégants (icônes check / tirets), PAS de points rouges.
+
+STRUCTURE (à implémenter) :
+Section id="problem" juste après le hero.
+Layout :
+- Desktop : 2 colonnes (gauche = label + titre, droite = texte + bullets + punchline)
+- Mobile : stack propre, spacing plus serré, lisible.
+
+COPY EXACT (à utiliser) :
+
+Label (petit badge/pill) :
+"Le problème"
+
+Titre H2 :
+"Pourquoi autant d’indépendants repoussent leur site ?"
+
+Texte court (1–2 lignes) :
+"Pas par manque d’envie. Juste parce qu’on leur a vendu le web comme un truc…"
+
+Bullets (3 lignes courtes) :
+- "Trop cher"
+- "Trop long"
+- "Trop compliqué"
+
+Punchline (gras, mais pas en bleu fluo) :
+"Le problème n’est pas votre activité. C’est la façon dont on vous vend le web."
+
+Ligne “done” (accent, mais premium) :
+"done, c’est l’alternative : un site premium, simple, accessible."
+
+DESIGN GUIDELINES (IMPORTANT) :
+- Supprimer le gros cadre bleu + liseré épais.
+- Remplacer par une card blanche/off-white avec :
+  - border 1px très léger (gray-200) OU shadow très douce
+  - radius 24px
+  - padding généreux
+- Les bullets doivent être “premium” :
+  - Utiliser une icône check très discrète (bleu pâle) OU un petit tiret typographique
+  - PAS de rouge
+- Le texte “done, c’est l’alternative…” :
+  - mettre “done” en accent bleu
+  - le reste en noir/graphite
+  - taille = pas énorme, juste “statement” propre
+
+ANIMATIONS :
+- Reveal au scroll (fade + translate léger), rien de lourd.
+- Respect prefers-reduced-motion.
+
+========================
+C) AMÉLIORATIONS VISUELLES RAPIDES (pour garder premium)
+========================
+1) Cohérence typographique :
+- H2/H3 : même logique partout (tailles + tracking)
+- Paragraphes : augmenter un peu le line-height pour confort mobile
+
+2) Espacements :
+- Sur mobile, éviter les gros vides inutiles entre hero -> problem -> features
+
+3) Accessibilité :
+- Contraste : texte gris pas trop clair
+- Boutons : hauteur min 44px
+- Focus states visibles
+
+========================
+D) CRITÈRES D’ACCEPTATION
+========================
+- Le HERO n’a PLUS aucune mention Ads/Tracking.
+- Le HERO dit clairement “site premium… moins qu’un logo” + “sites web & landing pages…”
+- La section “Pourquoi…” n’a plus de gros bloc bleu + puces rouges.
+- Le rendu de la section “Pourquoi…” est premium (sobre, propre, typographie + spacing).
+- Mobile-first : tout est lisible à 375px sans wrap bizarre.
+- Build OK, aucune régression.
+
+========================
+E) LIVRABLE
+========================
+- Modifications appliquées dans le code existant.
+- Copys centralisés (hero + problem) dans un fichier data si possible.
+- Commit logique des changements : Hero copy fix + Problem section redesign.

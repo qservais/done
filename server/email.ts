@@ -3,7 +3,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const STUDIO_EMAIL = process.env.STUDIO_EMAIL || "hello@madebydone.be";
-const FROM_EMAIL = "onboarding@resend.dev";
+const FROM_EMAIL = "no-reply@madebydone.be";
 
 type LeadData = {
   name: string;

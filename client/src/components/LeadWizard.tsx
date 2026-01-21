@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight, ChevronLeft, Loader2, ArrowRight } from "lucide-react";
+import { Check, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 
@@ -92,28 +92,25 @@ export function LeadWizard() {
   }
 
   // Summary logic
-  let recommendedPackPrice = BRAND.PRICING.PACK_EXPRESS;
+  let recommendedPackPrice = BRAND.PRICING.PACK_LANDING;
   let recommendedPackName = "Landing Express";
 
   if (data.pages === "2-5" || data.pages === "6+") {
-    recommendedPackPrice = BRAND.PRICING.PACK_PREMIUM;
+    recommendedPackPrice = BRAND.PRICING.PACK_MULTIPAGE;
     recommendedPackName = "Multi-page Premium";
-  } else if (data.formNeed === "oui" || data.formNeed === "multi") {
-    recommendedPackPrice = BRAND.PRICING.PACK_CONTACT;
+  } else if (data.formNeed === "oui" || data.formNeed === "multi" || data.siteType === "vitrine") {
+    recommendedPackPrice = BRAND.PRICING.PACK_VITRINE;
     recommendedPackName = "Vitrine Contact";
-  } else if (data.siteType === "ecommerce") {
-     // Custom logic for ecommerce usually higher
-     recommendedPackPrice = 749;
-     recommendedPackName = "E-commerce Start";
   }
 
-  const subPrice = data.domain === "oui" ? BRAND.PRICING.SUB_LIGHT : BRAND.PRICING.SUB_FULL;
+  // Use the single subscription price
+  const subPrice = BRAND.SUB_PRICE;
 
   if (step === 7) {
     return (
       <div className="bg-background border border-border rounded-xl overflow-hidden shadow-xl max-w-2xl mx-auto">
         <div className="bg-primary p-6 text-primary-foreground">
-          <h3 className="text-2xl font-serif font-bold">Récapitulatif de votre projet</h3>
+          <h3 className="text-2xl font-bold">Récapitulatif de votre projet</h3>
           <p className="opacity-80">Vérifiez avant d'envoyer.</p>
         </div>
         <div className="p-8 space-y-6">
@@ -131,8 +128,8 @@ export function LeadWizard() {
                <p className="font-medium">{data.siteType === "landing" ? "Landing Page (1 page)" : data.siteType === "vitrine" ? "Site Vitrine" : "Autre"}</p>
              </div>
              <div className="space-y-1">
-               <span className="text-xs text-muted-foreground uppercase tracking-wider">Pages estimées</span>
-               <p className="font-medium">{data.pages}</p>
+               <span className="text-xs text-muted-foreground uppercase tracking-wider">Délai souhaité</span>
+               <p className="font-medium">{data.timing}</p>
              </div>
            </div>
 
@@ -153,7 +150,7 @@ export function LeadWizard() {
 
            <div className="flex gap-4 pt-4">
              <Button variant="outline" onClick={() => setStep(6)}>Modifier</Button>
-             <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90" onClick={submitForm} disabled={isSubmitting}>
+             <Button className="w-full bg-accent text-white hover:bg-accent/90 font-bold" onClick={submitForm} disabled={isSubmitting}>
                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                Valider ma demande
              </Button>
@@ -175,7 +172,7 @@ export function LeadWizard() {
            {/* Step 1: Activity */}
            {step === 1 && (
              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-               <h3 className="text-2xl font-bold font-serif">Parlons de vous.</h3>
+               <h3 className="text-2xl font-bold">Parlons de vous.</h3>
                <div className="space-y-4">
                  <label className="block">
                    <span className="text-sm font-medium mb-1.5 block">Votre secteur d'activité</span>
@@ -209,7 +206,7 @@ export function LeadWizard() {
            {/* Step 2: Need */}
            {step === 2 && (
              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-               <h3 className="text-2xl font-bold font-serif">Votre besoin.</h3>
+               <h3 className="text-2xl font-bold">Votre besoin.</h3>
                <div className="space-y-4">
                  <div className="grid grid-cols-2 gap-3">
                     <button 
@@ -249,7 +246,7 @@ export function LeadWizard() {
            {/* Step 3: Languages */}
            {step === 3 && (
              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-               <h3 className="text-2xl font-bold font-serif">Langues.</h3>
+               <h3 className="text-2xl font-bold">Langues.</h3>
                <div className="space-y-4">
                  <label className="block">
                    <span className="text-sm font-medium mb-1.5 block">Combien de langues ?</span>
@@ -267,7 +264,7 @@ export function LeadWizard() {
                        2 (FR + EN/NL)
                      </button>
                    </div>
-                   <p className="text-xs text-muted-foreground mt-2">Max 2 langues incluses. Plus sur devis.</p>
+                   <p className="text-xs text-muted-foreground mt-2">Max 2 langues incluses.</p>
                  </label>
                </div>
              </motion.div>
@@ -276,7 +273,7 @@ export function LeadWizard() {
            {/* Step 4: Domain */}
            {step === 4 && (
              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-               <h3 className="text-2xl font-bold font-serif">Technique.</h3>
+               <h3 className="text-2xl font-bold">Technique.</h3>
                <div className="space-y-6">
                  <label className="block">
                    <span className="text-sm font-medium mb-2 block">Avez-vous déjà un nom de domaine ?</span>
@@ -312,9 +309,9 @@ export function LeadWizard() {
             {/* Step 5: Timing */}
            {step === 5 && (
              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-               <h3 className="text-2xl font-bold font-serif">Timing.</h3>
+               <h3 className="text-2xl font-bold">Timing.</h3>
                <div className="space-y-4">
-                 {["Urgent (24-48h)", "Normal (1 semaine)", "Flexible"].map((opt) => (
+                 {["Urgent (72h)", "Normal (1 semaine)", "Flexible"].map((opt) => (
                     <button
                       key={opt}
                       onClick={() => updateData("timing", opt)}
@@ -330,7 +327,7 @@ export function LeadWizard() {
            {/* Step 6: Contact Info */}
            {step === 6 && (
              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-               <h3 className="text-2xl font-bold font-serif">Dernière étape.</h3>
+               <h3 className="text-2xl font-bold">Dernière étape.</h3>
                <div className="grid grid-cols-2 gap-4">
                   <input 
                     type="text" 

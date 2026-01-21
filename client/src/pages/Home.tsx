@@ -2,9 +2,9 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { Why } from "@/components/sections/Why";
+import { Problem } from "@/components/sections/Problem"; // Imported Problem
 import { Packs } from "@/components/sections/Packs";
 import { Subscription } from "@/components/sections/Subscription";
-import { Maintenance } from "@/components/sections/Maintenance";
 import { Process } from "@/components/sections/Process";
 import { Realizations } from "@/components/sections/Realizations";
 import { Options } from "@/components/sections/Options";
@@ -20,15 +20,16 @@ export default function Home() {
       
       <main>
         <Hero />
+        <Problem /> {/* Added Problem section */}
         <Why />
         <Packs />
         <Subscription />
-        <Maintenance />
+        {/* Maintenance section removed as requested, content moved to FAQ/Subscription */}
         <Process />
         
         <Section id="wizard" className="bg-secondary/30 py-24">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold mb-4">Commencer le projet</h2>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">Commencer le projet</h2>
             <p className="text-muted-foreground">Répondez à quelques questions pour obtenir une estimation.</p>
           </div>
           <LeadWizard />

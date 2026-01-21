@@ -1,0 +1,319 @@
+TU ES REPLIT AI. OBJECTIF : Corriger/améliorer la V1 du site du studio “done” (site vitrine + funnel) en suivant STRICTEMENT les retours fournis (conversion + perception premium) et en gardant le ton transparent, légèrement décalé, mais pro.
+
+PRIORITÉ ABSOLUE : MOBILE-FIRST. Chaque correction doit être pensée d’abord pour 375px de large (iPhone). Desktop ensuite.
+
+========================
+0) CONTEXTE / PROBLÈMES À RÉSOUDRE (SYNTHÈSE RETOURS)
+========================
+- La promesse actuelle ne met pas assez en avant la valeur : “site premium rendu agence” à prix accessible.
+- “Vitesse” = pré-requis, PAS promesse principale. Garder “coûte moins qu’un logo” (très bon).
+- Direction artistique actuelle (jaune/vert) = trop fun/startup : augmenter la perception premium (palette plus “agency”).
+- Packs : différence pas claire → rendre les packs cumulés (Pack 2 inclut Pack 1 + extras visuels).
+- Abonnement : 2 prix = friction → simplifier en UN SEUL abonnement clair à 19,99€.
+- Prix packs : passer à 197/297/497 (plus qualitatif que 199/299/499).
+- “V1 en 48h” : trop “vite fait” → passer à 72h (toujours rapide, plus sérieux).
+- Étape “Contenu” : lever la peur “je n’ai rien” (proposer aide / RDV / option).
+- Réalisations : manque de visuels → ajouter previews (thumbnails) pour projection.
+- Tickets/jargon technique : simplifier fortement (orienté bénéfice, pas technique).
+- Ajouter une section PROBLÈME avant la solution (bloc d’identification très important).
+
+Source retours : PDF feedback fourni.
+
+========================
+1) NAMING & CONFIG
+========================
+- Studio name = "done"
+- Créer /src/config/brand.ts et centraliser :
+  STUDIO_NAME = "done"
+  TAGLINE = "Un site premium qui coûte moins qu’un logo."
+  BASE_LANG = "fr"
+  LANGS = ["fr","en"] (MAX 2)
+  SUB_PRICE = 19.99
+  PACK_PRICES = { landing: 197, vitrine: 297, multipage: 497 }
+  DELIVERY_PROMISE = "V1 en 72h"
+  CONTACT_EMAIL, PHONE, WHATSAPP, INSTAGRAM, CALENDAR_URL = placeholders éditables
+
+IMPORTANT : si le projet avait déjà une config, la mettre à jour sans casser le build.
+
+========================
+2) DIRECTION ARTISTIQUE (PLUS PREMIUM)
+========================
+Objectif : perception “agence premium” dès le 1er écran.
+
+2.1 Palette
+- Remplacer la dominante jaune/vert par une palette plus sobre :
+  Option recommandée :
+  - Background: off-white (#F7F7F5) ou blanc cassé
+  - Texte: quasi-noir (#0B0D0E)
+  - Accent principal: bleu profond (#1E2A5A) ou bleu royal (#2F5BFF)
+  - Accent secondaire léger: bleu clair/ice (#DDE8FF) ou gris froid
+- Garder 1 accent fort maximum (pas 2 accents flashy).
+
+2.2 Typo
+- Choisir une typographie premium lisible :
+  - Sans-serif: Inter / Neue-like
+  - Option : une serif uniquement pour les H1/H2 si ça reste très clean
+- Hiérarchie typographique claire sur mobile :
+  H1 très lisible, pas trop long, line-height généreux.
+
+2.3 Animations
+- Conserver animations mais les rendre “clean” :
+  - reveal au scroll : fade + translate léger
+  - hover micro-interactions sur cards/boutons
+  - menu overlay animé
+  - respecter prefers-reduced-motion
+- Pas d’animations lourdes sur mobile.
+
+========================
+3) HERO — REFAIRE LA PROMESSE PRINCIPALE
+========================
+But : dès le 1er écran, comprendre :
+- ce que fait done
+- pourquoi c’est fort
+- pourquoi c’est une opportunité
+
+3.1 Nouveau H1 (FR) à tester (choisir 1, implémenter + A/B possible plus tard)
+Option A:
+"Un site premium qui coûte moins qu’un logo."
+Option B:
+"Le web a évolué. Les prix aussi. Un site qui coûte moins qu’un logo."
+Option C:
+"Un rendu d’agence. Sans le prix d’agence."
+
+3.2 Sous-titre (1–2 lignes max)
+Ex :
+"Des sites au rendu haut de gamme, livrés vite, pensés mobile-first — à un prix accessible."
+
+3.3 Preuve rapide (chips)
+- "Rendu premium"
+- "Mobile-first"
+- "Suivi inclus"
+- "V1 en 72h"
+
+3.4 CTA
+- Primary: "Demander mon site"
+- Secondary: "Voir les packs"
+Garder les boutons actuels s’ils convertissent déjà bien.
+
+3.5 IMPORTANT : ne plus vendre “la vitesse” comme argument n°1.
+La vitesse reste dans un chip + dans “comment ça marche”.
+
+========================
+4) AJOUTER UN BLOC “PROBLÈME” AVANT PACKS (CRUCIAL CONVERSION)
+========================
+Créer une section immédiatement après le hero (ou juste avant “bulles”).
+
+Titre:
+"Pourquoi tant d’indépendants repoussent leur site ?"
+
+Texte (version sobre + impactante, 3–4 lignes):
+"Pas par manque d’envie.
+Mais parce qu’on leur a vendu le web comme un truc :
+- trop cher
+- trop long
+- trop compliqué
+Le problème n’est pas votre activité.
+C’est la façon dont on vous vend le web."
+
+Ensuite, une phrase transition:
+"done, c’est l’alternative : un site premium, simple, accessible."
+
+Mettre en forme mobile :
+- paragraphes courts
+- bullets lisibles
+- animation reveal douce
+
+========================
+5) SECTION BULLES (ARGUMENTS CLÉS) — GARDER
+========================
+Les 3 bulles actuelles sont “propres et efficaces” : conserver le concept.
+Juste adapter couleurs/typos à la nouvelle DA.
+
+========================
+6) PACKS — CLARIFIER EN MODE CUMULATIF (VISUELLEMENT)
+========================
+Problème : Landing vs Vitrine pas assez évident.
+Solution : packs cumulés + mise en avant “ce que vous avez en plus”.
+
+6.1 Pricing à appliquer
+- Landing Express: 197€
+- Vitrine Contact: 297€
+- Multi-page Premium: 497€
+
+6.2 Présentation UI
+Sur mobile :
+- cartes empilées
+- “badge recommandé” sur Vitrine Contact (souvent le meilleur compromis)
+- à l’intérieur, un bloc “Inclus” + un bloc “+ En plus” (pour pack 2 et 3)
+
+6.3 Contenu packs (simple, non-tech)
+Landing Express – 197€
+INCLUS :
+- 1 page claire et premium
+- sections essentielles (services, preuves, CTA)
+- mobile-first
+- 1 langue (FR)
+- 1 aller-retour inclus pour ajuster
+CTA card: "Choisir ce pack"
+
+Vitrine Contact – 297€
+TOUT CE QU’IL Y A DANS Landing Express
++ EN PLUS :
+- formulaire de contact (simple, efficace)
+- réception directe par email
+CTA: "Choisir ce pack"
+
+Multi-page Premium – 497€
+TOUT CE QU’IL Y A DANS Vitrine Contact
++ EN PLUS :
+- jusqu’à 5 pages (présentation plus complète)
+- animations légères “premium”
+- SEO de base (sans jargon)
+CTA: "Choisir ce pack"
+
+IMPORTANT :
+- Ne pas parler “nombre de sections” comme critère principal (non parlant).
+- Remplacer par bénéfices concrets.
+
+========================
+7) ABONNEMENT — SIMPLIFIER À 1 SEUL PLAN (19,99€)
+========================
+But : réduire friction, clarifier “suivi”.
+
+Créer une section “Le suivi (inclus)” :
+Titre:
+"On ne pose pas un site et on disparaît."
+
+Plan unique :
+"Abonnement done — 19,99€/mois"
+Inclut (langage client, pas technique) :
+- hébergement & surveillance
+- sauvegardes
+- sécurité / mises à jour
+- petits ajustements quand votre business bouge
+- réponse sous 48h (et urgent si site down)
+
+IMPORTANT : retirer le mot “ticket”.
+Remplacer par :
+"2 demandes d’ajustements / mois"
+et préciser simplement :
+"Chaque demande couvre un lot de changements raisonnables (jusqu’à 30 min) + 1 aller-retour."
+
+Fair-use : simplifier
+Au lieu de “fair use 5€” trop technique, écrire :
+"Si votre site explose en trafic (tant mieux), on ajuste la solution avec vous."
+(Option : garder une note discrète en FAQ, pas sur la section principale.)
+
+========================
+8) “COMMENT ÇA MARCHE” — GARDER LE TON + AJUSTER 2 POINTS
+========================
+- Conserver ton style “brut, direct, humain”.
+- Remplacer “V1 en 48h” → “V1 en 72h”.
+- Étape “Contenu” : enlever le frein.
+
+8.1 Nouvelle phrase pour “On va vite, mais on va propre”
+Proposer 2 alternatives et en choisir une :
+A) "On va vite. Et on fait ça sérieusement."
+B) "Rapide, oui. Bâclé, jamais."
+C) "On avance vite — mais avec un rendu clean et crédible."
+
+8.2 Étape “Contenu” (anti-frein)
+Au lieu de “envoyez logo/photos/textes”, écrire :
+"Vous avez déjà du contenu ? Parfait.
+Vous n’avez rien ? Ce n’est pas bloquant.
+On vous aide à cadrer l’essentiel en rendez-vous et on construit à partir de votre activité."
+
+Option :
+- préciser que l’aide “cadrage contenu” est incluse dans Vitrine/Multi-page, ou proposée en option.
+
+========================
+9) RÉALISATIONS — AJOUTER DES VISUELS (PREVIEWS)
+========================
+Renommer section :
+- "Nos clients" (recommandé) ou "Nos réalisations"
+
+Implémentation :
+- Ajouter des thumbnails (images) pour chaque site listé.
+- Sur mobile : slider horizontal snap + cartes avec preview image + nom + tags.
+- Sur desktop : grille 2–3 colonnes.
+
+DATA à utiliser :
+- maisonvagabonde.be
+- aste-esthetique.be
+- dissocle.space
+- mouvup.be
+- examtir.be
+- valorisermonentreprise.be
+- vegetalpetale.be
+- sosplantes.be
+
+IMPORTANT :
+- Créer des images placeholder dans /public/projects/*.jpg si pas de visuels fournis.
+- Prévoir une structure facile à remplacer (array projects.ts avec {name,url,image,tags}).
+
+========================
+10) SECTION “TECHNIQUE / TICKETS” — SIMPLIFIER (OU DÉPLACER EN FAQ)
+========================
+Supprimer ou réduire la section trop technique.
+Mettre plutôt une mini-section “Ce qui est inclus” en langage simple :
+- "Petites modifications incluses"
+- "Nouvelles fonctionnalités = devis"
+- "Toujours clair avant de commencer"
+
+Et détailler en FAQ si nécessaire.
+
+========================
+11) FORMULAIRE MULTI-ÉTAPES — GARDER, MAIS ADAPTER COPY
+========================
+- Garder le wizard multi-étapes.
+- Changer le wording pour correspondre au ton “done”.
+- Résumé final :
+  - pack recommandé
+  - abonnement 19,99€/mois
+  - délai : V1 en 72h
+  - CTA envoyer + réserver appel
+
+IMPORTANT :
+- Tout doit être ultra lisible sur mobile.
+- Validation progressive, erreurs claires, bouton “Retour” accessible.
+
+========================
+12) FAQ — AJOUTS/ADAPTATIONS
+========================
+Ajouter / ajuster questions :
+- "Pourquoi un abonnement ?"
+- "C’est quoi une “demande d’ajustement” ?"
+- "Et si je n’ai ni logo ni photos ?"
+- "En combien de temps ? (72h)"
+- "Multilingue ? (2 langues max)"
+- "Puis-je ajouter des fonctionnalités plus tard ?"
+- "Et si j’ai beaucoup de trafic ?"
+
+Réponses simples, orientées bénéfice, sans jargon.
+
+========================
+13) CHECKLIST QUALITÉ (ACCEPTANCE)
+========================
+- Mobile hero : promesse premium claire en 3 secondes
+- Bloc PROBLÈME présent avant offres
+- Packs cumulés et compréhensibles
+- 1 seul abonnement 19,99€ (friction réduite)
+- Délai affiché : 72h
+- Ton humain conservé
+- Réalisations avec previews visibles
+- Aucune section inutilement technique
+- Animations subtiles, perf OK, reduced motion OK
+- SEO de base : titres, metas, og tags
+
+========================
+14) LIVRABLES
+========================
+- Code compilable
+- Variables dans config
+- Data packs/projets/faq dans fichiers séparés pour édition facile
+- README : comment changer prix/textes, comment remplacer thumbnails, comment configurer email lead
+
+EXECUTION :
+- Appliquer toutes les modifications ci-dessus dans le projet existant.
+- Ne pas repartir de zéro sauf si structure V1 est ingérable.
+- Faire un rendu premium, simple, orienté conversion, mobile-first.

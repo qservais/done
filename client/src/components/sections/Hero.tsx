@@ -2,66 +2,62 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { motion } from "framer-motion";
 import { BRAND } from "@/config/brand";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Star, Clock, ShieldCheck, Smartphone } from "lucide-react";
+import { FadeIn } from "@/components/ui/fade-in";
 
 export function Hero() {
   return (
-    <Section className="min-h-[90vh] flex flex-col justify-center pt-32 pb-16 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-accent/10 blur-[100px] rounded-full -z-10" />
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-blue-500/5 blur-[100px] rounded-full -z-10" />
+    <Section className="min-h-[85vh] flex flex-col justify-center pt-32 pb-16 relative overflow-hidden">
+      {/* Subtle Background Gradient */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/30 blur-[120px] rounded-full -z-10 opacity-60" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/5 blur-[80px] rounded-full -z-10" />
 
-      <div className="max-w-4xl mx-auto text-center space-y-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="inline-block py-1 px-3 rounded-full bg-accent/20 text-accent-foreground text-sm font-medium mb-6 border border-accent/20">
-            Design premium • Mobile first
-          </span>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight leading-[1.1] mb-6">
-            Un site qui <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-green-600">charge vite</span>. <br className="hidden md:block" />
-            Et qui coûte moins qu’un logo.
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            {BRAND.TAGLINE} V1 livrée en 24–48h.
-            <br />
-            <span className="text-sm opacity-70 mt-2 block">
-              À partir de {BRAND.PRICING.PACK_EXPRESS}€ + abonnement.
+      <div className="max-w-4xl mx-auto text-center space-y-10">
+        <FadeIn>
+          {/* Quick Proof Chips */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-semibold tracking-wide">
+                <Star className="w-3 h-3" /> Rendu premium
+             </span>
+             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background border border-border text-muted-foreground text-xs font-medium">
+                <Smartphone className="w-3 h-3" /> Mobile-first
+             </span>
+             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-background border border-border text-muted-foreground text-xs font-medium">
+                <Clock className="w-3 h-3" /> V1 en 72h
+             </span>
+          </div>
+
+          {/* New H1 Options - Option A selected as primary per brief instruction */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6 text-foreground">
+            Un site premium qui coûte <br className="hidden md:block" />
+            <span className="text-accent relative inline-block">
+              moins qu’un logo.
+              <svg className="absolute w-full h-3 -bottom-1 left-0 text-accent/20" viewBox="0 0 100 10" preserveAspectRatio="none">
+                 <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+              </svg>
             </span>
-          </p>
-        </motion.div>
+          </h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <Button size="lg" className="text-lg px-8 h-14 w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 rounded-full" asChild>
-            <a href="#contact">Demander mon site <ArrowRight className="ml-2 w-5 h-5" /></a>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+             Des sites au rendu haut de gamme, livrés vite, pensés mobile-first — à un prix accessible.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.2} className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          <Button size="lg" className="text-base font-semibold px-8 h-12 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-lg shadow-primary/20" asChild>
+            <a href="#wizard">Demander mon site <ArrowRight className="ml-2 w-4 h-4" /></a>
           </Button>
-          <Button variant="outline" size="lg" className="text-lg px-8 h-14 w-full sm:w-auto rounded-full" asChild>
+          <Button variant="outline" size="lg" className="text-base font-medium px-8 h-12 w-full sm:w-auto rounded-full bg-background hover:bg-secondary/50 border-border" asChild>
             <a href="#packs">Voir les packs</a>
           </Button>
-        </motion.div>
+        </FadeIn>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="pt-8 flex justify-center gap-8 text-sm text-muted-foreground"
-        >
-           <div className="flex items-center gap-2">
-             <Star className="w-4 h-4 text-accent fill-accent" />
-             <span>Abonnement tout inclus</span>
-           </div>
-           <div className="flex items-center gap-2">
-             <Star className="w-4 h-4 text-accent fill-accent" />
-             <span>Design Premium</span>
-           </div>
-        </motion.div>
+        <FadeIn delay={0.4} className="pt-6">
+           <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+             <ShieldCheck className="w-4 h-4 text-accent" />
+             <span className="opacity-80">Suivi & maintenance inclus</span>
+           </p>
+        </FadeIn>
       </div>
     </Section>
   );

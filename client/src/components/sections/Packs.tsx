@@ -1,103 +1,132 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const packs = [
   {
     name: "Landing Express",
-    price: BRAND.PRICING.PACK_EXPRESS,
-    description: "L'essentiel pour exister en ligne.",
+    price: BRAND.PRICING.PACK_LANDING,
+    description: "Pour démarrer proprement.",
+    includesTitle: "INCLUS :",
     features: [
-      "1 page (jusqu'à 6 sections)",
-      "Design premium mobile-first",
-      "CTA (tel/mail/itinéraire)",
+      "1 page claire et premium",
+      "Sections essentielles",
+      "Design mobile-first",
       "1 langue (FR)",
-      "1 round de corrections",
+      "1 aller-retour inclus",
     ],
+    extras: []
   },
   {
     name: "Vitrine Contact",
-    price: BRAND.PRICING.PACK_CONTACT,
+    price: BRAND.PRICING.PACK_VITRINE,
     popular: true,
-    description: "Pour capter des leads efficacement.",
-    features: [
-      "1 page (jusqu'à 8 sections)",
-      "Formulaire simple + anti-spam",
-      "Email de confirmation",
-      "1 langue (FR)",
-      "1 round de corrections",
-    ],
+    description: "Pour capter des clients.",
+    includesTitle: "TOUT CE QU'IL Y A DANS LANDING EXPRESS",
+    features: [],
+    extras: [
+      "Formulaire de contact efficace",
+      "Réception directe par email",
+      "Protection anti-spam"
+    ]
   },
   {
     name: "Multi-page Premium",
-    price: BRAND.PRICING.PACK_PREMIUM,
-    description: "Pour présenter votre activité en détail.",
-    features: [
-      "Jusqu'à 5 pages",
-      "Formulaire de contact",
-      "Animations légères",
-      "SEO de base (structure)",
-      "1 round de corrections",
-    ],
+    price: BRAND.PRICING.PACK_MULTIPAGE,
+    description: "Pour tout expliquer.",
+    includesTitle: "TOUT CE QU'IL Y A DANS VITRINE CONTACT",
+    features: [],
+    extras: [
+      "Jusqu'à 5 pages complètes",
+      "Animations légères premium",
+      "SEO de base (structure clean)"
+    ]
   },
 ];
 
 export function Packs() {
   return (
-    <Section id="packs">
+    <Section id="packs" className="bg-background">
       <FadeIn className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">Nos Packs</h2>
+        <h2 className="text-3xl md:text-5xl font-bold mb-6">Nos Packs</h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Clairs, nets et précis. Tout le monde déteste les devis compliqués.
+          Des offres cumulatives. Plus vous montez, plus vous avez de valeur.
         </p>
       </FadeIn>
 
-      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
         {packs.map((pack, index) => (
           <FadeIn
             key={index}
-            className={`relative p-8 rounded-2xl border ${
+            className={`relative p-6 md:p-8 rounded-2xl flex flex-col ${
               pack.popular
-                ? "border-accent bg-accent/5 shadow-lg scale-105 z-10"
-                : "border-border bg-background"
-            } flex flex-col`}
+                ? "border-2 border-accent bg-background shadow-xl scale-100 md:scale-105 z-10"
+                : "border border-border bg-secondary/10"
+            }`}
           >
             {pack.popular && (
-              <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                Populaire
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-sm">
+                Recommandé
               </span>
             )}
 
-            <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-2">{pack.name}</h3>
-              <p className="text-muted-foreground text-sm min-h-[40px]">
-                {pack.description}
+            <div className="mb-6 text-center border-b border-border pb-6">
+              <h3 className="text-xl font-bold mb-2 text-foreground">{pack.name}</h3>
+              <div className="flex items-baseline justify-center gap-1 mb-2">
+                <span className="text-4xl font-bold text-foreground">{pack.price}€</span>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                 {pack.description}
               </p>
             </div>
 
-            <div className="mb-8">
-              <div className="flex items-baseline gap-1">
-                <span className="text-sm text-muted-foreground">À partir de</span>
-                <span className="text-4xl font-bold">{pack.price}€</span>
+            <div className="flex-1 space-y-6 mb-8">
+              {/* Main includes */}
+              <div className="space-y-3">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
+                  {pack.includesTitle}
+                </p>
+                
+                {pack.features.length > 0 && (
+                   <ul className="space-y-2">
+                     {pack.features.map((feature, i) => (
+                       <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
+                         <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                         <span>{feature}</span>
+                       </li>
+                     ))}
+                   </ul>
+                )}
+                
+                {/* Extras for cumulative packs */}
+                {pack.extras.length > 0 && (
+                  <>
+                     <div className="flex items-center gap-2 my-2">
+                        <span className="h-px bg-border flex-1"></span>
+                        <span className="text-xs font-bold text-accent uppercase">+ EN PLUS</span>
+                        <span className="h-px bg-border flex-1"></span>
+                     </div>
+                     <ul className="space-y-2">
+                       {pack.extras.map((extra, i) => (
+                         <li key={i} className="flex items-start gap-2.5 text-sm font-medium text-foreground">
+                           <Plus className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                           <span>{extra}</span>
+                         </li>
+                       ))}
+                     </ul>
+                  </>
+                )}
               </div>
-              <span className="text-xs text-muted-foreground block mt-2">
-                + abonnement (voir plus bas)
-              </span>
             </div>
 
-            <ul className="space-y-4 mb-8 flex-1">
-              {pack.features.map((feature, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm">
-                  <Check className="w-5 h-5 text-accent shrink-0" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-
             <Button
-              className={`w-full rounded-full ${pack.popular ? "bg-accent text-accent-foreground hover:bg-accent/90" : ""}`}
+              className={`w-full rounded-full py-6 font-semibold ${
+                pack.popular 
+                  ? "bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20" 
+                  : "bg-white text-foreground border-2 border-border hover:border-foreground/20 hover:bg-secondary/20"
+              }`}
               variant={pack.popular ? "default" : "outline"}
               asChild
             >
@@ -106,10 +135,6 @@ export function Packs() {
           </FadeIn>
         ))}
       </StaggerChildren>
-
-      <FadeIn delay={0.3} className="mt-12 text-center text-sm text-muted-foreground">
-        <p>Multilingue inclus : max 2 langues. • Au-delà / fonctionnalités avancées : sur devis.</p>
-      </FadeIn>
     </Section>
   );
 }

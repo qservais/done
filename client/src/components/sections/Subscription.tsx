@@ -1,67 +1,62 @@
 import { Section } from "@/components/ui/section";
-import { Check, Info } from "lucide-react";
+import { Check, ShieldCheck, RefreshCw, Server, LifeBuoy } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 export function Subscription() {
   return (
     <Section className="bg-primary text-primary-foreground">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <FadeIn direction="right">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">
-            Abonnement obligatoire.
-            <br />
-            <span className="text-accent">Pourquoi ?</span>
+      <div className="max-w-4xl mx-auto">
+        <FadeIn className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            On ne pose pas un site et on disparaît.
           </h2>
-          <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-            Pour que votre site ne meure pas après 6 mois. Hébergement, maintenance, mises à jour de sécurité et petits changements : tout est géré.
+          <p className="text-primary-foreground/70 text-lg max-w-2xl mx-auto">
+            Le suivi (inclus) qui vous garantit un site toujours en bonne santé.
           </p>
-          
-          <div className="bg-white/5 border border-white/10 p-6 rounded-xl mb-8">
-            <h4 className="flex items-center gap-2 font-bold mb-4 text-accent">
-              <Info className="w-5 h-5" /> Fair Use Policy ({BRAND.FAIR_USE_EUR}€)
-            </h4>
-            <p className="text-sm text-gray-300">
-              L'hébergement est inclus pour un usage normal "vitrine". 
-              Nous couvrons les frais d'infrastructure jusqu'à {BRAND.FAIR_USE_EUR}€/mois de coût variable. 
-              Au-delà (trafic énorme), on optimise ou on facture le surplus (en toute transparence).
-            </p>
-          </div>
         </FadeIn>
 
-        <StaggerChildren className="space-y-6">
-          <FadeIn className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-              <h3 className="text-xl font-bold">Pack Complet</h3>
-              <p className="text-gray-400 text-sm">Domaine + Hébergement + Maintenance</p>
-            </div>
-            <div className="text-right">
-              <span className="text-3xl font-bold text-accent">{BRAND.PRICING.SUB_FULL}€</span>
-              <span className="text-sm text-gray-400">/mois</span>
-            </div>
-          </FadeIn>
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-3xl mx-auto backdrop-blur-sm">
+           <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8 border-b border-white/10 pb-8">
+              <div className="text-center md:text-left">
+                <h3 className="text-2xl font-bold mb-1">Abonnement {BRAND.STUDIO_NAME}</h3>
+                <p className="text-primary-foreground/60 text-sm">Tout inclus, sans mauvaise surprise</p>
+              </div>
+              <div className="text-center md:text-right">
+                <span className="text-4xl font-bold text-accent">{BRAND.SUB_PRICE}€</span>
+                <span className="text-primary-foreground/60 text-sm">/mois</span>
+              </div>
+           </div>
 
-          <FadeIn className="bg-white/5 border border-white/10 p-6 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-              <h3 className="text-xl font-bold">Pack Light</h3>
-              <p className="text-gray-400 text-sm">Si vous gérez déjà votre domaine</p>
-            </div>
-            <div className="text-right">
-              <span className="text-3xl font-bold text-accent">{BRAND.PRICING.SUB_LIGHT}€</span>
-              <span className="text-sm text-gray-400">/mois</span>
-            </div>
-          </FadeIn>
+           <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
+              <div className="space-y-4">
+                 <h4 className="font-bold text-white flex items-center gap-2">
+                   <Server className="w-5 h-5 text-accent" /> Technique
+                 </h4>
+                 <ul className="space-y-3 text-sm text-primary-foreground/80">
+                   <li className="flex gap-3"><Check className="w-4 h-4 text-accent/70 mt-0.5" /> Hébergement & surveillance 24/7</li>
+                   <li className="flex gap-3"><Check className="w-4 h-4 text-accent/70 mt-0.5" /> Sauvegardes automatiques</li>
+                   <li className="flex gap-3"><Check className="w-4 h-4 text-accent/70 mt-0.5" /> Sécurité & mises à jour</li>
+                 </ul>
+              </div>
 
-          <FadeIn className="pt-6 border-t border-white/10">
-            <h4 className="font-bold mb-4">Inclus dans l'abonnement :</h4>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-300">
-              <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> Hébergement rapide</li>
-              <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> Certificat SSL (HTTPS)</li>
-              <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> Mises à jour techniques</li>
-              <li className="flex gap-2"><Check className="w-4 h-4 text-accent" /> 2 tickets support / mois</li>
-            </ul>
-          </FadeIn>
-        </StaggerChildren>
+              <div className="space-y-4">
+                 <h4 className="font-bold text-white flex items-center gap-2">
+                   <LifeBuoy className="w-5 h-5 text-accent" /> Accompagnement
+                 </h4>
+                 <ul className="space-y-3 text-sm text-primary-foreground/80">
+                   <li className="flex gap-3"><Check className="w-4 h-4 text-accent/70 mt-0.5" /> 2 demandes d’ajustements / mois</li>
+                   <li className="flex gap-3"><Check className="w-4 h-4 text-accent/70 mt-0.5" /> Réponse sous {BRAND.SLA_HOURS}h</li>
+                   <li className="flex gap-3"><Check className="w-4 h-4 text-accent/70 mt-0.5" /> Petits changements business</li>
+                 </ul>
+              </div>
+           </StaggerChildren>
+
+           <FadeIn delay={0.3} className="mt-8 pt-6 border-t border-white/5 text-xs text-primary-foreground/50 text-center">
+             <p className="mb-2">* Chaque demande couvre un lot de changements raisonnables (jusqu’à 30 min) + 1 aller-retour.</p>
+             <p>Si votre site explose en trafic (tant mieux), on ajuste la solution avec vous.</p>
+           </FadeIn>
+        </div>
       </div>
     </Section>
   );

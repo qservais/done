@@ -50,7 +50,7 @@ export function Realizations() {
                     <img 
                       src={project.image} 
                       alt={project.name}
-                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300 motion-reduce:group-hover:scale-100"
+                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-all duration-500 motion-reduce:group-hover:scale-100 project-preview"
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -108,6 +108,13 @@ export function Realizations() {
         }
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+        .project-preview {
+          filter: grayscale(100%) sepia(15%) saturate(200%) hue-rotate(180deg) brightness(0.95);
+          transition: filter 0.5s ease, transform 0.3s ease;
+        }
+        .group:hover .project-preview {
+          filter: none;
         }
       `}</style>
     </Section>

@@ -4,6 +4,7 @@ import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { projects } from "@/data/projects";
 import { useRef } from "react";
 import { MadeByDoneBadge, DoneStamp } from "@/components/signature";
+import { trackProjectClick } from "@/lib/tracking";
 
 export function Realizations() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -34,6 +35,7 @@ export function Realizations() {
               className="group block bg-background border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-lg hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 h-full"
               data-testid={`link-project-${index}`}
               aria-label={`Voir le site ${project.name}`}
+              onClick={() => trackProjectClick(project.name, project.url)}
             >
               <div className="bg-secondary/30 rounded-t-xl overflow-hidden">
                 <div className="flex items-center gap-1.5 px-4 py-2.5 bg-secondary/50 border-b border-border/50">

@@ -4,6 +4,7 @@ import { ArrowRight, Star, Clock, Smartphone, CreditCard } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
 import { DoneUnderline } from "@/components/signature";
 import { hero } from "@/data/copy";
+import { trackCTAClick } from "@/lib/tracking";
 
 export function Hero() {
   return (
@@ -46,7 +47,7 @@ export function Hero() {
             className="text-base font-semibold px-8 h-14 w-full sm:w-auto bg-accent text-white hover:bg-accent/90 rounded-full shadow-lg shadow-accent/20" 
             asChild
           >
-            <a href="#wizard" data-testid="link-hero-cta-primary">
+            <a href="#wizard" data-testid="link-hero-cta-primary" onClick={() => trackCTAClick('demander_site', 'hero')}>
               {hero.ctaPrimary} <ArrowRight className="ml-2 w-4 h-4" />
             </a>
           </Button>
@@ -56,7 +57,7 @@ export function Hero() {
             className="text-base font-medium px-8 h-14 w-full sm:w-auto rounded-full bg-background hover:bg-secondary/50 border-border" 
             asChild
           >
-            <a href="#packs" data-testid="link-hero-cta-secondary">{hero.ctaSecondary}</a>
+            <a href="#packs" data-testid="link-hero-cta-secondary" onClick={() => trackCTAClick('voir_packs', 'hero')}>{hero.ctaSecondary}</a>
           </Button>
         </FadeIn>
 

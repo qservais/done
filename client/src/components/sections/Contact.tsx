@@ -4,6 +4,7 @@ import { BRAND } from "@/config/brand";
 import { Mail, Phone } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
 import { DoneUnderline } from "@/components/signature";
+import { trackCTAClick, trackPhoneClick, trackEmailClick } from "@/lib/tracking";
 
 export function Contact() {
   return (
@@ -24,7 +25,7 @@ export function Contact() {
         <FadeIn delay={0.2}>
           <div className="flex justify-center mb-16">
             <Button size="lg" className="h-14 px-8 text-lg w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 rounded-full" asChild>
-              <a href="#wizard">
+              <a href="#wizard" onClick={() => trackCTAClick('remplir_formulaire', 'contact')}>
                 Remplir le formulaire (2 min)
               </a>
             </Button>
@@ -35,11 +36,11 @@ export function Contact() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm text-gray-400 border-t border-white/10 pt-12">
             <div className="flex flex-col items-center gap-2">
               <Mail className="w-6 h-6 text-accent mb-2" />
-              <a href={`mailto:${BRAND.CONTACT_EMAIL}`} className="hover:text-white transition-colors">{BRAND.CONTACT_EMAIL}</a>
+              <a href={`mailto:${BRAND.CONTACT_EMAIL}`} className="hover:text-white transition-colors" onClick={() => trackEmailClick()}>{BRAND.CONTACT_EMAIL}</a>
             </div>
             <div className="flex flex-col items-center gap-2">
               <Phone className="w-6 h-6 text-accent mb-2" />
-              <a href={`tel:${BRAND.PHONE}`} className="hover:text-white transition-colors">{BRAND.PHONE}</a>
+              <a href={`tel:${BRAND.PHONE}`} className="hover:text-white transition-colors" onClick={() => trackPhoneClick()}>{BRAND.PHONE}</a>
             </div>
             <div className="flex flex-col items-center gap-2">
               <span className="text-accent font-bold text-lg mb-1">Zone</span>

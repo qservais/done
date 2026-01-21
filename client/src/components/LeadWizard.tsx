@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 import { DoneStamp } from "@/components/signature";
+import { trackFormStart, trackFormStep, trackFormSubmit, trackFormError } from "@/lib/tracking";
 
 type StepData = {
   activity: string;
@@ -48,6 +49,15 @@ export function LeadWizard() {
 
   const totalSteps = 6;
   const progress = (step / totalSteps) * 100;
+
+  const stepNames = ['activite', 'zone', 'site_type', 'options', 'timing', 'coordonnees', 'recapitulatif'];
+
+  useEffect(() => {
+    if (step === 1) {
+      trackFormStart('lead_wizard');
+    }
+    trackFormStep('lead_wizard', step, stepNames[step - 1] || 'unknown');
+  }, [step]);
 
   const updateData = (key: keyof StepData, value: string) => {
     setData((prev) => ({ ...prev, [key]: value }));
@@ -95,9 +105,15 @@ export function LeadWizard() {
         throw new Error("Erreur lors de l'envoi");
       }
 
+      trackFormSubmit('lead_wizard', {
+        site_type: data.siteType,
+        zone: data.zone,
+        timing: data.timing,
+      });
       setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting lead:", error);
+      trackFormError('lead_wizard', 'submission_failed');
       alert("Une erreur s'est produite. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);

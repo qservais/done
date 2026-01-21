@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { trackCTAClick } from "@/lib/tracking";
 
 export function MobileStickyCTA() {
   const [isVisible, setIsVisible] = useState(false);
@@ -41,7 +42,7 @@ export function MobileStickyCTA() {
                 className="flex-1 h-12 text-sm font-semibold bg-accent text-white hover:bg-accent/90 rounded-full shadow-lg shadow-accent/20"
                 asChild
               >
-                <a href="#wizard" data-testid="link-sticky-cta-primary" aria-label="Demander mon site">
+                <a href="#wizard" data-testid="link-sticky-cta-primary" aria-label="Demander mon site" onClick={() => trackCTAClick('demander_site', 'sticky_mobile')}>
                   Demander mon site <ArrowRight className="ml-1.5 w-4 h-4" />
                 </a>
               </Button>
@@ -51,7 +52,7 @@ export function MobileStickyCTA() {
                 className="h-12 px-4 text-sm font-medium rounded-full bg-white/10 border-white/20 text-white hover:bg-white/20"
                 asChild
               >
-                <a href="#packs" data-testid="link-sticky-cta-packs" aria-label="Voir les packs">Packs</a>
+                <a href="#packs" data-testid="link-sticky-cta-packs" aria-label="Voir les packs" onClick={() => trackCTAClick('voir_packs', 'sticky_mobile')}>Packs</a>
               </Button>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronRight } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
+import { trackPackSelect } from "@/lib/tracking";
 
 const packs = [
   {
@@ -108,7 +109,7 @@ export function Packs() {
               variant={pack.popular ? "default" : "outline"}
               asChild
             >
-              <a href="#wizard" className="flex items-center justify-center gap-1.5" data-testid={`link-pack-${pack.id}`}>
+              <a href="#wizard" className="flex items-center justify-center gap-1.5" data-testid={`link-pack-${pack.id}`} onClick={() => trackPackSelect(pack.name, pack.price)}>
                 Choisir ce pack <ChevronRight className="w-4 h-4" />
               </a>
             </Button>

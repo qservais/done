@@ -34,11 +34,11 @@ export function MobileStickyCTA() {
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
         >
-          <div className="bg-background/80 backdrop-blur-lg border-t border-border/50 px-4 py-3" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+          <div className="bg-foreground/95 backdrop-blur-lg border-t border-white/10 px-4 py-3" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
             <div className="flex gap-3 max-w-lg mx-auto">
               <Button
                 size="lg"
-                className="flex-1 h-12 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 rounded-full shadow-lg"
+                className="flex-1 h-12 text-sm font-semibold bg-accent text-white hover:bg-accent/90 rounded-full shadow-lg shadow-accent/20"
                 asChild
               >
                 <a href="#wizard" data-testid="link-sticky-cta-primary" aria-label="Demander mon site">
@@ -48,7 +48,7 @@ export function MobileStickyCTA() {
               <Button
                 variant="outline"
                 size="lg"
-                className="h-12 px-4 text-sm font-medium rounded-full bg-background border-border"
+                className="h-12 px-4 text-sm font-medium rounded-full bg-white/10 border-white/20 text-white hover:bg-white/20"
                 asChild
               >
                 <a href="#packs" data-testid="link-sticky-cta-packs" aria-label="Voir les packs">Packs</a>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
+import { DoneStamp } from "@/components/DoneStamp";
 
 type StepData = {
   activity: string;
@@ -106,8 +107,8 @@ export function LeadWizard() {
   if (isSuccess) {
     return (
       <div className="bg-background border border-border rounded-xl p-8 text-center max-w-lg mx-auto shadow-lg">
-        <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Check className="w-8 h-8" />
+        <div className="flex justify-center mb-6">
+          <DoneStamp size="lg" />
         </div>
         <h3 className="text-2xl font-bold mb-4">Message reçu !</h3>
         <p className="text-muted-foreground mb-8">

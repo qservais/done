@@ -1,9 +1,11 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileStickyCTA } from "@/components/MobileStickyCTA";
+import { SEO } from "@/components/SEO";
+import { StructuredData } from "@/components/StructuredData";
 import { Hero } from "@/components/sections/Hero";
 import { Why } from "@/components/sections/Why";
-import { Problem } from "@/components/sections/Problem"; // Imported Problem
+import { Problem } from "@/components/sections/Problem";
 import { Packs } from "@/components/sections/Packs";
 import { Subscription } from "@/components/sections/Subscription";
 import { Process } from "@/components/sections/Process";
@@ -17,15 +19,22 @@ import { Section } from "@/components/ui/section";
 export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
+      <SEO
+        title="Studio web, Ads & tracking en Belgique | done"
+        description="Sites rapides, landing pages, Google Ads, Meta Ads et tracking GA4. Simple, beau, efficace — madebydone.be"
+        canonical="https://madebydone.be/"
+      />
+      <StructuredData type="organization" />
+      <StructuredData type="website" />
+      
       <Header />
       
       <main>
         <Hero />
-        <Problem /> {/* Added Problem section */}
+        <Problem />
         <Why />
         <Packs />
         <Subscription />
-        {/* Maintenance section removed as requested, content moved to FAQ/Subscription */}
         <Process />
         
         <Section id="wizard" className="bg-secondary/30 py-24">

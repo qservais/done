@@ -6,9 +6,13 @@ This is a premium web design studio website ("done") targeting freelancers and s
 
 The site is built as a mobile-first, single-page application with smooth animations and a premium agency aesthetic. It offers tiered website packages (Landing, Vitrine, Multi-page) with a subscription-based hosting and maintenance model.
 
+**Domain**: madebydone.be
+
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language
+- DA (Direction Artistique): minimal, éditorial, premium, micro-animations sobres, mobile-first
+- Codes DA validés: signature "DONE", capsules typo, concept "Before → Done", ton transparent/léger mais pro
 
 ## System Architecture
 
@@ -19,6 +23,7 @@ Preferred communication style: Simple, everyday language.
 - **UI Components**: shadcn/ui (New York style) built on Radix UI primitives
 - **Animations**: Framer Motion for scroll reveals and transitions
 - **State Management**: TanStack React Query for server state
+- **SEO**: Custom SEO component with dynamic meta tags per page
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express 5
@@ -35,10 +40,31 @@ Preferred communication style: Simple, everyday language.
 - **Shared Types**: Schema and types in `shared/` are imported by both client and server
 - **Configuration Centralization**: Brand constants in `client/src/config/brand.ts`
 - **Component Organization**: UI primitives in `components/ui/`, layout in `components/layout/`, page sections in `components/sections/`
+- **Editable Data**: Content in `client/src/data/` (pricing, projects, options, faq)
 
 ### Email Integration
 - **Service**: Resend for transactional emails
 - **Purpose**: Lead confirmation and studio notification emails
+- **Studio Email**: hello@madebydone.be
+
+## SEO Implementation
+
+### Files & Documentation
+- **SEO Map**: `/docs/seo-map.md` - All titles, metas, H1 per route
+- **Sitemap**: `/public/sitemap.xml` - Static sitemap
+- **Robots**: `/public/robots.txt` - Search engine directives
+
+### Components
+- **SEO Component**: `client/src/components/SEO.tsx` - Dynamic meta tags
+- **Structured Data**: `client/src/components/StructuredData.tsx` - JSON-LD schemas
+
+### Per-Page SEO
+Each page uses the `<SEO>` component with:
+- Unique title
+- Meta description
+- Canonical URL
+- OpenGraph tags
+- Twitter Cards
 
 ## External Dependencies
 
@@ -57,4 +83,25 @@ Preferred communication style: Simple, everyday language.
 ### Environment Variables Required
 - `DATABASE_URL`: PostgreSQL connection string
 - `RESEND_API_KEY`: Resend email service API key
-- `STUDIO_EMAIL`: Destination email for lead notifications (optional, defaults in code)
+- `STUDIO_EMAIL`: Destination email for lead notifications (optional, defaults to hello@madebydone.be)
+
+## Routes
+
+| Route | Page | SEO |
+|-------|------|-----|
+| `/` | Home (one-page) | Indexed |
+| `/realisations` | Portfolio projets | Indexed |
+| `/mentions` | Mentions légales | noindex |
+| `/privacy` | Politique vie privée | noindex |
+| `/cookies` | Politique cookies | noindex |
+| `/admin` | Dashboard admin | Protected, noindex |
+
+## Recent Changes (January 2026)
+
+- Added comprehensive SEO: titles, metas, structured data, sitemap
+- Created DoneStamp component for brand signature
+- Improved Hero with "Done." underline accent
+- Enhanced project cards with browser frame design
+- Added mobile sticky CTA
+- Unified capsules/tags styling
+- Created editable data files for content management

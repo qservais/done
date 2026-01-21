@@ -1,0 +1,100 @@
+CONTEXTE
+Tu travailles sur mon repo existant (site déjà avancé). Ne refais PAS from scratch.
+Objectif : m’aider à “planifier + inspirer” la suite (DA + structure) et surtout faire un VRAI travail SEO complet.
+Site : madebydone.be, marque “done”. DA : minimal, éditorial, premium, micro-animations sobres, mobile-first.
+Codes DA déjà validés : signature “DONE”, capsules typo, concept “Before → Done”, ton transparent/léger mais pro.
+
+TA MISSION (ordre strict)
+1) AUDIT RAPIDE DU REPO
+- Lance le projet, liste toutes les routes.
+- Identifie : pages publiques, pages dynamiques (/work/[slug]…), composants layout/header/footer, système de contenu (JSON/TS/MD).
+- Vérifie ce qui existe déjà en SEO : title, meta description, OpenGraph, Twitter, canonical, robots, sitemap, favicon, headings.
+
+2) PLAN D’INSPIRATION (sans sur-développer)
+- Propose 8–12 améliorations UX/UI “madebydone” (petites, impactantes) compatibles avec mon existant :
+  ex: Done Stamp récurrent, capsules, micro-underline, cards work plus éditoriales, captions type magazine, spacing, hero plus tranché, etc.
+- Donne-moi un mini backlog priorisé (P0/P1/P2) orienté impact (UX + conversion + SEO).
+- IMPORTANT : reste minimal, élégant, pas d’effets gratuits.
+
+3) SEO — LIVRER UNE STRATÉGIE + L’IMPLÉMENTER
+3.1 Mapping mots-clés (simple mais solide)
+- Définis 1 intention principale par page :
+  Home = studio web + acquisition / ads / tracking
+  Services = services détaillés (landing, site, GA4 tracking, Google Ads, Meta Ads, UX)
+  Work = études de cas / projets
+  About = studio + méthode
+  Contact = prise de contact / brief
+- Ajoute un léger ancrage géo “Belgique” (sans surcharger). Si le site mentionne Liège/Bruxelles, l’utiliser.
+
+3.2 Titres & metas (TOP)
+- Chaque page doit avoir :
+  - <title> unique, descriptif, concis (éviter “Accueil”, éviter répétition inutile)
+  - meta description persuasive, qui résume vraiment la page
+  - H1 unique cohérent avec le title (Google peut parfois s’en inspirer)
+- Respecte les bonnes pratiques : descriptif/concise, pas de keyword stuffing, pas de titles génériques. :contentReference[oaicite:2]{index=2}
+
+=> PRODUIS un fichier /docs/seo-map.md contenant :
+- Route
+- Title final
+- Meta description finale
+- H1 final
+- 3–6 mots-clés secondaires (facultatif)
+- Notes (ex: canonical, schema, CTA)
+
+3.3 Implémentation technique Next.js (App Router)
+- Utilise la Metadata API : metadata static + generateMetadata pour les pages dynamiques (/work/[slug]). :contentReference[oaicite:3]{index=3}
+- Ajoute robots.ts + sitemap.ts
+- Ajoute canonical (metadata.alternates.canonical)
+- Ajoute OpenGraph + Twitter cards par page (fallback global dans layout)
+- Ajoute favicons + apple-touch-icon avec conventions Next (icônes placeholders ok)
+- S’assure que toutes les images importantes ont alt text pertinent
+
+3.4 Structured Data (JSON-LD)
+- Ajouter au minimum :
+  - Organization (done / madebydone.be)
+  - WebSite (+ éventuellement SearchAction)
+  - Service sur /services
+  - BreadcrumbList sur /work/[slug]
+- Valider que le JSON-LD est cohérent, sans champs mensongers.
+
+4) PROPOSITION “META” (à appliquer)
+À utiliser comme base si mon contenu ne précise pas plus :
+
+HOME (/)
+Title: Studio web, Ads & tracking en Belgique | done
+Meta: Sites rapides, landing pages, Google Ads, Meta Ads et tracking GA4. Simple, beau, efficace — madebydone.be
+H1: Web. Ads. Tracking. Done.
+
+SERVICES (/services)
+Title: Services web, Ads & GA4 | done
+Meta: Landing pages, sites vitrines, tracking GA4, Google Ads & Meta Ads. Une exécution claire, orientée conversion.
+H1: Des services simples. Et bien faits.
+
+WORK (/work)
+Title: Projets & études de cas | done
+Meta: Avant/Après, choix UX, tracking, Ads. Des projets livrés vite, propres, mesurables.
+H1: Before → Done.
+
+WORK DETAIL (/work/[slug])
+Title template: {Nom du projet} — Before → Done | done
+Meta template: {1 phrase contexte + 1 phrase résultat/valeur}. UX, tracking et perf sur madebydone.be
+H1: {Nom du projet}
+
+ABOUT (/about)
+Title: À propos du studio done | madebydone.be
+Meta: done = fait. Un studio orienté clarté, conversion et performance, sans blabla ni sites lourds.
+H1: done = fait.
+
+CONTACT (/contact)
+Title: Contact & brief projet | done
+Meta: Décris ton besoin (site, ads, tracking). Réponse claire, rapide, et un plan concret.
+H1: Un projet ? On le rend done.
+
+5) QUALITÉ
+- Aucun doublon de title/meta/H1.
+- Hiérarchie Hn propre (H1 puis H2…)
+- Performances : fonts via next/font, images optimisées, animations respectent prefers-reduced-motion.
+- Livrer un récap final : ce que tu as changé + où + comment éditer.
+
+NE ME POSE PAS 15 QUESTIONS.
+Si une info manque, utilise la version “base” ci-dessus, et laisse des TODO clairs dans /docs/seo-map.md.

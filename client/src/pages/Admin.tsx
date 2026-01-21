@@ -25,31 +25,52 @@ type Lead = {
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authToken, setAuthToken] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
-  const ADMIN_PASSWORD = "done2024";
-
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["/api/leads"],
+    queryKey: ["/api/leads", authToken],
     queryFn: async () => {
-      const res = await fetch("/api/leads");
+      const res = await fetch("/api/leads", {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       if (!res.ok) throw new Error("Erreur de chargement");
       return res.json();
     },
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && !!authToken,
   });
 
   const leads: Lead[] = data?.leads || [];
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      setIsAuthenticated(true);
-      setError("");
-    } else {
-      setError("Mot de passe incorrect");
+    setIsLoggingIn(true);
+    setError("");
+    
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        setAuthToken(data.token);
+        setIsAuthenticated(true);
+      } else {
+        setError("Mot de passe incorrect");
+      }
+    } catch (err) {
+      setError("Erreur de connexion");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -84,8 +105,13 @@ export default function Admin() {
               data-testid="input-admin-password"
             />
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full h-12 bg-[#0a1628] hover:bg-[#1a2638]" data-testid="button-admin-login">
-              Connexion
+            <Button 
+              type="submit" 
+              className="w-full h-12 bg-[#0a1628] hover:bg-[#1a2638]" 
+              data-testid="button-admin-login"
+              disabled={isLoggingIn}
+            >
+              {isLoggingIn ? "Connexion..." : "Connexion"}
             </Button>
           </form>
         </div>

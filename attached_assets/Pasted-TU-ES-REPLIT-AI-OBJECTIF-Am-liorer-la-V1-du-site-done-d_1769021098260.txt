@@ -1,0 +1,232 @@
+TU ES REPLIT AI. OBJECTIF : Améliorer la V1 du site “done” (déjà fonctionnelle) en corrigeant les points UX/UI et conversion observés sur les screenshots (mobile + desktop). NE PAS REPARTIR DE ZÉRO. Tu dois modifier le code existant, refactorer proprement, et améliorer la perception “premium”.
+
+PRIORITÉ ABSOLUE : MOBILE-FIRST (375px). Desktop ensuite.
+TECH : Next.js + TS + Tailwind + Framer Motion (déjà en place). Respecter prefers-reduced-motion.
+
+========================
+A) INVARIANTS À NE PAS CHANGER
+========================
+- Nom studio : done
+- Promesse principale : “Un site premium qui coûte moins qu’un logo.”
+- Prix packs : 197€ / 297€ / 497€
+- Abonnement unique : 19,99€ / mois
+- Délai : “V1 en 72h”
+- Multilingue : 2 langues max (FR/EN) — même si EN peut rester placeholder
+- Maintenance : 2 demandes d’ajustements/mois, 30 min max, 1 aller-retour
+
+========================
+B) OBJECTIFS DE CORRECTION (PRIORISÉS)
+========================
+P0 (impact fort conversion/premium) :
+1) “Nos clients” : remplacer les cartes colorées pleines par des cartes premium avec thumbnails (même placeholders) dans un “browser frame”, tags discrets, plus crédibles.
+2) “Options à la carte” : rendre lisible + premium (cards, icônes, microcopy), surtout sur mobile.
+3) Ajouter un sticky CTA mobile (discret) + améliorer la preuve dans le hero (chips plus lisibles, meilleure densité).
+
+P1 :
+4) Ajuster la hiérarchie typographique sur mobile (H1, sous-titre, spacing).
+5) Packs : rendre encore plus “cumulatif” visuellement (Pack 2 = tout Pack1 + extras; Pack3 = tout Pack2 + extras), sans surcharge.
+6) Abonnement : réduire la “densité texte” et rendre les bénéfices plus scannables.
+
+P2 :
+7) Améliorer accessibilité (contraste, focus, tailles tappables) + micro-interactions + perf.
+
+========================
+C) AUDIT RAPIDE DU CODE EXISTANT (OBLIGATOIRE)
+========================
+1) Localiser les composants/sections (page principale) :
+- Header/Nav
+- Hero
+- Problème
+- Avantages (3 cards)
+- Packs
+- Abonnement
+- Process
+- Lead wizard
+- Nos clients
+- Options à la carte
+- FAQ
+- CTA final + footer
+
+2) Créer (si pas déjà fait) des fichiers data séparés pour éditabilité :
+- /src/data/pricing.ts
+- /src/data/projects.ts
+- /src/data/options.ts
+- /src/data/faq.ts
+
+3) Centraliser les variables dans /src/config/brand.ts :
+STUDIO_NAME="done"
+PACK_PRICES={ landing:197, vitrine:297, multipage:497 }
+SUB_PRICE=19.99
+DELIVERY="V1 en 72h"
+LANGS=["fr","en"] (max 2)
+
+========================
+D) CORRECTIONS UI DÉTAILLÉES
+========================
+
+----------------------------------------
+D1) HERO : Premium + conversion (MOBILE FIRST)
+----------------------------------------
+Objectifs :
+- H1 lisible sans casser les lignes bizarrement sur mobile
+- Sous-titre plus crédible (premium, pas “vite fait”)
+- CTA plus clairs + preuve rapide
+
+Actions :
+1) H1 :
+- Utiliser une taille responsive via clamp (Tailwind) :
+  mobile: text-3xl/4xl, desktop: text-6xl max
+- Empêcher l’underline/bleu de casser en 2 lignes de façon moche.
+  -> Utiliser un span inline-block sur “moins qu’un logo.” et un underline plus fin.
+
+2) Sous-titre :
+- 2 lignes max sur mobile, 1–2 sur desktop, opacité légèrement réduite.
+
+3) Chips preuve :
+- Chips = “Rendu premium”, “Mobile-first”, “V1 en 72h”, “Suivi 19,99€/mois”
+- Sur mobile : 2 colonnes, spacing propre (pas une ligne qui déborde)
+
+4) CTA :
+- Primary : “Demander mon site”
+- Secondary : “Voir les packs”
+- Taille tappable minimum 44px de hauteur, full-width sur mobile (stack vertical)
+
+5) Ajouter sous CTA une mini-ligne de transparence (petite) :
+“À partir de 197€ + abonnement (obligatoire).”
+
+----------------------------------------
+D2) STICKY CTA MOBILE (discret mais efficace)
+----------------------------------------
+Créer un composant <MobileStickyCTA /> :
+- Visible uniquement sur mobile (<= md)
+- Apparaît après scroll (ex: 400px) et disparaît proche du footer (pour éviter double CTA)
+- Contenu :
+  bouton primary “Demander mon site”
+  bouton ghost “Voir packs”
+- Style : fond blur léger + border, très premium (pas agressif)
+- Respect reduced motion
+
+----------------------------------------
+D3) SECTION “NOS CLIENTS” : passer en premium (P0)
+----------------------------------------
+Problème actuel :
+- cartes très colorées à plat = moins premium, moins crédible, ressemble à un template.
+
+Solution :
+1) Créer des thumbnails (même placeholders) :
+- Ajouter dans /public/projects/ des images placeholder sobres :
+  project-maisonvagabonde.jpg, project-aste.jpg, etc.
+  Si tu ne peux pas les générer : utiliser un placeholder “screenshot” neutre (dégradé très léger + frame).
+
+2) UI carte premium :
+- Card avec “browser frame” en haut (3 dots), image à l’intérieur
+- Sous l’image : Nom projet + tags (pills) + bouton “Voir le site”
+- Interaction : hover lift + shadow douce (desktop), pas de gros effets mobile
+
+3) Layout :
+- Mobile : slider horizontal snap (une carte 85% width), spacing propre
+- Desktop : grille 3 colonnes max, alignée
+
+4) Data array /src/data/projects.ts :
+{
+  name, url, image, tags: ["Vitrine", "Premium", ...]
+}
+
+----------------------------------------
+D4) “OPTIONS À LA CARTE” : rendre lisible et vendable (P0)
+----------------------------------------
+Problème actuel :
+- texte petit, en colonnes, pas scannable sur mobile.
+
+Solution :
+1) Remplacer par une grille de “option cards” :
+- Mobile : 1 colonne (cards full width)
+- Desktop : 2 ou 3 colonnes selon largeur
+
+2) Chaque card :
+- Icône (simple, lucide si dispo)
+- Titre clair
+- “À partir de XXX€” en badge
+- 1 phrase bénéfice (max 90 caractères)
+Exemples (à conserver) :
+- Formulaire multi-étapes — à partir de 149€ — “Qualifie les demandes sans échanges inutiles.”
+- Page supplémentaire (template existant) — à partir de 99€ — “Ajouter une page sans refaire le design.”
+- Langue supplémentaire (>2) — à partir de 99€ — “Traduction fournie par vous, intégration par nous.”
+- SEO avancé — à partir de 249€ — “Optimisations + structure + contenu orienté recherche.”
+- Tracking / datalayer propre — à partir de 199€ — “Prêt pour campagnes, events propres.”
+- Newsletter setup simple — à partir de 149€ — “Mailchimp/Brevo, template + capture.”
+- Shopify — à partir de 749€ — “Base solide, thème, paiements, config.”
+
+3) Ajouter un microcopy sous la grille :
+“Si c’est clair et simple, on fixe un prix. Si c’est du sur-mesure, on chiffre.”
+
+----------------------------------------
+D5) PACKS : rendre “cumulatif” plus évident (P1)
+----------------------------------------
+Actions :
+1) Pour Pack 297 (recommandé) :
+- Ajouter un mini bloc “Tout ce qu’il y a dans Landing + …”
+2) Pour Pack 497 :
+- “Tout ce qu’il y a dans Vitrine + …”
+3) Réduire le texte : 4–5 bullets max
+4) Uniformiser la hauteur des cards sur desktop
+5) CTA unique par card (“Choisir ce pack”) + scroll vers wizard pré-rempli (si possible)
+
+Option bonus :
+- Quand on clique un pack -> pré-sélection dans le wizard (state global simple ou param URL ?pack=vitrine)
+
+----------------------------------------
+D6) ABONNEMENT : plus scannable (P1)
+----------------------------------------
+Problème potentiel :
+- bloc dense ; sur mobile il faut “scan” en 3 secondes.
+
+Actions :
+1) Transformer la liste en 2 colonnes sur desktop, 1 sur mobile
+2) Remplacer jargon :
+- “2 demandes d’ajustements/mois” (pas “tickets”)
+- mention “jusqu’à 30 min + 1 aller-retour”
+3) Ajouter un mini bandeau “Urgences” :
+“Site down / formulaire cassé : priorité.”
+
+Fair-use :
+- Ne pas mettre le chiffre 5€ en gros ici (optionnel)
+- Le mettre dans FAQ, plus discret :
+“Si trafic exceptionnel, on adapte ensemble.”
+
+----------------------------------------
+D7) TYPO / SPACING / ACCESSIBILITÉ (P1/P2)
+----------------------------------------
+1) Augmenter légèrement la taille des textes secondaires sur mobile (min 14–16px)
+2) Augmenter l’interligne (leading) sur les paragraphes
+3) Vérifier contrastes (texte gris sur fond clair)
+4) Focus visible sur tous liens/boutons
+5) Taille tappable : min 44px height
+
+----------------------------------------
+D8) PERFORMANCE & MOTION (P2)
+----------------------------------------
+1) Préférer animations légères (opacity/translate)
+2) Désactiver parallax lourd sur mobile
+3) Respect reduced motion :
+- if prefers-reduced-motion -> réduire durations, supprimer transforms
+
+========================
+E) CHECKLIST D’ACCEPTATION (OBLIGATOIRE)
+========================
+- Mobile (375px) : hero lisible, CTA clairs, chips propres (pas de wrap moche)
+- Sticky CTA mobile fonctionnel (apparaît après scroll, disparaît près footer)
+- “Nos clients” affiche des thumbnails premium (frames + images)
+- “Options à la carte” devient une grille de cards lisibles
+- Packs cumulés plus évidents, card heights cohérentes desktop
+- Abonnement scannable en 3 secondes, jargon réduit
+- Accessibilité OK (focus, contrastes)
+- Build OK, aucune régression du wizard
+- Données éditables via fichiers /src/data/*
+
+========================
+F) LIVRABLES
+========================
+- Modifs appliquées dans le code existant
+- Data séparées (pricing, projects, options, faq)
+- README court : où changer prix/texte/images, comment remplacer thumbnails

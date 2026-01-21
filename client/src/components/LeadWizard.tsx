@@ -67,10 +67,40 @@ export function LeadWizard() {
 
   const submitForm = async () => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          activity: data.activity,
+          zone: data.zone,
+          siteType: data.siteType,
+          pages: data.pages,
+          languages: data.languages,
+          domain: data.domain,
+          emailPro: data.emailPro,
+          timing: data.timing,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          message: data.message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'envoi");
+      }
+
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Error submitting lead:", error);
+      alert("Une erreur s'est produite. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSuccess) {

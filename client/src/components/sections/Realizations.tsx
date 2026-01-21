@@ -3,12 +3,13 @@ import { ExternalLink } from "lucide-react";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { projects } from "@/data/projects";
 import { useRef } from "react";
+import { MadeByDoneBadge, DoneStamp } from "@/components/signature";
 
 export function Realizations() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Section id="realizations" className="bg-secondary/20 overflow-hidden">
+    <Section id="realizations" className="bg-secondary/20 overflow-hidden relative">
       <FadeIn className="mb-10 md:mb-12">
         <div className="text-center md:text-left">
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3">Nos clients</h2>
@@ -30,7 +31,7 @@ export function Realizations() {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block bg-background border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-lg h-full"
+              className="group block bg-background border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-lg hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 h-full"
               data-testid={`link-project-${index}`}
               aria-label={`Voir le site ${project.name}`}
             >
@@ -44,12 +45,12 @@ export function Realizations() {
                   </div>
                 </div>
                 
-                <div className={`aspect-[16/10] bg-gradient-to-br ${project.gradient} flex items-center justify-center relative`}>
+                <div className={`aspect-[16/10] bg-gradient-to-br ${project.gradient} flex items-center justify-center relative overflow-hidden`}>
                   {project.image ? (
                     <img 
                       src={project.image} 
                       alt={project.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300 motion-reduce:group-hover:scale-100"
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -68,7 +69,7 @@ export function Realizations() {
                     <h3 className="font-bold text-base md:text-lg text-foreground group-hover:text-accent transition-colors truncate">
                       {project.name}
                     </h3>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
+                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
                       {project.tags.map((tag, i) => (
                         <span 
                           key={i}
@@ -77,6 +78,7 @@ export function Realizations() {
                           {tag}
                         </span>
                       ))}
+                      <MadeByDoneBadge variant="subtle" />
                     </div>
                   </div>
                   <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-foreground group-hover:bg-accent group-hover:text-white transition-all shrink-0">
@@ -87,6 +89,16 @@ export function Realizations() {
             </a>
           </FadeIn>
         ))}
+      </div>
+
+      <FadeIn delay={0.3} className="mt-8 text-center">
+        <p className="text-xs text-muted-foreground/50 italic">
+          Exemple de rendus livrés par done — mobile-first.
+        </p>
+      </FadeIn>
+
+      <div className="absolute bottom-8 right-8 hidden md:block">
+        <DoneStamp size="md" />
       </div>
 
       <style>{`

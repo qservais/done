@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
 import { Mail, Phone } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
+import { DoneUnderline } from "@/components/signature";
 
 export function Contact() {
   return (
@@ -10,10 +11,13 @@ export function Contact() {
       <div className="max-w-4xl mx-auto text-center">
         <FadeIn>
           <h2 className="text-4xl md:text-6xl font-serif font-bold mb-8 text-white">
-            On le fait ?
+            <DoneUnderline>On le fait ?</DoneUnderline>
           </h2>
-          <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-400 mb-4 max-w-2xl mx-auto">
             Promis, on répond. Même le dimanche. (Mais on dort parfois.)
+          </p>
+          <p className="text-sm text-gray-500 italic mb-12">
+            Livré. Maintenu. Done.
           </p>
         </FadeIn>
 

@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/section";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
+import { DoneStamp } from "@/components/signature";
 
 const steps = [
   {
@@ -26,7 +27,7 @@ const steps = [
 
 export function Process() {
   return (
-    <Section id="process" className="bg-background">
+    <Section id="process" className="bg-background relative">
       <FadeIn className="mb-16">
         <h2 className="text-3xl md:text-5xl font-bold mb-6">Comment ça marche ?</h2>
         <p className="text-muted-foreground text-lg">Rapide, oui. Bâclé, jamais.</p>
@@ -43,6 +44,26 @@ export function Process() {
           </FadeIn>
         ))}
       </StaggerChildren>
+
+      <div className="absolute bottom-8 right-8 opacity-0 animate-fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+        <DoneStamp size="lg" />
+      </div>
+
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-fade-in {
+            animation: none;
+            opacity: 1;
+          }
+        }
+      `}</style>
     </Section>
   );
 }

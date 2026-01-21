@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
-import { DoneStamp } from "@/components/DoneStamp";
+import { DoneStamp } from "@/components/signature";
 
 type StepData = {
   activity: string;

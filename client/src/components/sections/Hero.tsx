@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
-import { BRAND } from "@/config/brand";
 import { ArrowRight, Star, Clock, Smartphone, CreditCard } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
+import { DoneUnderline } from "@/components/signature";
 import { hero } from "@/data/copy";
 
 export function Hero() {
@@ -30,22 +30,8 @@ export function Hero() {
 
           <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 md:mb-8 text-foreground">
             Un site premium qui coûte{" "}
-            <span className="relative inline-block whitespace-nowrap">
-              <span className="text-accent">moins qu'un logo.</span>
-              <svg 
-                className="absolute w-full h-2 md:h-3 -bottom-0.5 md:-bottom-1 left-0 text-accent" 
-                viewBox="0 0 100 10" 
-                preserveAspectRatio="none"
-              >
-                <path 
-                  d="M0 6 Q 25 2 50 6 T 100 6" 
-                  stroke="currentColor" 
-                  strokeWidth="3" 
-                  strokeLinecap="round"
-                  fill="none" 
-                  opacity="0.35"
-                />
-              </svg>
+            <span className="text-accent">
+              <DoneUnderline>moins qu'un logo.</DoneUnderline>
             </span>
           </h1>
 
@@ -74,9 +60,12 @@ export function Hero() {
           </Button>
         </FadeIn>
 
-        <FadeIn delay={0.25} className="pt-6 md:pt-8">
+        <FadeIn delay={0.25} className="pt-6 md:pt-8 space-y-2">
           <p className="text-sm text-muted-foreground/60">
             {hero.disclaimer}
+          </p>
+          <p className="text-xs text-muted-foreground/40 italic">
+            On fait simple. Et bien fait.
           </p>
         </FadeIn>
       </div>

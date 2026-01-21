@@ -39,8 +39,17 @@ The site is built as a mobile-first, single-page application with smooth animati
 - **Monorepo Structure**: `client/`, `server/`, `shared/` directories with path aliases
 - **Shared Types**: Schema and types in `shared/` are imported by both client and server
 - **Configuration Centralization**: Brand constants in `client/src/config/brand.ts`
-- **Component Organization**: UI primitives in `components/ui/`, layout in `components/layout/`, page sections in `components/sections/`
-- **Editable Data**: Content in `client/src/data/` (pricing, projects, options, faq)
+- **Component Organization**: UI primitives in `components/ui/`, layout in `components/layout/`, page sections in `components/sections/`, signature in `components/signature/`
+- **Editable Data**: Content in `client/src/data/` (pricing, projects, options, faq, copy)
+
+### Signature Components
+Located in `client/src/components/signature/`:
+- **DoneUnderline**: Ink-style underline (6-8px) with hover animation, accent color at 30% opacity
+- **DoneStamp**: Circular "DONE" stamp, rotated -12deg, opacity ~15%, sizes sm/md/lg
+- **MadeByDoneBadge**: Pill badge "made by done" with outline/subtle variants
+- **BeforeAfter**: Draggable image comparison slider with "Avant/Done" labels (ready for V2)
+
+All signature components support `prefers-reduced-motion`.
 
 ### Email Integration
 - **Service**: Resend for transactional emails
@@ -99,9 +108,13 @@ Each page uses the `<SEO>` component with:
 ## Recent Changes (January 2026)
 
 - Added comprehensive SEO: titles, metas, structured data, sitemap
-- Created DoneStamp component for brand signature
-- Improved Hero with "Done." underline accent
-- Enhanced project cards with browser frame design
+- Created signature components: DoneUnderline, DoneStamp, MadeByDoneBadge, BeforeAfter
+- Improved Hero with DoneUnderline on "moins qu'un logo"
+- Enhanced project cards with browser frame design and MadeByDoneBadge
+- Added DoneStamp to Process, Realizations, Footer sections
+- Added micro-copy "done" at strategic places (Hero, Packs, Contact)
+- Added captions under key sections
+- All animations respect prefers-reduced-motion
 - Added mobile sticky CTA
 - Unified capsules/tags styling
-- Created editable data files for content management
+- Created editable data files for content management (copy.ts, projects.ts with before/after)

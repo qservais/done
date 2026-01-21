@@ -7,19 +7,19 @@ import { useLocation } from "wouter";
 
 const legalContent = {
   mentions: {
-    title: "Mentions légales | done",
+    title: "Mentions légales — done",
     description: "Informations légales du studio done. Éditeur, hébergeur et conditions d'utilisation.",
     canonical: "https://madebydone.be/mentions",
     h1: "Mentions légales",
   },
   privacy: {
-    title: "Politique de confidentialité | done",
+    title: "Politique de confidentialité — done",
     description: "Comment done collecte et protège vos données personnelles. RGPD compliant.",
     canonical: "https://madebydone.be/privacy",
     h1: "Politique de confidentialité",
   },
   cookies: {
-    title: "Politique cookies | done",
+    title: "Politique cookies — done",
     description: "Utilisation des cookies sur madebydone.be. Paramètres et consentement.",
     canonical: "https://madebydone.be/cookies",
     h1: "Politique cookies",

@@ -11,7 +11,7 @@ export default function RealizationsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <SEO
-        title="Projets & études de cas | done"
+        title="Projets & études de cas — done"
         description="Avant/Après, choix UX, tracking, Ads. Des projets livrés vite, propres, mesurables."
         canonical="https://madebydone.be/realisations"
       />

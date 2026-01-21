@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <SEO
-        title="Sites web premium à prix accessible | done"
+        title="Sites web premium à prix accessible — done"
         description="Sites web & landing pages au rendu haut de gamme, pensés mobile-first, livrés en 72h. Simple, beau, efficace — madebydone.be"
         canonical="https://madebydone.be/"
       />

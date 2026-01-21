@@ -11,7 +11,7 @@ const features = [
   },
   {
     icon: Zap,
-    title: "Rapide (24-48h)",
+    title: "Rapide (72h)",
     description: "Votre V1 prête en un temps record. On ne traîne pas.",
   },
   {

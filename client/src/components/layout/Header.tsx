@@ -39,7 +39,7 @@ export function Header() {
       >
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
           <Link href="/" className="font-serif font-bold text-xl md:text-2xl tracking-tighter hover:opacity-80 transition-opacity">
-            {BRAND.STUDIO_NAME}
+            {BRAND.STUDIO_NAME}<span className="text-accent">.</span>
           </Link>
 
           {/* Desktop Nav */}

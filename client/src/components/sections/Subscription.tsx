@@ -35,7 +35,7 @@ export function Subscription() {
               <p className="text-primary-foreground/60 text-sm mt-1">Tout inclus, sans surprise</p>
             </div>
             <div className="flex items-baseline gap-1">
-              <span className="text-3xl md:text-4xl font-bold text-accent">{BRAND.SUB_PRICE}€</span>
+              <span className="text-3xl md:text-4xl font-bold text-white">{BRAND.SUB_PRICE}€</span>
               <span className="text-primary-foreground/60 text-sm">/mois</span>
             </div>
           </div>
@@ -76,7 +76,7 @@ export function Subscription() {
               <div>
                 <p className="text-sm font-semibold text-accent mb-1">Urgences prioritaires</p>
                 <p className="text-xs text-primary-foreground/70">
-                  Site down ou formulaire cassé ? On intervient en priorité.
+                  Besoin urgent ? On est là. On intervient en priorité.
                 </p>
               </div>
             </div>

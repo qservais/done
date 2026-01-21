@@ -8,7 +8,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12">
         <div className="col-span-1 md:col-span-2">
           <div className="flex items-center gap-3 mb-4">
-            <h3 className="font-serif text-2xl font-bold">{BRAND.STUDIO_NAME}</h3>
+            <h3 className="font-serif text-2xl font-bold">{BRAND.STUDIO_NAME}<span className="text-accent">.</span></h3>
             <MadeByDoneBadge variant="outline" className="border-white/30 text-white/70 hover:border-white/50 hover:text-white/90" />
           </div>
           <p className="text-white/60 max-w-sm mb-6 text-sm leading-relaxed">

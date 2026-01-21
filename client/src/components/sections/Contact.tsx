@@ -1,7 +1,7 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
-import { Mail, Phone, Calendar } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
 
 export function Contact() {
@@ -18,15 +18,10 @@ export function Contact() {
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+          <div className="flex justify-center mb-16">
             <Button size="lg" className="h-14 px-8 text-lg w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 rounded-full" asChild>
               <a href="#wizard">
                 Remplir le formulaire (2 min)
-              </a>
-            </Button>
-            <Button variant="outline" size="lg" className="h-14 px-8 text-lg w-full sm:w-auto rounded-full bg-transparent text-white border-white hover:bg-white hover:text-black" asChild>
-              <a href={BRAND.CALENDAR_URL} target="_blank" rel="noopener noreferrer">
-                <Calendar className="mr-2 w-5 h-5" /> Réserver un appel
               </a>
             </Button>
           </div>

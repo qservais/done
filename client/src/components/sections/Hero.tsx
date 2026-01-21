@@ -3,6 +3,7 @@ import { Section } from "@/components/ui/section";
 import { BRAND } from "@/config/brand";
 import { ArrowRight, Star, Clock, Smartphone, CreditCard } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
+import { hero } from "@/data/copy";
 
 export function Hero() {
   return (
@@ -14,44 +15,42 @@ export function Hero() {
         <FadeIn>
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-2.5 sm:gap-3 mb-8 md:mb-10">
             <span className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-wide">
-              <Star className="w-3.5 h-3.5" /> Rendu premium
+              <Star className="w-3.5 h-3.5" /> {hero.chips[0].label}
             </span>
             <span className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-secondary text-foreground/70 text-xs font-medium">
-              <Smartphone className="w-3.5 h-3.5" /> Mobile-first
+              <Smartphone className="w-3.5 h-3.5" /> {hero.chips[1].label}
             </span>
             <span className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-secondary text-foreground/70 text-xs font-medium">
-              <Clock className="w-3.5 h-3.5" /> V1 en 72h
+              <Clock className="w-3.5 h-3.5" /> {hero.chips[2].label}
             </span>
             <span className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-secondary text-foreground/70 text-xs font-medium">
-              <CreditCard className="w-3.5 h-3.5" /> {BRAND.SUB_PRICE}€/mois
+              <CreditCard className="w-3.5 h-3.5" /> {hero.chips[3].label}
             </span>
           </div>
 
-          <h1 className="text-[2.25rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 md:mb-8 text-foreground">
-            Web. Ads. Tracking.{" "}
-            <span className="relative inline-block">
-              <span className="text-accent">Done.</span>
+          <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 md:mb-8 text-foreground">
+            Un site premium qui coûte{" "}
+            <span className="relative inline-block whitespace-nowrap">
+              <span className="text-accent">moins qu'un logo.</span>
               <svg 
-                className="absolute w-full h-3 md:h-4 -bottom-1 md:-bottom-2 left-0 text-accent" 
-                viewBox="0 0 100 12" 
+                className="absolute w-full h-2 md:h-3 -bottom-0.5 md:-bottom-1 left-0 text-accent" 
+                viewBox="0 0 100 10" 
                 preserveAspectRatio="none"
               >
                 <path 
-                  d="M0 8 Q 25 2 50 8 T 100 8" 
+                  d="M0 6 Q 25 2 50 6 T 100 6" 
                   stroke="currentColor" 
-                  strokeWidth="4" 
+                  strokeWidth="3" 
                   strokeLinecap="round"
                   fill="none" 
-                  opacity="0.4"
+                  opacity="0.35"
                 />
               </svg>
             </span>
           </h1>
 
           <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-xl md:max-w-2xl mx-auto leading-relaxed">
-            Sites rapides, landing pages, Google Ads, Meta Ads et tracking GA4.
-            <br className="hidden sm:block" />
-            <span className="text-foreground/80 font-medium">Simple, beau, efficace.</span>
+            {hero.subtitle}
           </p>
         </FadeIn>
 
@@ -62,7 +61,7 @@ export function Hero() {
             asChild
           >
             <a href="#wizard" data-testid="link-hero-cta-primary">
-              Démarrer mon projet <ArrowRight className="ml-2 w-4 h-4" />
+              {hero.ctaPrimary} <ArrowRight className="ml-2 w-4 h-4" />
             </a>
           </Button>
           <Button 
@@ -71,13 +70,13 @@ export function Hero() {
             className="text-base font-medium px-8 h-14 w-full sm:w-auto rounded-full bg-background hover:bg-secondary/50 border-border" 
             asChild
           >
-            <a href="#packs" data-testid="link-hero-cta-secondary">Voir les packs</a>
+            <a href="#packs" data-testid="link-hero-cta-secondary">{hero.ctaSecondary}</a>
           </Button>
         </FadeIn>
 
         <FadeIn delay={0.25} className="pt-6 md:pt-8">
           <p className="text-sm text-muted-foreground/60">
-            À partir de {BRAND.PRICING.PACK_LANDING}€ + abonnement mensuel
+            {hero.disclaimer}
           </p>
         </FadeIn>
       </div>

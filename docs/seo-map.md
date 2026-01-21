@@ -11,11 +11,11 @@
 
 | Élément | Valeur |
 |---------|--------|
-| **Title** | Studio web, Ads & tracking en Belgique \| done |
-| **Meta description** | Sites rapides, landing pages, Google Ads, Meta Ads et tracking GA4. Simple, beau, efficace — madebydone.be |
-| **H1** | Web. Ads. Tracking. Done. |
+| **Title** | Sites web premium à prix accessible \| done |
+| **Meta description** | Sites web & landing pages au rendu haut de gamme, pensés mobile-first, livrés en 72h. Simple, beau, efficace — madebydone.be |
+| **H1** | Un site premium qui coûte moins qu'un logo. |
 | **Canonical** | https://madebydone.be/ |
-| **Mots-clés secondaires** | studio web belgique, création site vitrine, tracking GA4, agence digitale |
+| **Mots-clés secondaires** | site web premium, landing page, création site belgique, mobile-first |
 | **Notes** | Page principale one-page. Schema: Organization + WebSite |
 
 ---

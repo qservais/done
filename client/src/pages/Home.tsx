@@ -20,8 +20,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <SEO
-        title="Studio web, Ads & tracking en Belgique | done"
-        description="Sites rapides, landing pages, Google Ads, Meta Ads et tracking GA4. Simple, beau, efficace — madebydone.be"
+        title="Sites web premium à prix accessible | done"
+        description="Sites web & landing pages au rendu haut de gamme, pensés mobile-first, livrés en 72h. Simple, beau, efficace — madebydone.be"
         canonical="https://madebydone.be/"
       />
       <StructuredData type="organization" />

@@ -1,6 +1,6 @@
 export const BRAND = {
   STUDIO_NAME: "done",
-  TAGLINE: "Web. Ads. Tracking. Done.",
+  TAGLINE: "Un site premium qui coûte moins qu'un logo.",
   DOMAIN: "madebydone.be",
   CONTACT_EMAIL: "hello@madebydone.be",
   PHONE: "+32 400 00 00 00",

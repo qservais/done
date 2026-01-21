@@ -1,44 +1,52 @@
 import { Section } from "@/components/ui/section";
-import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
-import { AlertCircle } from "lucide-react";
+import { FadeIn } from "@/components/ui/fade-in";
+import { Check } from "lucide-react";
+import { problem } from "@/data/copy";
 
 export function Problem() {
   return (
-    <Section className="py-12 md:py-16">
-      <FadeIn className="max-w-3xl mx-auto bg-secondary/30 rounded-2xl p-8 md:p-12 border border-secondary relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
-        
-        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-foreground">
-          Pourquoi tant d’indépendants repoussent leur site ?
-        </h2>
+    <Section className="py-16 md:py-24">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+          <FadeIn className="lg:sticky lg:top-32">
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-wide mb-4">
+              {problem.label}
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
+              {problem.title}
+            </h2>
+          </FadeIn>
 
-        <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-          <p>
-            Pas par manque d’envie.
-            Mais parce qu’on leur a vendu le web comme un truc :
-          </p>
-          <ul className="space-y-2 list-none pl-4 md:pl-0">
-            <li className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-destructive flex-shrink-0" /> Trop cher
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-destructive flex-shrink-0" /> Trop long
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="w-1.5 h-1.5 rounded-full bg-destructive flex-shrink-0" /> Trop compliqué
-            </li>
-          </ul>
-          <p className="font-medium text-foreground">
-            Le problème n’est pas votre activité. C’est la façon dont on vous vend le web.
-          </p>
-          
-          <div className="pt-4 border-t border-border mt-6">
-            <p className="text-accent font-bold text-xl">
-              done, c’est l’alternative : un site premium, simple, accessible.
-            </p>
-          </div>
+          <FadeIn delay={0.1}>
+            <div className="bg-background border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
+                {problem.intro}
+              </p>
+
+              <ul className="space-y-3 mb-8">
+                {problem.bullets.map((bullet, index) => (
+                  <li key={index} className="flex items-center gap-3 text-foreground">
+                    <span className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 text-accent" />
+                    </span>
+                    <span className="text-base md:text-lg font-medium">{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="border-t border-border/60 pt-6 space-y-4">
+                <p className="text-base md:text-lg font-semibold text-foreground leading-relaxed">
+                  {problem.punchline}
+                </p>
+                <p className="text-base md:text-lg">
+                  <span className="text-accent font-bold">done</span>
+                  <span className="text-muted-foreground">{problem.solution.replace("done", "")}</span>
+                </p>
+              </div>
+            </div>
+          </FadeIn>
         </div>
-      </FadeIn>
+      </div>
     </Section>
   );
 }

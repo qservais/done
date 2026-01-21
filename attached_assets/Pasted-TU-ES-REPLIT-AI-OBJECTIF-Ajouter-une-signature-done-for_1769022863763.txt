@@ -1,0 +1,182 @@
+TU ES REPLIT AI. OBJECTIF : Ajouter une “signature done” forte au site (V1 existante) sans alourdir la lecture, en gardant un rendu premium et mobile-first.
+NE PAS REPARTIR DE ZÉRO. Modifier l’existant. Les changements doivent améliorer la cohérence visuelle et la conversion.
+
+========================
+1) CONCEPT CRÉATIF À IMPLÉMENTER
+========================
+A) Signature visuelle récurrente (partout, discrète)
+- Un soulignement “done underline” légèrement décalé (style marqueur propre) sur certains mots-clés
+- Un “stamp DONE” (tampon) discret en fin de sections importantes et au footer
+- Un badge “made by done” en micro-anim (hover/scroll) utilisé sur :
+  - les cards projets
+  - le footer
+  - éventuellement la section packs (très léger)
+
+B) Storytelling “Before / Done”
+- Ajouter une mécanique “Avant → Done” dans la section “Nos clients”
+- Format : slider/toggle pour comparer 2 images (before/after)
+- Pour V1 : placeholders acceptés (pas besoin d’images réelles), mais le composant doit être prêt
+
+C) Typo éditoriale + rythme magazine
+- Titres très grands, textes courts
+- “Captions” (petites légendes) sous visuels et sous sections clés
+- Règle UX : 1 idée par section (surtout mobile)
+- Grille simple : 1 colonne mobile, 2 colonnes desktop
+
+D) Micro-animations “signature done”
+- Reveal au scroll très soft (fade + translate y 6px max)
+- Hover : underline animé + image qui respire (scale 1.02)
+- Transition mini-wipe sur ancres (facultatif si déjà stable)
+
+E) Micro-copy “done” (ton transparent)
+Exemples à intégrer dans le site (petites phrases, pas partout) :
+- “On fait simple. Et bien fait.”
+- “Pas de blabla. Du concret.”
+- “Beau, rapide, prêt à convertir.”
+- “Livré. Maintenu. Done.”
+
+========================
+2) CHANGEMENTS TECHNIQUES (STRUCTURE & DATA)
+========================
+Créer/mettre à jour ces fichiers (si déjà existants, refactor) :
+- /src/styles/signature.css (ou module tailwind classes) pour :
+  - underline signature
+  - stamp
+  - badge
+- /src/components/signature/DoneUnderline.tsx
+- /src/components/signature/DoneStamp.tsx
+- /src/components/signature/MadeByDoneBadge.tsx
+- /src/components/projects/BeforeAfter.tsx (slider comparaison)
+- /src/data/projects.ts (ajouter beforeImage/afterImage placeholders)
+
+Ajouter des assets placeholders :
+- /public/stamp-done.svg (tampon simple, monochrome)
+- /public/projects/* (thumbnails + before/after placeholders)
+
+IMPORTANT : Tout doit être mobile-first, accessible, et respecter prefers-reduced-motion.
+
+========================
+3) SIGNATURE VISUELLE — SPÉCIFICATIONS UI
+========================
+A) DoneUnderline
+- Composant qui wrap un mot/phrase et ajoute un underline “ink” :
+  - underline épais 6–8px
+  - légèrement décalé verticalement
+  - border radius très doux
+  - couleur accent (bleu actuel) avec opacité 0.25–0.35
+- Animation hover : underline se dessine (scaleX de 0.6 à 1, 180ms)
+- Doit fonctionner sur mobile sans hover (statique)
+
+Utilisation :
+- Hero : sur “moins qu’un logo.” uniquement
+- Section packs : sur “197€ / 297€ / 497€” (optionnel et discret)
+- CTA final : sur “On le fait ?” (optionnel)
+
+B) DoneStamp
+- Tampon “DONE” discret :
+  - taille 48–64px
+  - opacité 0.12–0.18
+  - rotation légère -8deg
+  - position : bas droit de certaines sections (Process, Projects, Footer)
+- Sur mobile : position inside, align-right, pas absolute hors écran
+- Animation : fade in au scroll
+
+C) MadeByDoneBadge
+- Petit badge pill “made by done” :
+  - outline (border) + texte en accent
+  - micro-anim hover (underline ou léger bounce)
+- Utilisation :
+  - dans chaque card projet (sous le titre)
+  - au footer
+
+========================
+4) STORYTELLING “BEFORE / DONE”
+========================
+Dans la section “Nos clients” :
+- Remplacer/compléter les cartes actuelles par un format premium :
+  - thumbnail “after” dans un frame navigateur
+  - sous l’image : titre + tags + CTA “Voir le site”
+  - un lien “Avant / Après” ouvre un mini composant (modal ou accordion) contenant le BeforeAfter slider
+
+Composant BeforeAfter :
+- Slider horizontal draggable (range input) ou drag handle
+- Images : beforeImage + afterImage
+- Labels : “Avant” à gauche, “Done” à droite
+- Accessible : range input avec aria
+- prefers-reduced-motion : pas d’animation, juste rendu fixe
+
+DATA :
+Dans /src/data/projects.ts :
+{
+  name,
+  url,
+  image (after thumbnail),
+  beforeImage (placeholder),
+  afterImage (même que image ou autre),
+  tags: ["Vitrine", "Premium", ...]
+}
+
+Pour V1 : utiliser des placeholders neutres si pas de vrais before.
+
+========================
+5) TYPO ÉDITORIALE + “CAPTIONS”
+========================
+Appliquer un style “magazine” :
+- H1 très grand, tracking légèrement négatif, line-height tight mais lisible
+- Paragraphes courts, max-width limité
+- Captions sous visuels :
+  - text-xs / text-sm
+  - couleur gris froid
+  - ex : “Exemple de rendu livré par done — mobile-first.”
+- Ajouter 1 caption sous :
+  - Hero (sous les CTA ou sous le disclaimer)
+  - Section Projects (“Nos clients”)
+  - Optionnel : Process
+
+IMPORTANT :
+- Sur mobile, éviter blocs trop longs.
+- 1 idée par section : si une section dépasse, scinder.
+
+========================
+6) MICRO-ANIMATIONS (PREMIUM, SOFT)
+========================
+- Tous les reveals : fade + translateY 6px, 0.35s max, ease-out
+- Hover cards : shadow douce + translateY -2 + image scale 1.02
+- Underline : animation scaleX au hover desktop uniquement
+- Menu overlay : ok si déjà présent, sinon ne pas complexifier
+
+Respect reduced motion :
+- if prefers-reduced-motion: reduce => animations off / minimal
+
+========================
+7) MICRO-COPY “DONE” À AJOUTER (DOSAGE)
+========================
+Ajouter ces microcopies à des endroits précis :
+- Sous le Hero subtitle (petit) : “On fait simple. Et bien fait.”
+- Sous la section Packs (petit) : “Pas de blabla. Du concret.”
+- Dans Process (petit) : “Rapide, oui. Bâclé, jamais.”
+- Dans CTA final (petit) : “Livré. Maintenu. Done.”
+
+PAS PLUS. Garder de l’air.
+
+========================
+8) ACCEPTANCE CHECKLIST
+========================
+- Signature done visible mais discrète (underline + stamp + badge)
+- Projects section plus premium (frames, thumbs)
+- “Avant / Done” fonctionne (même avec placeholders)
+- Captions ajoutées et cohérentes
+- Micro-animations présentes mais très soft
+- Mobile-first impeccable (375px)
+- Aucune mention Ads/Tracking dans le hero (site web uniquement)
+- Perf OK, a11y OK, reduced motion OK
+- Build OK, pas de régression wizard
+
+========================
+9) LIVRABLES
+========================
+- Code modifié dans l’existant
+- Nouveaux composants signature + before/after
+- Data projects enrichie (before/after placeholders)
+- Assets placeholders ajoutés
+- README court : comment remplacer before/after par vrais visuels

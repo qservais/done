@@ -9,8 +9,10 @@ export const leads = pgTable("leads", {
   // Step 1: Activity
   activity: text("activity").notNull(),
   zone: text("zone").notNull(),
-  // Step 2: Need
+  // Step 2: Pack selection
   siteType: text("site_type").notNull(),
+  pack: text("pack"),
+  packPrice: text("pack_price"),
   pages: text("pages").notNull(),
   // Step 3: Languages
   languages: text("languages").notNull(),

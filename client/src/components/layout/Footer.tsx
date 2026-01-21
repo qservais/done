@@ -25,11 +25,13 @@ export function Footer() {
               Instagram
             </a>
             <a 
-              href="#" 
+              href={BRAND.FACEBOOK_URL} 
+              target="_blank" 
+              rel="noopener" 
               className="text-white/50 hover:text-white transition-colors text-sm underline-offset-4 hover:underline"
-              data-testid="link-footer-linkedin"
+              data-testid="link-footer-facebook"
             >
-              LinkedIn
+              Facebook
             </a>
           </div>
         </div>

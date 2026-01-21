@@ -1,15 +1,15 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { Check, Plus } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const packs = [
   {
+    id: "landing",
     name: "Landing Express",
     price: BRAND.PRICING.PACK_LANDING,
     description: "Pour démarrer proprement.",
-    includesTitle: "INCLUS :",
     features: [
       "1 page claire et premium",
       "Sections essentielles",
@@ -17,53 +17,52 @@ const packs = [
       "1 langue (FR)",
       "1 aller-retour inclus",
     ],
-    extras: []
   },
   {
+    id: "vitrine",
     name: "Vitrine Contact",
     price: BRAND.PRICING.PACK_VITRINE,
     popular: true,
     description: "Pour capter des clients.",
-    includesTitle: "TOUT CE QU'IL Y A DANS LANDING EXPRESS",
-    features: [],
-    extras: [
+    includesPrevious: "Landing Express",
+    features: [
       "Formulaire de contact efficace",
       "Réception directe par email",
-      "Protection anti-spam"
-    ]
+      "Protection anti-spam",
+    ],
   },
   {
+    id: "multipage",
     name: "Multi-page Premium",
     price: BRAND.PRICING.PACK_MULTIPAGE,
     description: "Pour tout expliquer.",
-    includesTitle: "TOUT CE QU'IL Y A DANS VITRINE CONTACT",
-    features: [],
-    extras: [
+    includesPrevious: "Vitrine Contact",
+    features: [
       "Jusqu'à 5 pages complètes",
       "Animations légères premium",
-      "SEO de base (structure clean)"
-    ]
+      "SEO de base (structure clean)",
+    ],
   },
 ];
 
 export function Packs() {
   return (
     <Section id="packs" className="bg-background">
-      <FadeIn className="text-center mb-16">
-        <h2 className="text-3xl md:text-5xl font-bold mb-6">Nos Packs</h2>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+      <FadeIn className="text-center mb-12 md:mb-16">
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">Nos Packs</h2>
+        <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto">
           Des offres cumulatives. Plus vous montez, plus vous avez de valeur.
         </p>
       </FadeIn>
 
-      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto">
         {packs.map((pack, index) => (
           <FadeIn
-            key={index}
-            className={`relative p-6 md:p-8 rounded-2xl flex flex-col ${
+            key={pack.id}
+            className={`relative p-5 md:p-6 lg:p-8 rounded-2xl flex flex-col ${
               pack.popular
-                ? "border-2 border-accent bg-background shadow-xl scale-100 md:scale-105 z-10"
-                : "border border-border bg-secondary/10"
+                ? "border-2 border-accent bg-background shadow-xl md:scale-105 z-10"
+                : "border border-border bg-secondary/5"
             }`}
           >
             {pack.popular && (
@@ -72,69 +71,56 @@ export function Packs() {
               </span>
             )}
 
-            <div className="mb-6 text-center border-b border-border pb-6">
-              <h3 className="text-xl font-bold mb-2 text-foreground">{pack.name}</h3>
+            <div className="mb-5 md:mb-6 text-center border-b border-border pb-5 md:pb-6">
+              <h3 className="text-lg md:text-xl font-bold mb-2 text-foreground">{pack.name}</h3>
               <div className="flex items-baseline justify-center gap-1 mb-2">
-                <span className="text-4xl font-bold text-foreground">{pack.price}€</span>
+                <span className="text-3xl md:text-4xl font-bold text-foreground">{pack.price}€</span>
               </div>
-              <p className="text-muted-foreground text-sm">
-                 {pack.description}
-              </p>
+              <p className="text-muted-foreground text-sm">{pack.description}</p>
             </div>
 
-            <div className="flex-1 space-y-6 mb-8">
-              {/* Main includes */}
-              <div className="space-y-3">
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
-                  {pack.includesTitle}
-                </p>
-                
-                {pack.features.length > 0 && (
-                   <ul className="space-y-2">
-                     {pack.features.map((feature, i) => (
-                       <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
-                         <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                         <span>{feature}</span>
-                       </li>
-                     ))}
-                   </ul>
-                )}
-                
-                {/* Extras for cumulative packs */}
-                {pack.extras.length > 0 && (
-                  <>
-                     <div className="flex items-center gap-2 my-2">
-                        <span className="h-px bg-border flex-1"></span>
-                        <span className="text-xs font-bold text-accent uppercase">+ EN PLUS</span>
-                        <span className="h-px bg-border flex-1"></span>
-                     </div>
-                     <ul className="space-y-2">
-                       {pack.extras.map((extra, i) => (
-                         <li key={i} className="flex items-start gap-2.5 text-sm font-medium text-foreground">
-                           <Plus className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                           <span>{extra}</span>
-                         </li>
-                       ))}
-                     </ul>
-                  </>
-                )}
-              </div>
+            <div className="flex-1 space-y-4 mb-6 md:mb-8">
+              {pack.includesPrevious && (
+                <div className="bg-accent/5 border border-accent/20 rounded-lg p-3 mb-4">
+                  <p className="text-xs font-semibold text-accent flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5" />
+                    Tout ce qu'il y a dans {pack.includesPrevious}
+                  </p>
+                </div>
+              )}
+
+              <ul className="space-y-2.5">
+                {pack.features.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
+                    <Check className={`w-4 h-4 shrink-0 mt-0.5 ${pack.includesPrevious ? 'text-accent' : 'text-primary'}`} />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <Button
-              className={`w-full rounded-full py-6 font-semibold ${
-                pack.popular 
-                  ? "bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20" 
+              className={`w-full rounded-full py-5 md:py-6 font-semibold text-sm md:text-base ${
+                pack.popular
+                  ? "bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20"
                   : "bg-white text-foreground border-2 border-border hover:border-foreground/20 hover:bg-secondary/20"
               }`}
               variant={pack.popular ? "default" : "outline"}
               asChild
             >
-              <a href="#wizard">Choisir ce pack</a>
+              <a href="#wizard" className="flex items-center justify-center gap-1.5" data-testid={`link-pack-${pack.id}`}>
+                Choisir ce pack <ChevronRight className="w-4 h-4" />
+              </a>
             </Button>
           </FadeIn>
         ))}
       </StaggerChildren>
+
+      <FadeIn delay={0.3} className="text-center mt-8 md:mt-10">
+        <p className="text-sm text-muted-foreground">
+          + Abonnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
+        </p>
+      </FadeIn>
     </Section>
   );
 }

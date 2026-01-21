@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { MobileStickyCTA } from "@/components/MobileStickyCTA";
 import { Hero } from "@/components/sections/Hero";
 import { Why } from "@/components/sections/Why";
 import { Problem } from "@/components/sections/Problem"; // Imported Problem
@@ -42,6 +43,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <MobileStickyCTA />
     </div>
   );
 }

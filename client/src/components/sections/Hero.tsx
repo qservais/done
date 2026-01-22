@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { ArrowRight, Star, Clock, Smartphone, CreditCard } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
-import { DoneUnderline } from "@/components/signature";
+import { RotatingText } from "@/components/ui/rotating-text";
 import { hero } from "@/data/copy";
 import { trackCTAClick } from "@/lib/tracking";
 
@@ -31,8 +31,8 @@ export function Hero() {
 
           <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 md:mb-8 text-foreground">
             Un site premium qui coûte{" "}
-            <span className="text-accent">
-              <DoneUnderline>moins qu'un logo.</DoneUnderline>
+            <span className="text-accent underline decoration-accent/30 decoration-[6px] md:decoration-[8px] underline-offset-4">
+              <RotatingText />
             </span>
           </h1>
 

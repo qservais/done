@@ -31,7 +31,7 @@ export function Hero() {
 
           <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 md:mb-8 text-foreground">
             <span className="block">Un site premium qui coûte</span>
-            <span className="text-accent underline decoration-accent/30 decoration-[6px] md:decoration-[8px] underline-offset-4 block h-[1.2em]">
+            <span className="text-accent underline decoration-accent/30 decoration-[6px] md:decoration-[8px] underline-offset-4 block min-h-[2.4em] sm:min-h-[1.2em]">
               <RotatingText />
             </span>
           </h1>

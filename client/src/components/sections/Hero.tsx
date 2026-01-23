@@ -30,8 +30,8 @@ export function Hero() {
           </div>
 
           <h1 className="text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6 md:mb-8 text-foreground">
-            <span className="block">Un site premium qui coûte</span>
-            <span className="block h-[2.4em] sm:h-[1.2em] text-accent underline decoration-accent/30 decoration-[6px] md:decoration-[8px] underline-offset-4">
+            Un site premium qui coûte{" "}
+            <span className="text-accent underline decoration-accent/30 decoration-[6px] md:decoration-[8px] underline-offset-4">
               <RotatingText />
             </span>
           </h1>

@@ -12,13 +12,13 @@ export async function registerRoutes(
   // Lead submission endpoint
   app.post("/api/leads", async (req, res) => {
     try {
-      const { companyWebsite, siteInspi, objectif, ...leadPayload } = req.body;
+      const { companyWebsite, siteInspi, objectifs, ...leadPayload } = req.body;
       
       // Add optional fields to payload
       const fullLeadPayload = {
         ...leadPayload,
         siteInspi: siteInspi || null,
-        objectif: objectif || null,
+        objectifs: objectifs || null,
       };
       
       // Honeypot check: if filled, silently return success (bot detected)

@@ -19,7 +19,7 @@ export const leads = pgTable("leads", {
   domain: text("domain").notNull(),
   emailPro: text("email_pro").notNull(),
   siteInspi: text("site_inspi"),
-  objectif: text("objectif"),
+  objectifs: text("objectifs"),
   // Step 4: Timing
   timing: text("timing").notNull(),
   // Step 5: Contact

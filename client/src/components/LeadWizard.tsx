@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight, ChevronLeft, Loader2, FileText, Layout, Layers, ShoppingCart } from "lucide-react";
+import { Check, ChevronRight, ChevronLeft, Loader2, FileText, Layout, Layers, ShoppingCart, Phone, FileQuestion, Calendar, MessageSquare, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 import { DoneStamp } from "@/components/signature";
@@ -17,7 +17,7 @@ type StepData = {
   domain: string;
   emailPro: string;
   siteInspi: string;
-  objectif: string;
+  objectifs: string[];
   timing: string;
   name: string;
   email: string;
@@ -34,7 +34,7 @@ const initialData: StepData = {
   domain: "non",
   emailPro: "non",
   siteInspi: "",
-  objectif: "",
+  objectifs: [],
   timing: "Normal (1 semaine)",
   name: "",
   email: "",
@@ -44,14 +44,14 @@ const initialData: StepData = {
 };
 
 const objectifOptions = [
-  { id: "appel", label: "Qu'il vous appelle" },
-  { id: "devis", label: "Qu'il demande un devis" },
-  { id: "reservation", label: "Qu'il réserve / prenne RDV" },
-  { id: "message", label: "Qu'il vous envoie un message" },
-  { id: "achat", label: "Qu'il achète directement" },
+  { id: "appel", label: "Vous appeler", description: "Afficher votre numéro", icon: Phone },
+  { id: "devis", label: "Demander un devis", description: "Formulaire de demande", icon: FileQuestion },
+  { id: "reservation", label: "Réserver / Prendre RDV", description: "Calendrier en ligne", icon: Calendar },
+  { id: "message", label: "Vous contacter", description: "Formulaire de contact", icon: MessageSquare },
+  { id: "achat", label: "Acheter directement", description: "Paiement en ligne", icon: CreditCard },
 ];
 
-const MEET_BOOKING_URL = "https://cal.com/madebydone/30min";
+const MEET_BOOKING_URL = "https://calendar.app.google/madebydone30min";
 
 const packs = [
   {
@@ -108,7 +108,7 @@ export function LeadWizard() {
     trackFormStep('lead_wizard', step, stepNames[step - 1] || 'unknown');
   }, [step]);
 
-  const updateData = (key: keyof StepData, value: string) => {
+  const updateData = <K extends keyof StepData>(key: K, value: StepData[K]) => {
     setData((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -174,7 +174,7 @@ export function LeadWizard() {
           emailPro: data.emailPro,
           timing: data.timing,
           siteInspi: data.siteInspi || "",
-          objectif: data.objectif || "",
+          objectifs: data.objectifs.join(",") || "",
           name: data.name,
           email: data.email,
           phone: data.phone,
@@ -407,23 +407,41 @@ export function LeadWizard() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
               <h3 className="text-2xl font-bold">Quelques détails.</h3>
               <div className="space-y-5">
-                <label className="block">
-                  <span className="text-sm font-medium mb-2 block">Quand quelqu'un visite votre site, vous voulez...</span>
-                  <div className="space-y-2">
-                    {objectifOptions.map((opt) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => updateData("objectif", opt.id)}
-                        className={cn(
-                          "w-full p-3 border rounded-lg text-left text-sm transition-colors",
-                          data.objectif === opt.id ? "border-accent bg-accent/5" : "border-input hover:border-accent/50"
-                        )}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
+                <div>
+                  <span className="text-sm font-medium mb-3 block">Quand quelqu'un visite votre site, vous voulez qu'il... <span className="text-muted-foreground font-normal">(plusieurs choix possibles)</span></span>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {objectifOptions.map((opt) => {
+                      const Icon = opt.icon;
+                      const isSelected = data.objectifs.includes(opt.id);
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => {
+                            const newObjectifs = isSelected
+                              ? data.objectifs.filter(o => o !== opt.id)
+                              : [...data.objectifs, opt.id];
+                            updateData("objectifs", newObjectifs);
+                          }}
+                          className={cn(
+                            "relative p-4 border-2 rounded-xl text-center transition-all",
+                            isSelected 
+                              ? "border-accent bg-accent/5 shadow-sm" 
+                              : "border-input hover:border-accent/50 hover:bg-muted/30"
+                          )}
+                        >
+                          {isSelected && (
+                            <div className="absolute -top-2 -right-2 w-5 h-5 bg-accent rounded-full flex items-center justify-center">
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                          )}
+                          <Icon className={cn("w-6 h-6 mx-auto mb-2", isSelected ? "text-accent" : "text-muted-foreground")} />
+                          <p className="text-sm font-medium">{opt.label}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{opt.description}</p>
+                        </button>
+                      );
+                    })}
                   </div>
-                </label>
+                </div>
 
                 <label className="block">
                   <span className="text-sm font-medium mb-1.5 block">Un site web que vous aimez bien ? (optionnel)</span>

@@ -20,7 +20,7 @@ type LeadData = {
   domain: string;
   emailPro: string;
   siteInspi?: string | null;
-  objectif?: string | null;
+  objectifs?: string | null;
   timing: string;
   message?: string | null;
 };
@@ -51,7 +51,7 @@ function sanitizeLead(lead: LeadData): LeadData {
     domain: escapeHtml(lead.domain),
     emailPro: escapeHtml(lead.emailPro),
     siteInspi: lead.siteInspi ? escapeHtml(lead.siteInspi) : null,
-    objectif: lead.objectif ? escapeHtml(lead.objectif) : null,
+    objectifs: lead.objectifs ? escapeHtml(lead.objectifs) : null,
     timing: escapeHtml(lead.timing),
     message: lead.message ? escapeHtml(lead.message) : null,
   };
@@ -67,15 +67,16 @@ function getFirstName(fullName: string): string {
   return fullName.split(' ')[0] || fullName;
 }
 
-function getObjectifLabel(objectif: string | null | undefined): string {
+function getObjectifsLabels(objectifs: string | null | undefined): string {
+  if (!objectifs) return "";
   const labels: Record<string, string> = {
-    "appel": "vous appelle",
-    "devis": "demande un devis",
-    "reservation": "réserve / prenne RDV",
-    "message": "vous envoie un message",
-    "achat": "achète directement",
+    "appel": "Vous appeler",
+    "devis": "Demander un devis",
+    "reservation": "Réserver/RDV",
+    "message": "Vous contacter",
+    "achat": "Acheter",
   };
-  return objectif ? labels[objectif] || objectif : "";
+  return objectifs.split(",").map(o => labels[o.trim()] || o).join(", ");
 }
 
 function buildConfirmationText(lead: LeadData): string {
@@ -249,7 +250,7 @@ export async function sendNotificationEmail(leadRaw: LeadData) {
   const packName = lead.pack || lead.siteType;
   const packPrice = formatPackPrice(leadRaw.packPrice);
   const isEcommerce = lead.siteType === "ecommerce" || packName.toLowerCase().includes("commerce");
-  const objectifLabel = getObjectifLabel(lead.objectif);
+  const objectifLabel = getObjectifsLabels(lead.objectifs);
   
   const textContent = `Nouveau lead — ${lead.name}
 

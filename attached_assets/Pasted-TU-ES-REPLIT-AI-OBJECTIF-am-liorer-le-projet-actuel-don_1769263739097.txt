@@ -1,0 +1,168 @@
+TU ES REPLIT AI. OBJECTIF : améliorer le projet actuel “done” (site + wizard) pour que, lorsqu’un prospect envoie une demande via le formulaire multi-étapes, il reçoive AUTOMATIQUEMENT un email clair et digeste qui :
+1) confirme la demande
+2) demande les éléments nécessaires pour produire une V1 preview (72h)
+3) propose en alternative un call de 30 minutes via Google Meet (lien)
+4) fixe un ton transparent, premium, légèrement décalé mais pro
+5) fonctionne de manière fiable (anti-spam basique, erreurs gérées, logs)
+
+NE PAS REPARTIR DE ZÉRO. Modifier le code existant. Conserver le wizard et la route /api/lead (ou équivalent), mais ajouter l’envoi d’email côté serveur.
+
+PRIORITÉ : simplicité + délivrabilité (pas d’email lourd, pas d’HTML cassé). Email en HTML léger + fallback texte.
+
+========================
+A) PRÉ-REQUIS / CONFIG
+========================
+1) Ajouter des variables d’environnement (NE PAS hardcoder) dans .env:
+- SMTP_HOST=
+- SMTP_PORT=
+- SMTP_USER=
+- SMTP_PASS=
+- SMTP_FROM="done <hello@madebydone.be>"
+- STUDIO_NAME="done"
+- PUBLIC_SITE_URL="https://madebydone.be"
+- MEET_BOOKING_URL="https://cal.com/XXXX" OU "https://calendar.google.com/..." (lien de prise de RDV) 
+  IMPORTANT : on veut un call 30 min Google Meet, donc lien de booking (Google Calendar appointment schedule / Cal.com / autre).
+- INTERNAL_NOTIFY_EMAIL="hello@madebydone.be" (pour recevoir la demande côté done)
+2) Si le projet est Next.js:
+- utiliser nodemailer (ou Resend si déjà prévu, mais ici SMTP suffit)
+3) Ajouter une validation côté serveur :
+- email valide
+- nom non vide
+- honeypot (champ invisible) pour limiter spam
+
+========================
+B) FLOW À METTRE EN PLACE
+========================
+Lors de la soumission du wizard :
+1) API reçoit le lead (déjà en place)
+2) API enregistre le lead (DB ou JSON actuel)
+3) API envoie 2 emails :
+   - Email #1 (AU PROSPECT) : “Merci, voici ce qu’il nous faut pour sortir votre V1 + option call 30 min”
+   - Email #2 (À DONE INTERNE) : récap du lead + réponses du wizard + lien pour contacter
+
+4) API renvoie success au frontend
+5) UI affiche un écran “Merci” + rappel de l’option call 30 min
+
+========================
+C) EMAIL AU PROSPECT — CONTENU (DIGESTE)
+========================
+Subject (FR) :
+"done — on lance votre V1 (72h) ✅"
+
+Preview text (ligne courte) :
+"Envoyez 3–5 éléments, ou réservez un call de 30 min."
+
+Ton : transparent + premium + léger clin d’œil, sans emojis excessifs.
+
+Structure email (HTML léger, max 600px) :
+1) Intro courte :
+"Hello {Prénom},
+Bien reçu ✅ On peut sortir une V1 preview en 72h."
+
+2) Deux options très claires (bloc A / bloc B) :
+
+OPTION A — “Envoyer les éléments (le plus rapide)”
+Liste très courte, avec cases à cocher (visuelles ou bullets). Demander uniquement l’essentiel :
+- 1) Nom exact de l’activité + zone (ville/pays)
+- 2) Ce que vous vendez (3 services/produits max)
+- 3) Style souhaité (2–3 sites en inspi OU “sobre / premium / minimal”)
+- 4) Logo + couleurs (si vous avez) — sinon OK, on fait simple
+- 5) Photos (3–10) — sinon on part sur vos réseaux / placeholders
+- 6) Infos pratiques : horaires / adresse / téléphone / email
+- 7) CTA principal : “appel”, “devis”, “réservation”, “message”
+- 8) Langues : FR / EN (max 2)
+
+IMPORTANT : rendre ça ultra digeste :
+- pas plus de 8 bullets
+- phrases très courtes
+- rappeler : “Si vous n’avez pas tout, ce n’est pas bloquant.”
+
+Ajouter une phrase :
+"Répondez directement à ce mail avec ce que vous avez — même incomplet."
+
+OPTION B — “Call 30 min (Google Meet)”
+Texte :
+"Si vous préférez, on fait ça ensemble en 30 minutes (Google Meet) :
+→ Réserver mon call (30 min)"
+Bouton/lien vers MEET_BOOKING_URL.
+
+3) Mini rappel de transparence (1 ligne) :
+"Rappel : projets à partir de 197€ + 19,99€/mois (hébergement & suivi)."
+
+4) Signature simple :
+"Quentin — done
+madebydone.be"
+
+Fallback texte (plain) obligatoire : même contenu sans HTML.
+
+========================
+D) EMAIL INTERNE À DONE
+========================
+Subject :
+"Nouveau lead — done"
+
+Contenu :
+- Infos prospect (nom, email, tel, zone)
+- Résumé du wizard (type site, pages, langues, domaine, délai, budget)
+- Message libre
+- Lien vers la page (si tu as un dashboard), sinon bloc JSON lisible
+
+========================
+E) IMPLEMENTATION TECHNIQUE (NEXT.JS)
+========================
+1) Installer nodemailer
+2) Créer /src/lib/email.ts :
+- createTransport depuis env
+- sendMail({to, subject, html, text})
+- gestion d’erreur + logs
+
+3) Créer /src/lib/emailTemplates.ts :
+- buildLeadConfirmationEmail(lead) -> {subject, html, text}
+- buildInternalNotificationEmail(lead) -> {subject, html, text}
+=> Centraliser le copy ici (facile à changer)
+
+4) Mettre à jour l’API route existante :
+- /app/api/lead/route.ts (ou /pages/api/lead.ts)
+Pseudo:
+- parse body
+- validate
+- save lead
+- await Promise.all([sendToProspect, sendToInternal]) (avec try/catch)
+- return 200 même si internal fail? (à décider) :
+   - si email prospect fail => return 500 + message
+   - si email internal fail => log + return 200 (pas bloquant)
+
+5) Anti-spam :
+- Ajouter champ “company_website” hidden (honeypot)
+- Si rempli => return 200 sans envoyer email (silence)
+- Ajouter rate-limit simple in-memory (optionnel) : 5 req/min par IP
+
+========================
+F) UI — ÉCRAN SUCCESS
+========================
+Après envoi du wizard :
+- Afficher :
+"Merci — on revient vers vous sous 48h."
+"Pour aller plus vite : répondez à l’email qu’on vient de vous envoyer."
++ bouton secondaire :
+"Réserver un call 30 min" -> MEET_BOOKING_URL
+
+========================
+G) ACCEPTANCE CHECKLIST
+========================
+- Un lead soumis déclenche bien l’email prospect + email interne
+- L’email prospect est DIGESTE, 2 options claires, répondable (reply-to correct)
+- Le lien de call ouvre une page de booking avec Google Meet
+- Les variables sont en .env, rien n’est hardcodé
+- Erreurs gérées, logs propres, pas de crash build
+- Honeypot actif
+- HTML email rendu propre (mobile email clients)
+
+========================
+H) LIVRABLES
+========================
+- Code modifié dans le projet existant
+- /src/lib/email.ts + /src/lib/emailTemplates.ts
+- API route modifiée
+- UI success modifiée
+- README : comment configurer SMTP + booking link + emails

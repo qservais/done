@@ -50,3 +50,4 @@ mockupState = "FULLSTACK"
 
 [userenv.shared]
 STUDIO_EMAIL = "hello@madebydone.be"
+MEET_BOOKING_URL = "https://cal.com/madebydone/30min"

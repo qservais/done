@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const STUDIO_EMAIL = process.env.STUDIO_EMAIL || "hello@madebydone.be";
 const FROM_EMAIL = "done. <no-reply@madebydone.be>";
-const MEET_BOOKING_URL = process.env.MEET_BOOKING_URL || "https://cal.com/madebydone/30min";
+const MEET_BOOKING_URL = process.env.MEET_BOOKING_URL || "https://calendar.app.google/zFbiLZ22gFyL1cGf8";
 
 type LeadData = {
   name: string;

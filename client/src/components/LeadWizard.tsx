@@ -51,7 +51,7 @@ const objectifOptions = [
   { id: "achat", label: "Acheter directement", description: "Paiement en ligne", icon: CreditCard },
 ];
 
-const MEET_BOOKING_URL = "https://calendar.app.google/madebydone30min";
+const MEET_BOOKING_URL = "https://calendar.app.google/zFbiLZ22gFyL1cGf8";
 
 const packs = [
   {

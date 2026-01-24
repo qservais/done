@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, ChevronLeft, Loader2, FileText, Layout, Layers, ShoppingCart, Phone, FileQuestion, Calendar, MessageSquare, CreditCard } from "lucide-react";
@@ -95,6 +95,7 @@ export function LeadWizard() {
   const [data, setData] = useState<StepData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const totalSteps = 6;
   const progress = Math.min((step / totalSteps) * 100, 100);
@@ -106,6 +107,11 @@ export function LeadWizard() {
       trackFormStart('lead_wizard');
     }
     trackFormStep('lead_wizard', step, stepNames[step - 1] || 'unknown');
+    
+    // Scroll to top of form on step change
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }, [step]);
 
   const updateData = <K extends keyof StepData>(key: K, value: StepData[K]) => {
@@ -306,7 +312,7 @@ export function LeadWizard() {
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[500px]">
+    <div ref={formRef} className="w-full max-w-lg mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[500px] scroll-mt-8">
       <div className="h-2 bg-secondary w-full">
         <div className="h-full bg-accent transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
       </div>

@@ -12,7 +12,18 @@ export async function registerRoutes(
   // Lead submission endpoint
   app.post("/api/leads", async (req, res) => {
     try {
-      const leadData = insertLeadSchema.parse(req.body);
+      const { companyWebsite, ...leadPayload } = req.body;
+      
+      // Honeypot check: if filled, silently return success (bot detected)
+      if (companyWebsite && companyWebsite.trim() !== "") {
+        console.log("Honeypot triggered - spam blocked");
+        return res.status(201).json({ 
+          success: true, 
+          message: "Lead créé avec succès" 
+        });
+      }
+      
+      const leadData = insertLeadSchema.parse(leadPayload);
       const lead = await storage.createLead(leadData);
       
       // Send emails in parallel (don't block response)

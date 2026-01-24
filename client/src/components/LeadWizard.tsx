@@ -21,6 +21,7 @@ type StepData = {
   email: string;
   phone: string;
   message: string;
+  companyWebsite: string;
 };
 
 const initialData: StepData = {
@@ -35,7 +36,10 @@ const initialData: StepData = {
   email: "",
   phone: "",
   message: "",
+  companyWebsite: "",
 };
+
+const MEET_BOOKING_URL = "https://cal.com/madebydone/30min";
 
 const packs = [
   {
@@ -161,6 +165,7 @@ export function LeadWizard() {
           email: data.email,
           phone: data.phone,
           message: data.message || "",
+          companyWebsite: data.companyWebsite,
         }),
       });
 
@@ -190,14 +195,26 @@ export function LeadWizard() {
         <div className="flex justify-center mb-6">
           <DoneStamp size="lg" />
         </div>
-        <h3 className="text-2xl font-bold mb-4">Message reçu !</h3>
-        <p className="text-muted-foreground mb-8">
-          On analyse votre demande et on vous recontacte sous {BRAND.SLA_HOURS}h.
-          Surveillez vos emails ({data.email}).
+        <h3 className="text-2xl font-bold mb-4">Merci — on revient vers vous sous 48h.</h3>
+        <p className="text-muted-foreground mb-6">
+          Vérifiez votre boîte mail ({data.email}) — on vous a envoyé un récap + la liste des éléments pour démarrer.
         </p>
-        <Button onClick={() => window.location.reload()} variant="outline">
-          Retour au site
-        </Button>
+        <p className="text-sm text-muted-foreground mb-6">
+          <strong>Pour aller plus vite :</strong> répondez directement à l'email qu'on vient de vous envoyer.
+        </p>
+        <div className="flex flex-col gap-3">
+          <a
+            href={MEET_BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent text-accent-foreground px-6 py-3 font-semibold hover:bg-accent/90 transition-colors"
+          >
+            Réserver un call 30 min
+          </a>
+          <Button onClick={() => window.location.reload()} variant="outline">
+            Retour au site
+          </Button>
+        </div>
       </div>
     );
   }
@@ -482,6 +499,16 @@ export function LeadWizard() {
                   className="w-full p-3 rounded-md border border-input bg-transparent h-20 resize-none"
                   value={data.message}
                   onChange={(e) => updateData("message", e.target.value)}
+                />
+                <input
+                  type="text"
+                  name="company_website"
+                  autoComplete="off"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="absolute opacity-0 pointer-events-none h-0 w-0"
+                  value={data.companyWebsite}
+                  onChange={(e) => updateData("companyWebsite", e.target.value)}
                 />
               </div>
             </motion.div>

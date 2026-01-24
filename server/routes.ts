@@ -12,7 +12,14 @@ export async function registerRoutes(
   // Lead submission endpoint
   app.post("/api/leads", async (req, res) => {
     try {
-      const { companyWebsite, ...leadPayload } = req.body;
+      const { companyWebsite, siteInspi, objectif, ...leadPayload } = req.body;
+      
+      // Add optional fields to payload
+      const fullLeadPayload = {
+        ...leadPayload,
+        siteInspi: siteInspi || null,
+        objectif: objectif || null,
+      };
       
       // Honeypot check: if filled, silently return success (bot detected)
       if (companyWebsite && companyWebsite.trim() !== "") {
@@ -23,13 +30,13 @@ export async function registerRoutes(
         });
       }
       
-      const leadData = insertLeadSchema.parse(leadPayload);
+      const leadData = insertLeadSchema.parse(fullLeadPayload);
       const lead = await storage.createLead(leadData);
       
       // Send emails in parallel (don't block response)
       Promise.all([
-        sendConfirmationEmail(leadData),
-        sendNotificationEmail(leadData),
+        sendConfirmationEmail(fullLeadPayload),
+        sendNotificationEmail(fullLeadPayload),
       ]).catch((err) => {
         console.error("Error sending emails:", err);
       });

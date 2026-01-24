@@ -14,14 +14,15 @@ export const leads = pgTable("leads", {
   pack: text("pack"),
   packPrice: text("pack_price"),
   pages: text("pages").notNull(),
-  // Step 3: Languages
+  // Step 3: Options
   languages: text("languages").notNull(),
-  // Step 4: Domain
   domain: text("domain").notNull(),
   emailPro: text("email_pro").notNull(),
-  // Step 5: Timing
+  siteInspi: text("site_inspi"),
+  objectif: text("objectif"),
+  // Step 4: Timing
   timing: text("timing").notNull(),
-  // Step 6: Contact
+  // Step 5: Contact
   name: text("name").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),

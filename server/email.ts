@@ -19,6 +19,8 @@ type LeadData = {
   languages: string;
   domain: string;
   emailPro: string;
+  siteInspi?: string | null;
+  objectif?: string | null;
   timing: string;
   message?: string | null;
 };
@@ -48,6 +50,8 @@ function sanitizeLead(lead: LeadData): LeadData {
     languages: escapeHtml(lead.languages),
     domain: escapeHtml(lead.domain),
     emailPro: escapeHtml(lead.emailPro),
+    siteInspi: lead.siteInspi ? escapeHtml(lead.siteInspi) : null,
+    objectif: lead.objectif ? escapeHtml(lead.objectif) : null,
     timing: escapeHtml(lead.timing),
     message: lead.message ? escapeHtml(lead.message) : null,
   };
@@ -63,38 +67,50 @@ function getFirstName(fullName: string): string {
   return fullName.split(' ')[0] || fullName;
 }
 
+function getObjectifLabel(objectif: string | null | undefined): string {
+  const labels: Record<string, string> = {
+    "appel": "vous appelle",
+    "devis": "demande un devis",
+    "reservation": "réserve / prenne RDV",
+    "message": "vous envoie un message",
+    "achat": "achète directement",
+  };
+  return objectif ? labels[objectif] || objectif : "";
+}
+
 function buildConfirmationText(lead: LeadData): string {
   const firstName = getFirstName(lead.name);
   return `Hello ${firstName},
 
-Bien reçu ! On peut sortir une V1 preview en 72h.
+Bien reçu ! On peut sortir une première version de votre site en 72h.
 
 Deux options pour démarrer :
 
-OPTION A — Envoyer les éléments (le plus rapide)
+OPTION 1 — Envoyez-nous quelques infos (le plus rapide)
 
 Répondez directement à ce mail avec ce que vous avez :
 
-1. Nom exact de l'activité + zone (ville/pays)
-2. Ce que vous vendez (3 services/produits max)
-3. Style souhaité (2-3 sites en inspi OU "sobre / premium / minimal")
-4. Logo + couleurs (si vous avez) — sinon OK, on fait simple
-5. Photos (3-10) — sinon on part sur vos réseaux / placeholders
-6. Infos pratiques : horaires / adresse / téléphone / email
-7. CTA principal : "appel", "devis", "réservation", "message"
-8. Langues : FR / EN (max 2)
+1. Le nom exact de votre activité + votre ville
+2. Ce que vous proposez (vos 3 principaux services ou produits)
+3. Le style que vous aimez (montrez-nous 2-3 sites que vous trouvez beaux, ou dites-nous juste "sobre", "moderne", "élégant"...)
+4. Votre logo et vos couleurs préférées (si vous en avez, sinon on fait simple)
+5. Quelques photos de vous ou de votre travail (3 à 10, sinon on prend sur vos réseaux)
+6. Vos infos pratiques : adresse, téléphone, email, horaires
+7. Ce que vous voulez que les visiteurs fassent sur votre site (vous appeler, demander un devis, réserver...)
+8. En quelle(s) langue(s) ? Français seul ou aussi en anglais ?
 
-Si vous n'avez pas tout, ce n'est pas bloquant. Envoyez ce que vous avez !
+Pas de stress si vous n'avez pas tout — envoyez ce que vous avez, on s'adapte !
 
-OPTION B — Call 30 min (Google Meet)
+OPTION 2 — On en parle ensemble en visio (30 min)
 
-Si vous préférez, on fait ça ensemble en 30 minutes :
+Si vous préférez qu'on fasse le point ensemble, réservez un créneau ici :
 ${MEET_BOOKING_URL}
 
 ---
 
-Rappel : projets à partir de 197€ + 19,99€/mois (hébergement & suivi).
+Pour rappel : nos sites démarrent à 197€ + 19,99€/mois (hébergement et suivi inclus).
 
+À très vite,
 Quentin — done
 madebydone.be`;
 }
@@ -108,7 +124,7 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
       from: FROM_EMAIL,
       to: leadRaw.email,
       replyTo: STUDIO_EMAIL,
-      subject: "done — on lance votre V1 (72h) ✅",
+      subject: "done — on lance votre site (72h) ✅",
       text: buildConfirmationText(leadRaw),
       html: `
         <!DOCTYPE html>
@@ -141,30 +157,30 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                       <!-- Intro -->
                       <p style="color: #0a1628; font-size: 18px; margin: 0 0 8px; font-weight: 600;">Hello ${firstName},</p>
                       <p style="color: #4a5568; font-size: 15px; line-height: 1.6; margin: 0 0 28px;">
-                        Bien reçu ✅ On peut sortir une <strong>V1 preview en 72h</strong>.
+                        Bien reçu ✅ On peut sortir une <strong>première version de votre site en 72h</strong>.
                       </p>
                       
                       <!-- Option A -->
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f8f9fa; border-radius: 12px; margin-bottom: 20px;">
                         <tr>
                           <td style="padding: 24px;">
-                            <p style="color: #395af6; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px;">Option A — Le plus rapide</p>
-                            <p style="color: #0a1628; font-size: 16px; font-weight: 600; margin: 0 0 16px;">Envoyer les éléments</p>
+                            <p style="color: #395af6; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px;">Option 1 — Le plus rapide</p>
+                            <p style="color: #0a1628; font-size: 16px; font-weight: 600; margin: 0 0 16px;">Envoyez-nous quelques infos</p>
                             <p style="color: #4a5568; font-size: 14px; line-height: 1.5; margin: 0 0 16px;">
                               Répondez à ce mail avec ce que vous avez :
                             </p>
                             <table role="presentation" cellspacing="0" cellpadding="0" style="font-size: 14px; color: #4a5568;">
-                              <tr><td style="padding: 4px 0;">1. Nom exact de l'activité + zone</td></tr>
-                              <tr><td style="padding: 4px 0;">2. Ce que vous vendez (3 max)</td></tr>
-                              <tr><td style="padding: 4px 0;">3. Style (2-3 sites inspi OU "sobre / premium / minimal")</td></tr>
-                              <tr><td style="padding: 4px 0;">4. Logo + couleurs (optionnel)</td></tr>
-                              <tr><td style="padding: 4px 0;">5. Photos (3-10, optionnel)</td></tr>
-                              <tr><td style="padding: 4px 0;">6. Infos : horaires / adresse / tel / email</td></tr>
-                              <tr><td style="padding: 4px 0;">7. CTA principal : appel / devis / réservation</td></tr>
-                              <tr><td style="padding: 4px 0;">8. Langues : FR / EN (max 2)</td></tr>
+                              <tr><td style="padding: 4px 0;">1. Le nom de votre activité + votre ville</td></tr>
+                              <tr><td style="padding: 4px 0;">2. Ce que vous proposez (3 services/produits max)</td></tr>
+                              <tr><td style="padding: 4px 0;">3. Des sites que vous trouvez beaux (ou juste "sobre", "moderne"...)</td></tr>
+                              <tr><td style="padding: 4px 0;">4. Votre logo + couleurs préférées (optionnel)</td></tr>
+                              <tr><td style="padding: 4px 0;">5. Quelques photos (3-10, optionnel)</td></tr>
+                              <tr><td style="padding: 4px 0;">6. Vos infos : adresse, téléphone, email, horaires</td></tr>
+                              <tr><td style="padding: 4px 0;">7. Ce que les visiteurs doivent faire (appeler, réserver...)</td></tr>
+                              <tr><td style="padding: 4px 0;">8. Langue(s) du site : français seul ou aussi anglais ?</td></tr>
                             </table>
                             <p style="color: #718096; font-size: 13px; font-style: italic; margin: 16px 0 0;">
-                              Si vous n'avez pas tout, ce n'est pas bloquant.
+                              Pas de stress si vous n'avez pas tout — envoyez ce que vous avez !
                             </p>
                           </td>
                         </tr>
@@ -174,21 +190,22 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: linear-gradient(135deg, #395af6 0%, #2a47c9 100%); border-radius: 12px; margin-bottom: 28px;">
                         <tr>
                           <td style="padding: 24px; text-align: center;">
-                            <p style="color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Option B</p>
-                            <p style="color: white; font-size: 16px; font-weight: 600; margin: 0 0 4px;">Préférez un call ?</p>
-                            <p style="color: rgba(255,255,255,0.85); font-size: 14px; margin: 0 0 16px;">On fait ça ensemble en 30 min (Google Meet)</p>
-                            <a href="${MEET_BOOKING_URL}" style="display: inline-block; background: white; color: #395af6; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Réserver mon call →</a>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Option 2</p>
+                            <p style="color: white; font-size: 16px; font-weight: 600; margin: 0 0 4px;">On en parle ensemble ?</p>
+                            <p style="color: rgba(255,255,255,0.85); font-size: 14px; margin: 0 0 16px;">30 min en visio pour faire le point</p>
+                            <a href="${MEET_BOOKING_URL}" style="display: inline-block; background: white; color: #395af6; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Réserver un créneau →</a>
                           </td>
                         </tr>
                       </table>
                       
                       <!-- Reminder -->
                       <p style="color: #718096; font-size: 13px; text-align: center; margin: 0 0 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                        Rappel : projets à partir de 197€ + 19,99€/mois (hébergement & suivi).
+                        Pour rappel : nos sites démarrent à 197€ + 19,99€/mois (hébergement et suivi inclus).
                       </p>
                       
                       <!-- Signature -->
                       <p style="color: #0a1628; font-size: 14px; margin: 0;">
+                        À très vite,<br>
                         Quentin — <strong>done</strong><br>
                         <a href="https://madebydone.be" style="color: #395af6; text-decoration: none;">madebydone.be</a>
                       </p>
@@ -232,6 +249,7 @@ export async function sendNotificationEmail(leadRaw: LeadData) {
   const packName = lead.pack || lead.siteType;
   const packPrice = formatPackPrice(leadRaw.packPrice);
   const isEcommerce = lead.siteType === "ecommerce" || packName.toLowerCase().includes("commerce");
+  const objectifLabel = getObjectifLabel(lead.objectif);
   
   const textContent = `Nouveau lead — ${lead.name}
 
@@ -246,6 +264,8 @@ Détails:
 - Langues: ${lead.languages === "1" ? "1 (FR)" : "2 langues"}
 - Domaine: ${lead.domain === "oui" ? "Oui" : "Non"}
 - Email pro: ${lead.emailPro === "oui" ? "Oui" : "Non"}
+- Objectif: ${objectifLabel || "Non précisé"}
+- Site inspiration: ${lead.siteInspi || "Non précisé"}
 - Timing: ${lead.timing}
 
 ${lead.message ? `Message:\n${lead.message}` : ""}
@@ -299,6 +319,16 @@ Voir dans l'admin: https://madebydone.be/admin`;
               </div>
 
               <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                  <td style="color: #718096; padding: 12px 0;">Objectif visiteur</td>
+                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${objectifLabel || "Non précisé"}</td>
+                </tr>
+                ${lead.siteInspi ? `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                  <td style="color: #718096; padding: 12px 0;">Site inspiration</td>
+                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;"><a href="${lead.siteInspi.startsWith('http') ? lead.siteInspi : 'https://' + lead.siteInspi}" style="color: #395af6;">${lead.siteInspi}</a></td>
+                </tr>
+                ` : ''}
                 <tr style="border-bottom: 1px solid #e2e8f0;">
                   <td style="color: #718096; padding: 12px 0;">Langues</td>
                   <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${lead.languages === "1" ? "1 (FR)" : "2 langues"}</td>

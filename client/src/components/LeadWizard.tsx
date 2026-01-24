@@ -16,6 +16,8 @@ type StepData = {
   languages: string;
   domain: string;
   emailPro: string;
+  siteInspi: string;
+  objectif: string;
   timing: string;
   name: string;
   email: string;
@@ -31,6 +33,8 @@ const initialData: StepData = {
   languages: "1",
   domain: "non",
   emailPro: "non",
+  siteInspi: "",
+  objectif: "",
   timing: "Normal (1 semaine)",
   name: "",
   email: "",
@@ -38,6 +42,14 @@ const initialData: StepData = {
   message: "",
   companyWebsite: "",
 };
+
+const objectifOptions = [
+  { id: "appel", label: "Qu'il vous appelle" },
+  { id: "devis", label: "Qu'il demande un devis" },
+  { id: "reservation", label: "Qu'il réserve / prenne RDV" },
+  { id: "message", label: "Qu'il vous envoie un message" },
+  { id: "achat", label: "Qu'il achète directement" },
+];
 
 const MEET_BOOKING_URL = "https://cal.com/madebydone/30min";
 
@@ -161,6 +173,8 @@ export function LeadWizard() {
           domain: data.domain,
           emailPro: data.emailPro,
           timing: data.timing,
+          siteInspi: data.siteInspi || "",
+          objectif: data.objectif || "",
           name: data.name,
           email: data.email,
           phone: data.phone,
@@ -305,28 +319,27 @@ export function LeadWizard() {
               <h3 className="text-2xl font-bold">Parlons de vous.</h3>
               <div className="space-y-4">
                 <label className="block">
-                  <span className="text-sm font-medium mb-1.5 block">Votre secteur d'activité</span>
+                  <span className="text-sm font-medium mb-1.5 block">Que faites-vous ?</span>
                   <input 
                     type="text" 
                     className="w-full p-3 rounded-md border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
-                    placeholder="Ex: Architecte, Coach, Restaurant..."
+                    placeholder="Ex: Architecte, Coach sportif, Restaurant italien..."
                     value={data.activity}
                     onChange={(e) => updateData("activity", e.target.value)}
                   />
                 </label>
                 <label className="block">
-                  <span className="text-sm font-medium mb-1.5 block">Zone géographique</span>
+                  <span className="text-sm font-medium mb-1.5 block">Où êtes-vous basé ?</span>
                   <select 
                     className="w-full p-3 rounded-md border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
                     value={data.zone}
                     onChange={(e) => updateData("zone", e.target.value)}
                   >
                     <option value="">Choisir...</option>
-                    <option value="Bruxelles">Bruxelles</option>
-                    <option value="Wallonie">Wallonie</option>
-                    <option value="Flandre">Flandre</option>
+                    <option value="Belgique">Belgique</option>
                     <option value="France">France</option>
                     <option value="Luxembourg">Luxembourg</option>
+                    <option value="Autre">Autre pays</option>
                   </select>
                 </label>
               </div>
@@ -392,10 +405,40 @@ export function LeadWizard() {
           {/* Step 3: Options */}
           {step === 3 && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-              <h3 className="text-2xl font-bold">Quelques options.</h3>
-              <div className="space-y-6">
+              <h3 className="text-2xl font-bold">Quelques détails.</h3>
+              <div className="space-y-5">
                 <label className="block">
-                  <span className="text-sm font-medium mb-2 block">Combien de langues ?</span>
+                  <span className="text-sm font-medium mb-2 block">Quand quelqu'un visite votre site, vous voulez...</span>
+                  <div className="space-y-2">
+                    {objectifOptions.map((opt) => (
+                      <button
+                        key={opt.id}
+                        onClick={() => updateData("objectif", opt.id)}
+                        className={cn(
+                          "w-full p-3 border rounded-lg text-left text-sm transition-colors",
+                          data.objectif === opt.id ? "border-accent bg-accent/5" : "border-input hover:border-accent/50"
+                        )}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-medium mb-1.5 block">Un site web que vous aimez bien ? (optionnel)</span>
+                  <input 
+                    type="text" 
+                    className="w-full p-3 rounded-md border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
+                    placeholder="Ex: www.exemple.com"
+                    value={data.siteInspi}
+                    onChange={(e) => updateData("siteInspi", e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Ça nous aide à comprendre le style que vous aimez</p>
+                </label>
+
+                <label className="block">
+                  <span className="text-sm font-medium mb-2 block">Votre site sera en combien de langues ?</span>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => updateData("languages", "1")}
@@ -413,12 +456,12 @@ export function LeadWizard() {
                 </label>
                 
                 <label className="block">
-                  <span className="text-sm font-medium mb-2 block">Avez-vous un nom de domaine ?</span>
+                  <span className="text-sm font-medium mb-2 block">Avez-vous déjà une adresse de site ? (nom de domaine)</span>
                   <div className="flex gap-3">
                     <button
                       onClick={() => updateData("domain", "oui")}
                       className={cn("flex-1 p-3 border rounded-md text-sm", data.domain === "oui" ? "bg-primary text-primary-foreground" : "border-input")}
-                    >Oui, j'en ai un</button>
+                    >Oui, j'en ai une</button>
                     <button
                       onClick={() => updateData("domain", "non")}
                       className={cn("flex-1 p-3 border rounded-md text-sm", data.domain === "non" ? "bg-primary text-primary-foreground" : "border-input")}
@@ -427,7 +470,7 @@ export function LeadWizard() {
                 </label>
                 
                 <label className="block">
-                  <span className="text-sm font-medium mb-2 block">Besoin d'une adresse email pro ?</span>
+                  <span className="text-sm font-medium mb-2 block">Besoin d'une adresse email pro ? (ex: vous@votresite.be)</span>
                   <div className="flex gap-3">
                     <button
                       onClick={() => updateData("emailPro", "oui")}
@@ -473,27 +516,48 @@ export function LeadWizard() {
               <h3 className="text-2xl font-bold">Dernière étape.</h3>
               <p className="text-sm text-muted-foreground">Vos coordonnées pour qu'on vous recontacte.</p>
               <div className="space-y-3">
-                <input 
-                  type="text" 
-                  placeholder="Nom complet" 
-                  className="w-full p-3 rounded-md border border-input bg-transparent"
-                  value={data.name}
-                  onChange={(e) => updateData("name", e.target.value)}
-                />
-                <input 
-                  type="email" 
-                  placeholder="Email" 
-                  className="w-full p-3 rounded-md border border-input bg-transparent"
-                  value={data.email}
-                  onChange={(e) => updateData("email", e.target.value)}
-                />
-                <input 
-                  type="tel" 
-                  placeholder="Téléphone" 
-                  className="w-full p-3 rounded-md border border-input bg-transparent"
-                  value={data.phone}
-                  onChange={(e) => updateData("phone", e.target.value)}
-                />
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder="Votre nom" 
+                    className={cn(
+                      "w-full p-3 rounded-md border bg-transparent transition-colors",
+                      data.name.trim() ? "border-green-500/50" : "border-input"
+                    )}
+                    value={data.name}
+                    onChange={(e) => updateData("name", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="email" 
+                    placeholder="Votre email" 
+                    className={cn(
+                      "w-full p-3 rounded-md border bg-transparent transition-colors",
+                      data.email.includes("@") && data.email.includes(".") ? "border-green-500/50" : "border-input"
+                    )}
+                    value={data.email}
+                    onChange={(e) => updateData("email", e.target.value)}
+                  />
+                  {data.email && (!data.email.includes("@") || !data.email.includes(".")) && (
+                    <p className="text-xs text-amber-600 mt-1">Vérifiez votre adresse email</p>
+                  )}
+                </div>
+                <div>
+                  <input 
+                    type="tel" 
+                    placeholder="Votre téléphone" 
+                    className={cn(
+                      "w-full p-3 rounded-md border bg-transparent transition-colors",
+                      data.phone.replace(/\D/g, '').length >= 9 ? "border-green-500/50" : "border-input"
+                    )}
+                    value={data.phone}
+                    onChange={(e) => updateData("phone", e.target.value)}
+                  />
+                  {data.phone && data.phone.replace(/\D/g, '').length < 9 && (
+                    <p className="text-xs text-amber-600 mt-1">Numéro trop court</p>
+                  )}
+                </div>
                 <textarea 
                   placeholder="Un petit mot sur votre projet (optionnel)..." 
                   className="w-full p-3 rounded-md border border-input bg-transparent h-20 resize-none"

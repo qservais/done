@@ -19,7 +19,15 @@ import { Section } from "@/components/ui/section";
 
 export default function Home() {
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Disable browser scroll restoration and force top
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // Also try with a small delay for stubborn browsers
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 0);
   }, []);
 
   return (

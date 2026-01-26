@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MobileStickyCTA } from "@/components/MobileStickyCTA";
@@ -17,6 +18,10 @@ import { LeadWizard } from "@/components/LeadWizard";
 import { Section } from "@/components/ui/section";
 
 export default function Home() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <SEO

@@ -52,6 +52,8 @@ export function Realizations() {
                     <img 
                       src={project.image} 
                       alt={project.name}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-all duration-500 motion-reduce:group-hover:scale-100 project-preview"
                     />
                   ) : (

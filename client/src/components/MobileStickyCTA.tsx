@@ -4,8 +4,50 @@ import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { trackCTAClick } from "@/lib/tracking";
 
+const HIDDEN_SECTIONS = ["packs", "wizard", "contact"];
+
 export function MobileStickyCTA() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isInHiddenSection, setIsInHiddenSection] = useState(false);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    const checkHiddenSections = () => {
+      HIDDEN_SECTIONS.forEach((sectionId) => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  setIsInHiddenSection(true);
+                } else {
+                  const anyVisible = HIDDEN_SECTIONS.some((id) => {
+                    const el = document.getElementById(id);
+                    if (!el) return false;
+                    const rect = el.getBoundingClientRect();
+                    return rect.top < window.innerHeight && rect.bottom > 0;
+                  });
+                  setIsInHiddenSection(anyVisible);
+                }
+              });
+            },
+            { threshold: 0.1 }
+          );
+          observer.observe(section);
+          observers.push(observer);
+        }
+      });
+    };
+
+    const timer = setTimeout(checkHiddenSections, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observers.forEach((obs) => obs.disconnect());
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,7 +56,7 @@ export function MobileStickyCTA() {
       const windowHeight = window.innerHeight;
       const footerThreshold = documentHeight - windowHeight - 400;
 
-      if (scrollY > 500 && scrollY < footerThreshold) {
+      if (scrollY > 500 && scrollY < footerThreshold && !isInHiddenSection) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -22,8 +64,9 @@ export function MobileStickyCTA() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isInHiddenSection]);
 
   return (
     <AnimatePresence>

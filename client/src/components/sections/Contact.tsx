@@ -1,12 +1,11 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
-import { Mail, Phone, Calendar } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
 import { DoneUnderline } from "@/components/signature";
 import { trackCTAClick, trackPhoneClick, trackEmailClick } from "@/lib/tracking";
-
-const CAL_BOOKING_URL = "https://cal.com/madebydone/30min";
+import { CalEmbed } from "@/components/CalEmbed";
 
 export function Contact() {
   return (
@@ -24,19 +23,20 @@ export function Contact() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.2}>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+        <FadeIn delay={0.15}>
+          <div className="mb-10">
             <Button size="lg" className="h-14 px-8 text-lg w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 rounded-full" asChild>
               <a href="#wizard" onClick={() => trackCTAClick('remplir_formulaire', 'contact')}>
                 Remplir le formulaire (2 min)
               </a>
             </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full" asChild>
-              <a href={CAL_BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('prendre_rdv', 'contact')}>
-                <Calendar className="w-5 h-5 mr-2" />
-                Prendre rendez-vous
-              </a>
-            </Button>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.2}>
+          <div className="mb-16">
+            <p className="text-gray-400 mb-6 text-sm">ou réservez directement un créneau</p>
+            <CalEmbed className="max-w-2xl mx-auto" />
           </div>
         </FadeIn>
 

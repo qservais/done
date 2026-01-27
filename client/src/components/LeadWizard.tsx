@@ -101,6 +101,7 @@ export function LeadWizard() {
   const progress = Math.min((step / totalSteps) * 100, 100);
 
   const stepNames = ['activite', 'pack', 'options', 'timing', 'coordonnees', 'recapitulatif'];
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     if (step === 1) {
@@ -108,10 +109,11 @@ export function LeadWizard() {
     }
     trackFormStep('lead_wizard', step, stepNames[step - 1] || 'unknown');
     
-    // Scroll to top of form on step change
-    if (formRef.current) {
+    // Scroll to top of form on step change (but not on initial mount)
+    if (formRef.current && !isInitialMount.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    isInitialMount.current = false;
   }, [step]);
 
   const updateData = <K extends keyof StepData>(key: K, value: StepData[K]) => {

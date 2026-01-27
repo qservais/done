@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
     
+    <!-- Suppress non-Error exceptions from third-party scripts (must be first) -->
+    <script>
+    (function() {
+      window.addEventListener('error', function(e) {
+        if (!e.error || !(e.error instanceof Error)) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          return false;
+        }
+      }, true);
+      window.addEventListener('unhandledrejection', function(e) {
+        if (!e.reason || !(e.reason instanceof Error)) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+          return false;
+        }
+      }, true);
+    })();
+    </script>
+    
     <!-- Google Tag Manager - Deferred for performance -->
     <script>
     window.addEventListener('load', function() {

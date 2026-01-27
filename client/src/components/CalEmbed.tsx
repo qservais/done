@@ -1,14 +1,10 @@
+import Cal, { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
 import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const CAL_LINK = "madebydone/30min";
-
-declare global {
-  interface Window {
-    Cal?: any;
-  }
-}
+const CAL_NAMESPACE = "30min";
 
 interface CalPopupButtonProps {
   className?: string;
@@ -22,46 +18,28 @@ export function CalPopupButton({
   children 
 }: CalPopupButtonProps) {
   useEffect(() => {
-    // Load Cal.com embed script
-    if (!document.getElementById("cal-embed-script")) {
-      const script = document.createElement("script");
-      script.id = "cal-embed-script";
-      script.src = "https://app.cal.com/embed/embed.js";
-      script.async = true;
-      document.head.appendChild(script);
-
-      script.onload = () => {
-        try {
-          if (window.Cal) {
-            window.Cal("init", { origin: "https://cal.com" });
-            window.Cal("ui", {
-              theme: "light",
-              styles: { branding: { brandColor: "#395af6" } },
-              hideEventTypeDetails: false,
-            });
-          }
-        } catch (e) {
-          console.warn("Cal.com initialization failed:", e);
-        }
-      };
-
-      script.onerror = () => {
-        console.warn("Failed to load Cal.com embed script");
-      };
-    }
+    (async function () {
+      try {
+        const cal = await getCalApi({ namespace: CAL_NAMESPACE });
+        cal("ui", { 
+          hideEventTypeDetails: false, 
+          layout: "month_view",
+          theme: "light",
+          styles: { branding: { brandColor: "#395af6" } }
+        });
+      } catch (e) {
+        console.warn("Cal.com initialization failed:", e);
+      }
+    })();
   }, []);
 
-  const openCalPopup = () => {
+  const openCalPopup = async () => {
     try {
-      if (window.Cal) {
-        window.Cal("modal", {
-          calLink: CAL_LINK,
-          config: { layout: "month_view", theme: "light" },
-        });
-      } else {
-        // Fallback: open in new tab
-        window.open(`https://cal.com/${CAL_LINK}`, "_blank");
-      }
+      const cal = await getCalApi({ namespace: CAL_NAMESPACE });
+      cal("modal", {
+        calLink: CAL_LINK,
+        config: { layout: "month_view" },
+      });
     } catch (e) {
       console.warn("Cal.com modal failed, using fallback:", e);
       window.open(`https://cal.com/${CAL_LINK}`, "_blank");
@@ -83,5 +61,36 @@ export function CalPopupButton({
         </>
       )}
     </Button>
+  );
+}
+
+interface CalInlineProps {
+  className?: string;
+}
+
+export function CalInline({ className = "" }: CalInlineProps) {
+  useEffect(() => {
+    (async function () {
+      try {
+        const cal = await getCalApi({ namespace: CAL_NAMESPACE });
+        cal("ui", { 
+          hideEventTypeDetails: false, 
+          layout: "month_view" 
+        });
+      } catch (e) {
+        console.warn("Cal.com initialization failed:", e);
+      }
+    })();
+  }, []);
+
+  return (
+    <Cal 
+      namespace={CAL_NAMESPACE}
+      calLink={CAL_LINK}
+      style={{ width: "100%", height: "100%", overflow: "scroll" }}
+      config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true" }}
+      className={className}
+      data-testid="cal-inline-embed"
+    />
   );
 }

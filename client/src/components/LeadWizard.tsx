@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 import { DoneStamp } from "@/components/signature";
 import { trackFormStart, trackFormStep, trackFormSubmit, trackFormError, trackPackSelect } from "@/lib/tracking";
+import { CalPopupButton } from "@/components/CalEmbed";
 
 type PackType = "landing" | "vitrine" | "multipage" | "ecommerce" | "";
 
@@ -51,7 +52,6 @@ const objectifOptions = [
   { id: "achat", label: "Acheter directement", description: "Paiement en ligne", icon: CreditCard },
 ];
 
-const CAL_BOOKING_URL = "https://cal.com/madebydone/30min";
 
 const packs = [
   {
@@ -225,14 +225,9 @@ export function LeadWizard() {
           <strong>Pour aller plus vite :</strong> répondez directement à l'email qu'on vient de vous envoyer.
         </p>
         <div className="flex flex-col gap-3">
-          <a
-            href={CAL_BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent text-accent-foreground px-6 py-3 font-semibold hover:bg-accent/90 transition-colors"
-          >
+          <CalPopupButton className="rounded-full bg-accent text-accent-foreground px-6 py-3 font-semibold hover:bg-accent/90">
             Réserver un call 30 min
-          </a>
+          </CalPopupButton>
           <Button onClick={() => window.location.reload()} variant="outline">
             Retour au site
           </Button>

@@ -1,18 +1,74 @@
-interface CalEmbedProps {
-  calLink?: string;
-  className?: string;
+import { useEffect } from "react";
+import { Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const CAL_LINK = "madebydone/30min";
+
+declare global {
+  interface Window {
+    Cal?: any;
+  }
 }
 
-export function CalEmbed({ calLink = "madebydone/30min", className = "" }: CalEmbedProps) {
+interface CalPopupButtonProps {
+  className?: string;
+  variant?: "default" | "outline" | "ghost";
+  children?: React.ReactNode;
+}
+
+export function CalPopupButton({ 
+  className = "", 
+  variant = "default",
+  children 
+}: CalPopupButtonProps) {
+  useEffect(() => {
+    // Load Cal.com embed script
+    if (!document.getElementById("cal-embed-script")) {
+      const script = document.createElement("script");
+      script.id = "cal-embed-script";
+      script.src = "https://app.cal.com/embed/embed.js";
+      script.async = true;
+      document.head.appendChild(script);
+
+      script.onload = () => {
+        if (window.Cal) {
+          window.Cal("init", { origin: "https://cal.com" });
+          window.Cal("ui", {
+            theme: "light",
+            styles: { branding: { brandColor: "#395af6" } },
+            hideEventTypeDetails: false,
+          });
+        }
+      };
+    }
+  }, []);
+
+  const openCalPopup = () => {
+    if (window.Cal) {
+      window.Cal("modal", {
+        calLink: CAL_LINK,
+        config: { layout: "month_view", theme: "light" },
+      });
+    } else {
+      // Fallback: open in new tab
+      window.open(`https://cal.com/${CAL_LINK}`, "_blank");
+    }
+  };
+
   return (
-    <div className={`w-full rounded-2xl overflow-hidden ${className}`}>
-      <iframe
-        src={`https://cal.com/${calLink}?embed=true&theme=light&layout=month_view`}
-        title="Réserver un rendez-vous"
-        className="w-full border-0 rounded-2xl bg-white"
-        style={{ minHeight: "600px", height: "100%" }}
-        loading="lazy"
-      />
-    </div>
+    <Button 
+      size="lg" 
+      variant={variant}
+      className={className}
+      onClick={openCalPopup}
+      data-testid="button-cal-popup"
+    >
+      {children || (
+        <>
+          <Calendar className="w-5 h-5 mr-2" />
+          Prendre rendez-vous
+        </>
+      )}
+    </Button>
   );
 }

@@ -31,26 +31,39 @@ export function CalPopupButton({
       document.head.appendChild(script);
 
       script.onload = () => {
-        if (window.Cal) {
-          window.Cal("init", { origin: "https://cal.com" });
-          window.Cal("ui", {
-            theme: "light",
-            styles: { branding: { brandColor: "#395af6" } },
-            hideEventTypeDetails: false,
-          });
+        try {
+          if (window.Cal) {
+            window.Cal("init", { origin: "https://cal.com" });
+            window.Cal("ui", {
+              theme: "light",
+              styles: { branding: { brandColor: "#395af6" } },
+              hideEventTypeDetails: false,
+            });
+          }
+        } catch (e) {
+          console.warn("Cal.com initialization failed:", e);
         }
+      };
+
+      script.onerror = () => {
+        console.warn("Failed to load Cal.com embed script");
       };
     }
   }, []);
 
   const openCalPopup = () => {
-    if (window.Cal) {
-      window.Cal("modal", {
-        calLink: CAL_LINK,
-        config: { layout: "month_view", theme: "light" },
-      });
-    } else {
-      // Fallback: open in new tab
+    try {
+      if (window.Cal) {
+        window.Cal("modal", {
+          calLink: CAL_LINK,
+          config: { layout: "month_view", theme: "light" },
+        });
+      } else {
+        // Fallback: open in new tab
+        window.open(`https://cal.com/${CAL_LINK}`, "_blank");
+      }
+    } catch (e) {
+      console.warn("Cal.com modal failed, using fallback:", e);
       window.open(`https://cal.com/${CAL_LINK}`, "_blank");
     }
   };

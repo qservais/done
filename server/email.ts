@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const STUDIO_EMAIL = process.env.STUDIO_EMAIL || "hello@madebydone.be";
 const FROM_EMAIL = "done. <no-reply@madebydone.be>";
-const MEET_BOOKING_URL = process.env.MEET_BOOKING_URL || "https://calendar.app.google/zFbiLZ22gFyL1cGf8";
+const CAL_BOOKING_URL = process.env.CAL_BOOKING_URL || "https://cal.com/madebydone/30min";
 
 type LeadData = {
   name: string;
@@ -105,7 +105,7 @@ Pas de stress si vous n'avez pas tout — envoyez ce que vous avez, on s'adapte 
 OPTION 2 — On en parle ensemble en visio (30 min)
 
 Si vous préférez qu'on fasse le point ensemble, réservez un créneau ici :
-${MEET_BOOKING_URL}
+${CAL_BOOKING_URL}
 
 ---
 
@@ -194,7 +194,7 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                             <p style="color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px;">Option 2</p>
                             <p style="color: white; font-size: 16px; font-weight: 600; margin: 0 0 4px;">On en parle ensemble ?</p>
                             <p style="color: rgba(255,255,255,0.85); font-size: 14px; margin: 0 0 16px;">30 min en visio pour faire le point</p>
-                            <a href="${MEET_BOOKING_URL}" style="display: inline-block; background: white; color: #395af6; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Réserver un créneau →</a>
+                            <a href="${CAL_BOOKING_URL}" style="display: inline-block; background: white; color: #395af6; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Réserver un créneau →</a>
                           </td>
                         </tr>
                       </table>

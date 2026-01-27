@@ -6,7 +6,7 @@ import { FadeIn } from "@/components/ui/fade-in";
 import { DoneUnderline } from "@/components/signature";
 import { trackCTAClick, trackPhoneClick, trackEmailClick } from "@/lib/tracking";
 
-const MEET_BOOKING_URL = "https://calendar.app.google/zFbiLZ22gFyL1cGf8";
+const CAL_BOOKING_URL = "https://cal.com/madebydone/30min";
 
 export function Contact() {
   return (
@@ -32,7 +32,7 @@ export function Contact() {
               </a>
             </Button>
             <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full" asChild>
-              <a href={MEET_BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('prendre_rdv', 'contact')}>
+              <a href={CAL_BOOKING_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('prendre_rdv', 'contact')}>
                 <Calendar className="w-5 h-5 mr-2" />
                 Prendre rendez-vous
               </a>

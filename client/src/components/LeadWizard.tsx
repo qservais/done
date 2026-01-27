@@ -51,7 +51,7 @@ const objectifOptions = [
   { id: "achat", label: "Acheter directement", description: "Paiement en ligne", icon: CreditCard },
 ];
 
-const MEET_BOOKING_URL = "https://calendar.app.google/zFbiLZ22gFyL1cGf8";
+const CAL_BOOKING_URL = "https://cal.com/madebydone/30min";
 
 const packs = [
   {
@@ -226,7 +226,7 @@ export function LeadWizard() {
         </p>
         <div className="flex flex-col gap-3">
           <a
-            href={MEET_BOOKING_URL}
+            href={CAL_BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-accent text-accent-foreground px-6 py-3 font-semibold hover:bg-accent/90 transition-colors"

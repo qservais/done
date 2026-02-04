@@ -2,7 +2,6 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight } from "lucide-react";
 import { BRAND } from "@/config/brand";
-import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { trackPackSelect } from "@/lib/tracking";
 
 const packs = [
@@ -49,16 +48,16 @@ const packs = [
 export function Packs() {
   return (
     <Section id="packs" className="bg-background">
-      <FadeIn className="text-center mb-12 md:mb-16">
+      <div className="text-center mb-12 md:mb-16">
         <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">Nos Packs</h2>
         <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto">
           Des offres cumulatives. Plus vous montez, plus vous avez de valeur.
         </p>
-      </FadeIn>
+      </div>
 
-      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto">
-        {packs.map((pack, index) => (
-          <FadeIn
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto">
+        {packs.map((pack) => (
+          <div
             key={pack.id}
             className={`relative p-5 md:p-6 lg:p-8 rounded-2xl flex flex-col ${
               pack.popular
@@ -113,18 +112,18 @@ export function Packs() {
                 Choisir ce pack <ChevronRight className="w-4 h-4" />
               </a>
             </Button>
-          </FadeIn>
+          </div>
         ))}
-      </StaggerChildren>
+      </div>
 
-      <FadeIn delay={0.3} className="text-center mt-8 md:mt-10 space-y-2">
+      <div className="text-center mt-8 md:mt-10 space-y-2">
         <p className="text-sm text-muted-foreground">
           + Abonnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
         </p>
         <p className="text-xs text-muted-foreground/50 italic">
           Pas de blabla. Du concret.
         </p>
-      </FadeIn>
+      </div>
     </Section>
   );
 }

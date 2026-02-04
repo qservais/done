@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, ChevronLeft, Loader2, FileText, Layout, Layers, ShoppingCart, Phone, FileQuestion, Calendar, MessageSquare, CreditCard, RefreshCw, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -323,7 +322,7 @@ export function LeadWizard() {
         <div className="flex-1">
           {/* Step 1: Besoins - Pourquoi un site ? */}
           {step === 1 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold">Pourquoi voulez-vous un site ?</h3>
                 <p className="text-sm text-muted-foreground mt-1">Ça nous aide à vous proposer la meilleure solution.</p>
@@ -401,12 +400,12 @@ export function LeadWizard() {
                   })}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 2: Activité & Zone */}
           {step === 2 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold">Que faites-vous ?</h3>
                 <p className="text-sm text-muted-foreground mt-1">Décrivez votre activité en quelques mots.</p>
@@ -441,12 +440,12 @@ export function LeadWizard() {
                   </select>
                 </label>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 3: Pack Selection */}
           {step === 3 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold">On vous propose...</h3>
                 <p className="text-sm text-muted-foreground mt-1">Choisissez le pack qui correspond à vos besoins.</p>
@@ -501,12 +500,12 @@ export function LeadWizard() {
               <p className="text-xs text-muted-foreground text-center">
                 + Abonnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
               </p>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 4: Détails / Options */}
           {step === 4 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold">Quelques détails</h3>
                 <p className="text-sm text-muted-foreground mt-1">Pour personnaliser votre site.</p>
@@ -577,12 +576,12 @@ export function LeadWizard() {
                   </div>
                 </label>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 5: Délai */}
           {step === 5 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold">Quand en avez-vous besoin ?</h3>
                 <p className="text-sm text-muted-foreground mt-1">On s'adapte à votre planning.</p>
@@ -605,12 +604,12 @@ export function LeadWizard() {
                   </button>
                 ))}
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 6: Coordonnées */}
           {step === 6 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+            <div className="space-y-4">
               <div>
                 <h3 className="text-2xl font-bold">Vos coordonnées</h3>
                 <p className="text-sm text-muted-foreground mt-1">Pour qu'on puisse vous recontacter.</p>
@@ -680,12 +679,12 @@ export function LeadWizard() {
                   onChange={(e) => updateData("companyWebsite", e.target.value)}
                 />
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* Step 7: Récapitulatif */}
           {step === 7 && (
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+            <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-bold">Récapitulatif</h3>
                 <p className="text-sm text-muted-foreground mt-1">Vérifiez vos informations avant d'envoyer.</p>
@@ -743,7 +742,7 @@ export function LeadWizard() {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           )}
         </div>
 

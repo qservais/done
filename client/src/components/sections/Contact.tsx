@@ -2,7 +2,6 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
 import { Mail, Phone } from "lucide-react";
-import { FadeIn } from "@/components/ui/fade-in";
 import { DoneUnderline } from "@/components/signature";
 import { trackCTAClick, trackPhoneClick, trackEmailClick } from "@/lib/tracking";
 import { CalPopupButton } from "@/components/CalEmbed";
@@ -11,7 +10,7 @@ export function Contact() {
   return (
     <Section id="contact" className="bg-foreground text-background py-24">
       <div className="max-w-4xl mx-auto text-center">
-        <FadeIn>
+        <div>
           <h2 className="text-4xl md:text-6xl font-serif font-bold mb-8 text-white">
             <DoneUnderline>On le fait ?</DoneUnderline>
           </h2>
@@ -21,9 +20,9 @@ export function Contact() {
           <p className="text-sm text-gray-500 italic mb-12">
             Livré. Maintenu. Done.
           </p>
-        </FadeIn>
+        </div>
 
-        <FadeIn delay={0.2}>
+        <div>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             <Button size="lg" className="h-14 px-8 text-lg w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 rounded-full" asChild>
               <a href="#wizard" onClick={() => trackCTAClick('remplir_formulaire', 'contact')}>
@@ -35,9 +34,9 @@ export function Contact() {
               className="h-14 px-8 text-lg w-full sm:w-auto bg-transparent border-white/20 text-white hover:bg-white/10 rounded-full"
             />
           </div>
-        </FadeIn>
+        </div>
 
-        <FadeIn delay={0.4}>
+        <div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm text-gray-400 border-t border-white/10 pt-12">
             <div className="flex flex-col items-center gap-2">
               <Mail className="w-6 h-6 text-accent mb-2" />
@@ -52,7 +51,7 @@ export function Contact() {
               <span>{BRAND.SERVICE_AREA}</span>
             </div>
           </div>
-        </FadeIn>
+        </div>
       </div>
     </Section>
   );

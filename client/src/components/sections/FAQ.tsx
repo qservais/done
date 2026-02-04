@@ -6,7 +6,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { BRAND } from "@/config/brand";
-import { FadeIn } from "@/components/ui/fade-in";
 import { trackFAQOpen } from "@/lib/tracking";
 
 const faqItems = [
@@ -22,30 +21,26 @@ export function FAQ() {
   return (
     <Section id="faq" className="bg-background">
       <div className="max-w-3xl mx-auto">
-        <FadeIn>
-          <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center">Questions fréquentes</h2>
-        </FadeIn>
+        <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center">Questions fréquentes</h2>
         
-        <FadeIn delay={0.2}>
-          <Accordion 
-            type="single" 
-            collapsible 
-            className="w-full"
-            onValueChange={(value) => {
-              if (value) {
-                const item = faqItems.find(i => i.id === value);
-                if (item) trackFAQOpen(item.question);
-              }
-            }}
-          >
-            {faqItems.map((item) => (
-              <AccordionItem key={item.id} value={item.id}>
-                <AccordionTrigger>{item.question}</AccordionTrigger>
-                <AccordionContent>{item.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </FadeIn>
+        <Accordion 
+          type="single" 
+          collapsible 
+          className="w-full"
+          onValueChange={(value) => {
+            if (value) {
+              const item = faqItems.find(i => i.id === value);
+              if (item) trackFAQOpen(item.question);
+            }
+          }}
+        >
+          {faqItems.map((item) => (
+            <AccordionItem key={item.id} value={item.id}>
+              <AccordionTrigger>{item.question}</AccordionTrigger>
+              <AccordionContent>{item.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </Section>
   );

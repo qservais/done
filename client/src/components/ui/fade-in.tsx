@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FadeInProps {
@@ -13,47 +13,25 @@ interface FadeInProps {
 export function FadeIn({ 
   children, 
   delay = 0, 
-  duration = 0.5, 
+  duration = 0.6, 
   className = "",
   direction = "up" 
 }: FadeInProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Always render visible content until we're mounted and confirmed desktop
-  if (!mounted || isMobile || prefersReducedMotion) {
+  // Sur mobile ou reduced motion : rendu direct SANS motion.div
+  if (isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
-  const variants = {
-    hidden: {
-      opacity: 0,
-      y: direction === "up" ? 20 : direction === "down" ? -20 : 0,
-      x: direction === "left" ? 20 : direction === "right" ? -20 : 0,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      transition: {
-        duration,
-        delay,
-        ease: "easeOut"
-      } as any
-    }
-  };
-
+  // Sur desktop : animations normales
   return (
     <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      variants={variants}
+      initial={{ opacity: 0, y: direction === "up" ? 20 : direction === "down" ? -20 : 0, x: direction === "left" ? 20 : direction === "right" ? -20 : 0 }}
+      whileInView={{ opacity: 1, y: 0, x: 0 }}
+      viewport={{ once: true, margin: "0px" }}
+      transition={{ duration, delay, ease: "easeOut" }}
       className={className}
     >
       {children}
@@ -72,14 +50,9 @@ export function StaggerChildren({
 }) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Always render visible content until we're mounted and confirmed desktop
-  if (!mounted || isMobile || prefersReducedMotion) {
+  // Sur mobile ou reduced motion : rendu direct SANS motion.div
+  if (isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
@@ -87,7 +60,7 @@ export function StaggerChildren({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "0px" }}
       variants={{
         visible: {
           transition: {

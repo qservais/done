@@ -116,13 +116,27 @@ html {
   }
 }
 
-/* Mobile fallback - targeted visibility fix for animated sections */
-@media (max-width: 767px) {
-  /* Ensure main content sections are always visible on mobile */
+/* ===== CORRECTIF MOBILE ===== */
+
+/* Forcer la visibilité des sections principales sur mobile */
+@media (max-width: 768px) {
+  /* Sections principales toujours visibles */
   main > section,
-  main > div > section {
+  main > div > section,
+  .fade-in-section {
     opacity: 1;
     visibility: visible;
     transform: none;
+  }
+}
+
+/* Désactiver les animations si l'utilisateur préfère */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

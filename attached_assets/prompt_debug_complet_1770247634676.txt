@@ -1,0 +1,210 @@
+Le problème mobile persiste après les modifications. Voici ce qui se passe maintenant :
+
+NOUVEAUX SYMPTÔMES OBSERVÉS :
+- Safari : Page reste blanche même après désactivation des animations FadeIn
+- Chrome mobile : Page grise, une partie du contenu apparaît après 5 secondes, le reste ne charge jamais
+- Le problème se produit aussi en navigation privée (donc pas un problème de cache)
+- Sans interaction (pas de scroll), le contenu ne se charge pas
+
+ANALYSE : Il y a PLUSIEURS problèmes qui se cumulent, pas juste FadeIn.
+
+ACTIONS DE DÉBOGAGE IMMÉDIAT :
+
+1. **AJOUTER UN DIAGNOSTIC COMPLET EN HAUT DU HTML** :
+   Dans le <head> de index.html ou _document.js, ajoute ceci AVANT tout autre script :
+   
+   ```html
+   <script>
+     // Diagnostic mobile ultra-prioritaire
+     window.mobileDebugger = {
+       startTime: Date.now(),
+       userAgent: navigator.userAgent,
+       viewport: window.innerWidth + 'x' + window.innerHeight,
+       errors: [],
+       warnings: [],
+       loadedScripts: [],
+       failedScripts: []
+     };
+     
+     // Capturer TOUTES les erreurs
+     window.addEventListener('error', function(e) {
+       window.mobileDebugger.errors.push({
+         type: 'error',
+         message: e.message,
+         source: e.filename,
+         line: e.lineno,
+         col: e.colno,
+         time: Date.now() - window.mobileDebugger.startTime
+       });
+       console.error('ERROR CAUGHT:', e);
+     }, true);
+     
+     // Capturer les promesses rejetées
+     window.addEventListener('unhandledrejection', function(e) {
+       window.mobileDebugger.errors.push({
+         type: 'promise_rejection',
+         reason: e.reason?.toString(),
+         time: Date.now() - window.mobileDebugger.startTime
+       });
+       console.error('PROMISE REJECTION:', e.reason);
+     });
+     
+     // Forcer l'affichage après 2 secondes si rien n'apparaît
+     setTimeout(function() {
+       const bodyText = document.body.innerText.trim();
+       const bodyVisible = document.body.offsetHeight > 100;
+       
+       if (!bodyVisible || bodyText.length < 50) {
+         console.error('EMERGENCY: Content not visible!');
+         
+         // Afficher le diagnostic
+         document.body.innerHTML = '<div style="padding:20px;font-family:monospace;background:#fff;color:#000;"><h1>🚨 DIAGNOSTIC MOBILE</h1><h2>Temps écoulé: ' + (Date.now() - window.mobileDebugger.startTime) + 'ms</h2><h3>Erreurs détectées:</h3><pre>' + JSON.stringify(window.mobileDebugger, null, 2) + '</pre><h3>Body height: ' + document.body.offsetHeight + 'px</h3><h3>Body text length: ' + bodyText.length + '</h3><button onclick="location.reload()" style="padding:10px;margin-top:20px;">Recharger</button></div>';
+       }
+     }, 2000);
+     
+     console.log('Mobile debugger initialized');
+   </script>
+   ```
+
+2. **VÉRIFIER ET CORRIGER LE CSS** :
+   Cherche dans ton CSS global si tu as :
+   - `body { opacity: 0 }` ou `html { opacity: 0 }`
+   - Des classes avec `display: none` qui s'appliquent sur mobile
+   - Des `min-height: 100vh` qui peuvent causer des problèmes
+   
+   Ajoute ce CSS de sécurité au début de ton CSS principal :
+   ```css
+   /* URGENCE - Forcer la visibilité sur mobile */
+   @media (max-width: 768px) {
+     html, body {
+       opacity: 1 !important;
+       visibility: visible !important;
+       display: block !important;
+     }
+     
+     /* Forcer tous les éléments principaux à être visibles */
+     main, .hero, .hero-content, section, article {
+       opacity: 1 !important;
+       visibility: visible !important;
+       display: block !important;
+     }
+     
+     /* Désactiver TOUTES les animations sur mobile temporairement */
+     * {
+       animation-duration: 0s !important;
+       transition-duration: 0s !important;
+     }
+   }
+   ```
+
+3. **VÉRIFIER LE JAVASCRIPT** :
+   Cherche dans ton code si tu as :
+   - Des imports de modules qui peuvent échouer sur mobile
+   - Du code qui attend un événement avant d'afficher le contenu
+   - Des conditions qui cachent le contenu (`if (window.innerWidth > X)`)
+   
+   Commente temporairement TOUT le JavaScript non-essentiel :
+   ```javascript
+   // Désactive temporairement :
+   // - Toutes les animations Framer Motion
+   // - Tous les useEffect qui manipulent l'affichage
+   // - Tous les lazy loading
+   // - Tous les IntersectionObserver
+   ```
+
+4. **SIMPLIFIER TEMPORAIREMENT LE COMPOSANT HERO** :
+   Remplace tout le contenu du Hero par du HTML pur temporairement :
+   ```jsx
+   export default function Hero() {
+     return (
+       <div style={{ 
+         padding: '60px 20px',
+         background: '#ffffff',
+         minHeight: '400px',
+         opacity: 1,
+         visibility: 'visible'
+       }}>
+         <h1 style={{ 
+           fontSize: '32px',
+           color: '#000000',
+           marginBottom: '20px',
+           opacity: 1
+         }}>
+           Sites web premium à prix accessible
+         </h1>
+         <p style={{ 
+           fontSize: '18px',
+           color: '#666666',
+           opacity: 1
+         }}>
+           TEST MOBILE - Si vous voyez ce texte, le HTML fonctionne.
+         </p>
+       </div>
+     );
+   }
+   ```
+
+5. **VÉRIFIER LES FICHIERS SUIVANTS** :
+   - `_app.js` ou `_app.tsx` : Y a-t-il du CSS global qui cache le contenu ?
+   - `layout.js` : Y a-t-il des wrappers qui appliquent des styles problématiques ?
+   - `globals.css` : Y a-t-il des styles qui s'appliquent au body ou html ?
+   - Composants providers : Y a-t-il un ThemeProvider ou autre qui bloque le rendu ?
+
+6. **SI C'EST NEXT.JS** :
+   Vérifie le fichier `next.config.js` :
+   ```javascript
+   module.exports = {
+     // Ajoute ceci si pas déjà présent
+     reactStrictMode: false, // Désactive temporairement
+     swcMinify: true,
+     
+     // Optimisations pour mobile
+     compiler: {
+       removeConsole: false, // Garde les console.log pour débugger
+     }
+   }
+   ```
+
+7. **TESTER L'HYPOTHÈSE DU HYDRATION ERROR** :
+   Si c'est Next.js/React, ajoute ceci dans ton composant principal :
+   ```jsx
+   import { useEffect, useState } from 'react';
+   
+   export default function Home() {
+     const [mounted, setMounted] = useState(false);
+     
+     useEffect(() => {
+       setMounted(true);
+     }, []);
+     
+     // Afficher un fallback simple en attendant
+     if (!mounted) {
+       return (
+         <div style={{ padding: '20px', minHeight: '100vh', background: '#fff' }}>
+           <h1>Chargement...</h1>
+         </div>
+       );
+     }
+     
+     return (
+       // Ton contenu normal ici
+     );
+   }
+   ```
+
+PRIORITÉS DANS L'ORDRE :
+1. Ajoute le script de diagnostic (point 1) - CRITIQUE
+2. Ajoute le CSS de sécurité (point 2) - CRITIQUE  
+3. Simplifie le Hero temporairement (point 4)
+4. Teste sur mobile et regarde ce que dit le diagnostic
+5. Une fois que le contenu s'affiche, réactive progressivement les features
+
+APRÈS CHAQUE MODIFICATION :
+- Vide le cache du navigateur mobile
+- Teste en navigation privée
+- Regarde la console pour les erreurs
+- Note ce que dit le diagnostic après 2 secondes
+
+L'objectif est de faire apparaître le contenu AVEC du HTML/CSS pur d'abord, PUIS de réactiver progressivement React/Framer Motion/etc.
+
+Commence par ces modifications et dis-moi ce qu'affiche le diagnostic mobile après 2 secondes !

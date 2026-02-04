@@ -1,6 +1,12 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, lazy, Suspense, useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+
+// Lazy load Framer Motion uniquement sur desktop
+const MotionDiv = lazy(() => 
+  import('framer-motion').then(mod => ({ 
+    default: mod.motion.div 
+  }))
+);
 
 interface FadeInProps {
   children: ReactNode;
@@ -17,25 +23,35 @@ export function FadeIn({
   className = "",
   direction = "up" 
 }: FadeInProps) {
-  const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(true);
 
-  // Sur mobile ou reduced motion : rendu direct SANS motion.div
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+  }, []);
+
+  // Sur mobile ou reduced motion : rendu direct SANS Framer Motion
   if (isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
-  // Sur desktop : animations normales
+  const y = direction === "up" ? 20 : direction === "down" ? -20 : 0;
+  const x = direction === "left" ? 20 : direction === "right" ? -20 : 0;
+
+  // Sur desktop : Framer Motion avec lazy loading
   return (
-    <motion.div
-      initial={{ opacity: 0, y: direction === "up" ? 20 : direction === "down" ? -20 : 0, x: direction === "left" ? 20 : direction === "right" ? -20 : 0 }}
-      whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: "0px" }}
-      transition={{ duration, delay, ease: "easeOut" }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <Suspense fallback={<div className={className}>{children}</div>}>
+      <MotionDiv
+        initial={{ opacity: 0, y, x }}
+        whileInView={{ opacity: 1, y: 0, x: 0 }}
+        viewport={{ once: true, margin: "0px" }}
+        transition={{ duration, delay, ease: "easeOut" }}
+        className={className}
+      >
+        {children}
+      </MotionDiv>
+    </Suspense>
   );
 }
 
@@ -48,29 +64,36 @@ export function StaggerChildren({
   staggerDelay?: number;
   className?: string;
 }) {
-  const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(true);
 
-  // Sur mobile ou reduced motion : rendu direct SANS motion.div
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+  }, []);
+
+  // Sur mobile ou reduced motion : rendu direct SANS Framer Motion
   if (isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "0px" }}
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay
+    <Suspense fallback={<div className={className}>{children}</div>}>
+      <MotionDiv
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "0px" }}
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: staggerDelay
+            }
           }
-        }
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+        }}
+        className={className}
+      >
+        {children}
+      </MotionDiv>
+    </Suspense>
   );
 }

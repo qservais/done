@@ -3,7 +3,6 @@ import { Link, useLocation } from "wouter";
 import { BRAND, LINKS } from "@/config/brand";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -74,38 +73,32 @@ export function Header() {
       </header>
 
       {/* Mobile Overlay Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-background pt-24 px-6 md:hidden flex flex-col"
-          >
-            <nav className="flex flex-col gap-6 text-center">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-2xl font-serif font-medium hover:text-accent transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="h-px w-24 bg-border mx-auto my-4" />
-              <div className="flex justify-center gap-4">
-                <button className="text-lg font-bold">FR</button>
-                <button className="text-lg text-muted-foreground">EN</button>
-              </div>
-              <Button size="lg" className="w-full mt-8 rounded-full text-lg" onClick={() => setIsOpen(false)} asChild>
-                <a href="#contact">Demander mon site</a>
-              </Button>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-background pt-24 px-6 md:hidden flex flex-col animate-in fade-in slide-in-from-top-4 duration-200"
+        >
+          <nav className="flex flex-col gap-6 text-center">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="text-2xl font-serif font-medium hover:text-accent transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+            <div className="h-px w-24 bg-border mx-auto my-4" />
+            <div className="flex justify-center gap-4">
+              <button className="text-lg font-bold">FR</button>
+              <button className="text-lg text-muted-foreground">EN</button>
+            </div>
+            <Button size="lg" className="w-full mt-8 rounded-full text-lg" onClick={() => setIsOpen(false)} asChild>
+              <a href="#contact">Demander mon site</a>
+            </Button>
+          </nav>
+        </div>
+      )}
     </>
   );
 }

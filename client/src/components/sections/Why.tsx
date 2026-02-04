@@ -1,6 +1,5 @@
 import { Section } from "@/components/ui/section";
 import { Zap, Layout, Search } from "lucide-react";
-import { motion } from "framer-motion";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const features = [

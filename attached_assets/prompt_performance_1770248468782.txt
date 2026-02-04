@@ -1,0 +1,296 @@
+URGENT - PROBLÈME DE PERFORMANCE : Le site met 17+ secondes à charger sur mobile
+
+Les 3 corrections d'affichage sont appliquées mais le problème persiste. Ce n'est PAS un problème d'affichage, c'est un problème de PERFORMANCE/CHARGEMENT.
+
+DIAGNOSTIC À FAIRE IMMÉDIATEMENT :
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. VÉRIFIER LA TAILLE DES BUNDLES JAVASCRIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Exécute cette commande :
+```bash
+npm run build
+```
+
+Puis regarde la sortie. Cherche les lignes comme :
+```
+○ /                    XXX kB        YYY kB
+```
+
+Si la taille totale > 500 kB, c'est LE problème.
+
+Causes probables :
+- Framer Motion est importé partout (très lourd : ~100 kB)
+- Des librairies inutiles sont bundlées
+- Pas de code splitting
+
+SOLUTION si bundles trop lourds :
+```javascript
+// next.config.js
+module.exports = {
+  swcMinify: true,
+  
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Exclure Framer Motion du bundle initial
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          framer: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: 'framer-motion',
+            priority: 10,
+          },
+        },
+      };
+    }
+    return config;
+  },
+};
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. VÉRIFIER LES IMAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Liste toutes les images du projet :
+```bash
+find . -name "*.jpg" -o -name "*.png" -o -name "*.webp" | xargs ls -lh
+```
+
+Si tu as des images > 500 kB, c'est un gros problème sur mobile.
+
+SOLUTION :
+1. Compresser toutes les images :
+   ```bash
+   npm install --save-dev sharp
+   ```
+
+2. Utiliser next/image partout :
+   ```jsx
+   // ❌ MAUVAIS
+   <img src="/hero.jpg" />
+   
+   // ✅ BON
+   import Image from 'next/image';
+   <Image 
+     src="/hero.jpg" 
+     width={1920}
+     height={1080}
+     priority={true}  // Pour le hero
+     quality={75}     // Réduit la taille
+   />
+   ```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. VÉRIFIER LES FONTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cherche dans ton code :
+```bash
+grep -r "@import url" --include="*.css" --include="*.scss"
+grep -r "fonts.googleapis.com" -r .
+```
+
+Si tu importes des fonts Google via @import ou <link>, ça ralentit ÉNORMÉMENT.
+
+SOLUTION :
+```jsx
+// app/layout.tsx ou _app.tsx
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+});
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="fr" className={inter.className}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. DÉSACTIVER FRAMER MOTION COMPLÈTEMENT SUR MOBILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Même si FadeIn n'utilise plus motion.div sur mobile, Framer Motion est quand même chargé dans le bundle.
+
+SOLUTION : Lazy load Framer Motion uniquement sur desktop
+
+Crée un nouveau composant :
+```tsx
+// components/FadeInOptimized.tsx
+'use client';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { lazy, Suspense } from 'react';
+
+// Lazy load Framer Motion uniquement sur desktop
+const MotionDiv = lazy(() => 
+  import('framer-motion').then(mod => ({ 
+    default: mod.motion.div 
+  }))
+);
+
+export function FadeIn({ children, className = '', ...props }) {
+  const isMobile = useIsMobile();
+  
+  // Mobile : div normale, pas de Framer Motion chargé
+  if (isMobile) {
+    return <div className={className} {...props}>{children}</div>;
+  }
+  
+  // Desktop : Framer Motion avec lazy loading
+  return (
+    <Suspense fallback={<div className={className} {...props}>{children}</div>}>
+      <MotionDiv
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className={className}
+        {...props}
+      >
+        {children}
+      </MotionDiv>
+    </Suspense>
+  );
+}
+```
+
+Remplace tous les imports de FadeIn par FadeInOptimized.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. VÉRIFIER LES REQUÊTES API / FETCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cherche dans le code :
+```bash
+grep -r "fetch(" --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js"
+grep -r "axios" --include="*.tsx" --include="*.ts"
+```
+
+Si tu as des fetch() qui bloquent le rendu, c'est un problème.
+
+SOLUTION : Utiliser le chargement asynchrone
+```tsx
+// ❌ MAUVAIS - Bloque le rendu
+export default function Page() {
+  const [data, setData] = useState(null);
+  
+  useEffect(() => {
+    fetch('/api/data').then(res => res.json()).then(setData);
+  }, []);
+  
+  if (!data) return <div>Loading...</div>; // Bloque tout
+  return <div>{data.content}</div>;
+}
+
+// ✅ BON - Affiche le contenu, charge les données en parallèle
+export default function Page() {
+  const [data, setData] = useState(null);
+  
+  useEffect(() => {
+    fetch('/api/data').then(res => res.json()).then(setData);
+  }, []);
+  
+  return (
+    <div>
+      <h1>Mon contenu statique (visible immédiatement)</h1>
+      {data ? <DynamicContent data={data} /> : null}
+    </div>
+  );
+}
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. AJOUTER UN DIAGNOSTIC DE PERFORMANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ajoute ce code temporairement dans <head> pour voir ce qui bloque :
+
+```html
+<script>
+  const perfLog = [];
+  const startTime = Date.now();
+  
+  // Logger chaque étape importante
+  window.addEventListener('DOMContentLoaded', () => {
+    perfLog.push({ event: 'DOMContentLoaded', time: Date.now() - startTime });
+  });
+  
+  window.addEventListener('load', () => {
+    perfLog.push({ event: 'load', time: Date.now() - startTime });
+    
+    // Afficher les performances
+    console.table(perfLog);
+    
+    // Alerter si trop lent
+    const loadTime = Date.now() - startTime;
+    if (loadTime > 3000) {
+      alert(`⚠️ PERFORMANCE: Chargement en ${loadTime}ms\n\nDétails:\n${JSON.stringify(perfLog, null, 2)}`);
+    }
+  });
+  
+  // Logger les resources qui chargent
+  performance.getEntriesByType('resource').forEach(resource => {
+    if (resource.duration > 1000) {
+      console.warn('Resource lente:', resource.name, resource.duration + 'ms');
+    }
+  });
+</script>
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. VÉRIFIER LE SERVEUR REPLIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Parfois le problème vient de Replit lui-même.
+
+Teste le temps de réponse serveur :
+```bash
+curl -w "\nTemps total: %{time_total}s\n" -o /dev/null -s https://45cda848-3f85-4523-bb4f-4df09fe2f5ec-00-fyejpej7n3u4.riker.replit.dev/
+```
+
+Si > 2 secondes, le serveur Replit est lent.
+
+SOLUTIONS :
+1. Redémarre le Repl
+2. Vérifie que le mode production est activé :
+   ```bash
+   NODE_ENV=production npm run start
+   ```
+3. Utilise un CDN pour les static assets
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PLAN D'ACTION PRIORITAIRE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fais ces vérifications DANS CET ORDRE :
+
+1. ✅ Exécute `npm run build` et vérifie la taille des bundles
+2. ✅ Cherche les images lourdes avec `find . -name "*.jpg" | xargs ls -lh`
+3. ✅ Ajoute le script de diagnostic de performance (point 6)
+4. ✅ Teste sur mobile et regarde ce que dit l'alert
+5. ✅ Applique la solution correspondante au problème identifié
+
+RÉSULTATS ATTENDUS :
+
+Après avoir identifié et corrigé le vrai problème de performance, le site devrait charger en :
+- < 2 secondes sur mobile avec 4G
+- < 3 secondes sur mobile avec 3G
+- < 1 seconde sur desktop
+
+Si après TOUTES ces vérifications le problème persiste, partage-moi :
+1. La sortie de `npm run build`
+2. Ce que dit l'alert de diagnostic
+3. Le contenu de package.json
+4. Le contenu de next.config.js
+
+Il y a forcément quelque chose qui bloque. On va le trouver !

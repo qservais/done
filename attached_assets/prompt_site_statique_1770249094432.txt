@@ -1,0 +1,346 @@
+OBJECTIF : Rendre le site ultra-rapide en remplaçant TOUTES les animations JavaScript par du CSS pur
+
+Le bundle est optimisé (51 kB) mais le site est toujours lent sur mobile. Le problème vient des animations JavaScript, surtout l'animation de texte qui s'écrit et change dans le Hero.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 1 : SUPPRIMER L'ANIMATION DE TEXTE QUI S'ÉCRIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Trouve le composant qui gère l'animation de texte (probablement dans Hero ou un composant RotatingText/TypingText).
+
+REMPLACE-LE par du texte statique simple :
+
+```tsx
+// components/Hero.tsx
+export function Hero() {
+  return (
+    <section className="hero">
+      <div className="hero-content">
+        <h1 className="hero-title">
+          Sites web premium à prix accessible
+        </h1>
+        <p className="hero-subtitle">
+          Transformez votre présence en ligne avec un site professionnel
+        </p>
+        <button className="cta-button">
+          Commencer mon projet
+        </button>
+      </div>
+    </section>
+  );
+}
+```
+
+Si tu veux ABSOLUMENT garder une animation de texte, utilise du CSS pur :
+
+```tsx
+// Version avec animation CSS simple
+export function Hero() {
+  return (
+    <section className="hero">
+      <div className="hero-content">
+        <h1 className="hero-title">
+          Sites web premium à{' '}
+          <span className="rotating-text">prix accessible</span>
+        </h1>
+      </div>
+    </section>
+  );
+}
+```
+
+```css
+/* CSS pour animation de texte qui change (sans JS) */
+.rotating-text {
+  display: inline-block;
+  position: relative;
+  color: #3b82f6; /* Couleur accent */
+}
+
+.rotating-text::after {
+  content: 'prix accessible';
+  animation: rotateWords 12s infinite;
+}
+
+@keyframes rotateWords {
+  0%, 25% { content: 'prix accessible'; }
+  30%, 55% { content: 'design moderne'; }
+  60%, 85% { content: 'résultats garantis'; }
+  90%, 100% { content: 'prix accessible'; }
+}
+
+/* Désactiver sur mobile pour performance */
+@media (max-width: 768px) {
+  .rotating-text::after {
+    animation: none;
+    content: 'prix accessible';
+  }
+}
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 2 : SUPPRIMER TOUS LES FadeIn RESTANTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cherche tous les FadeIn dans le projet :
+```bash
+grep -r "FadeIn" --include="*.tsx" --include="*.jsx"
+```
+
+SUPPRIME-LES TOUS et remplace par des divs normales :
+
+```tsx
+// ❌ AVANT
+<FadeIn>
+  <div className="section">Contenu</div>
+</FadeIn>
+
+// ✅ APRÈS
+<div className="section">Contenu</div>
+```
+
+Si tu veux une animation subtile, utilise du CSS pur :
+
+```css
+/* Animation fade-in simple au chargement de la page */
+.section {
+  animation: simpleFadeIn 0.8s ease-out;
+}
+
+@keyframes simpleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Désactiver sur mobile */
+@media (max-width: 768px) {
+  .section {
+    animation: none;
+  }
+}
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 3 : SUPPRIMER COMPLÈTEMENT FRAMER MOTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```bash
+npm uninstall framer-motion
+```
+
+Puis cherche tous les imports restants :
+```bash
+grep -r "framer-motion" --include="*.tsx" --include="*.jsx" --include="*.ts" --include="*.js"
+```
+
+Supprime tous ces imports et remplace par du HTML/CSS standard.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 4 : RENDRE LE SITE COMPLÈTEMENT STATIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dans next.config.js, ajoute la génération statique :
+
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export', // Génère un site 100% statique
+  images: {
+    unoptimized: true, // Nécessaire pour export statique
+  },
+  // Supprimer le runtime React côté client
+  reactStrictMode: true,
+};
+
+module.exports = nextConfig;
+```
+
+Puis build en mode statique :
+```bash
+npm run build
+```
+
+Cela génère un site HTML/CSS pur dans le dossier `out/` qui charge INSTANTANÉMENT.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 5 : SUPPRIMER LES HOOKS INUTILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cherche tous les useState, useEffect, useIsMobile :
+```bash
+grep -r "useState\|useEffect\|useIsMobile" --include="*.tsx" --include="*.jsx"
+```
+
+Si le site est 100% statique, tu n'en as plus besoin.
+
+REMPLACE par du code simple :
+
+```tsx
+// ❌ AVANT - Avec hooks
+export function Component() {
+  const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
+  
+  useEffect(() => {
+    // Code complexe
+  }, []);
+  
+  return <div>{content}</div>;
+}
+
+// ✅ APRÈS - 100% statique
+export function Component() {
+  return <div>{content}</div>;
+}
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 6 : OPTIMISER LES IMAGES EN STATIQUE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Puisque tu passes en export statique, remplace next/image par des <img> optimisées :
+
+```tsx
+// ❌ AVANT
+import Image from 'next/image';
+<Image src="/hero.jpg" width={800} height={600} />
+
+// ✅ APRÈS (pour export statique)
+<img 
+  src="/hero-optimized.webp"
+  alt="Hero"
+  loading="lazy"
+  width="800"
+  height="600"
+/>
+```
+
+Compresse toutes tes images avec un outil comme squoosh.app ou :
+```bash
+npm install --save-dev sharp-cli
+npx sharp-cli --input public/images/*.jpg --output public/images/ --format webp --quality 80
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ÉTAPE 7 : CSS MINIMALISTE ET PERFORMANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Remplace toutes les animations complexes par du CSS simple :
+
+```css
+/* styles/globals.css */
+
+/* Reset rapide */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Typographie optimisée */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Hero section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+}
+
+/* Sections */
+.section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding: 3rem 1.5rem;
+  }
+  
+  .section {
+    padding: 2rem 1rem;
+  }
+  
+  /* Désactiver toutes les animations sur mobile */
+  * {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RÉSULTAT ATTENDU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après ces modifications :
+
+✅ Bundle JavaScript : < 20 kB (au lieu de 505 kB)
+✅ Temps de chargement mobile : < 1 seconde
+✅ Site 100% statique (HTML/CSS pur)
+✅ Pas de dépendance JavaScript lourde
+✅ Fonctionne sans JavaScript activé
+
+Le site sera ULTRA RAPIDE mais sans les animations fancy. C'est le bon choix pour une landing page performante !
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ORDRE D'IMPLÉMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Remplace l'animation de texte par du texte statique (ÉTAPE 1)
+2. Supprime tous les FadeIn (ÉTAPE 2)
+3. Désinstalle Framer Motion (ÉTAPE 3)
+4. Teste → Le site devrait déjà être 10x plus rapide
+5. Si satisfait, passe en export statique (ÉTAPE 4)
+6. Optimise les images (ÉTAPE 6)
+7. Simplifie le CSS (ÉTAPE 7)
+
+Teste après CHAQUE étape pour voir l'amélioration !
+
+Tu veux que je t'aide à convertir ton Hero actuel en version statique CSS pur ?

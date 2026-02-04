@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FadeInProps {
@@ -19,8 +19,14 @@ export function FadeIn({
 }: FadeInProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
 
-  if (isMobile || prefersReducedMotion) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Always render visible content until we're mounted and confirmed desktop
+  if (!mounted || isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 
@@ -66,8 +72,14 @@ export function StaggerChildren({
 }) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
 
-  if (isMobile || prefersReducedMotion) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Always render visible content until we're mounted and confirmed desktop
+  if (!mounted || isMobile || prefersReducedMotion) {
     return <div className={className}>{children}</div>;
   }
 

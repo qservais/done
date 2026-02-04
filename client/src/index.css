@@ -116,12 +116,13 @@ html {
   }
 }
 
-/* Mobile fallback - ensure content is always visible */
+/* Mobile fallback - targeted visibility fix for animated sections */
 @media (max-width: 767px) {
-  /* Target only Framer Motion animated elements that might get stuck */
+  /* Ensure main content sections are always visible on mobile */
   main > section,
-  main > div {
+  main > div > section {
     opacity: 1;
+    visibility: visible;
     transform: none;
   }
 }

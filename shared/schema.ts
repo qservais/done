@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -38,3 +38,40 @@ export const insertLeadSchema = createInsertSchema(leads).omit({
 
 export type InsertLead = z.infer<typeof insertLeadSchema>;
 export type Lead = typeof leads.$inferSelect;
+
+// Partial leads for tracking form abandonment
+export const partialLeads = pgTable("partial_leads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull(),
+  currentStep: integer("current_step").notNull().default(1),
+  maxStepReached: integer("max_step_reached").notNull().default(1),
+  // Form data (all optional as they might not be filled yet)
+  siteStatus: text("site_status"),
+  objectifs: text("objectifs"),
+  activity: text("activity"),
+  zone: text("zone"),
+  pack: text("pack"),
+  packPrice: text("pack_price"),
+  languages: text("languages"),
+  domain: text("domain"),
+  emailPro: text("email_pro"),
+  siteInspi: text("site_inspi"),
+  timing: text("timing"),
+  name: text("name"),
+  email: text("email"),
+  phone: text("phone"),
+  message: text("message"),
+  // Status
+  converted: boolean("converted").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPartialLeadSchema = createInsertSchema(partialLeads).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertPartialLead = z.infer<typeof insertPartialLeadSchema>;
+export type PartialLead = typeof partialLeads.$inferSelect;

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 const comparisons = [
   "moins qu'un logo.",
@@ -73,28 +72,14 @@ export function RotatingText() {
   }, [displayedText, phase, currentPhrase, prefersReducedMotion]);
 
   if (prefersReducedMotion) {
-    return (
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={currentIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {displayedText}
-        </motion.span>
-      </AnimatePresence>
-    );
+    return <span className="animate-fade-in">{displayedText}</span>;
   }
 
   return (
     <>
       {displayedText}
-      <motion.span
-        className="inline-block w-[2px] h-[0.85em] bg-accent ml-0.5 align-baseline"
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+      <span 
+        className="inline-block w-[2px] h-[0.85em] bg-accent ml-0.5 align-baseline animate-blink"
       />
     </>
   );

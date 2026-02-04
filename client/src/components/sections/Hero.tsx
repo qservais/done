@@ -41,7 +41,7 @@ export function Hero() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.15} className="flex flex-col gap-3.5 sm:flex-row sm:gap-4 justify-center items-center pt-2 md:pt-4">
+        <FadeIn delay={0.15} className="hidden sm:flex flex-col gap-3.5 sm:flex-row sm:gap-4 justify-center items-center pt-2 md:pt-4">
           <Button 
             size="lg" 
             className="text-base font-semibold px-8 h-14 w-full sm:w-auto bg-accent text-white hover:bg-accent/90 rounded-full shadow-lg shadow-accent/20" 

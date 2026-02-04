@@ -96,24 +96,30 @@ export function LeadWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const hasStartedRef = useRef(false);
+  const previousStepRef = useRef(1);
 
   const totalSteps = 6;
   const progress = Math.min((step / totalSteps) * 100, 100);
 
   const stepNames = ['activite', 'pack', 'options', 'timing', 'coordonnees', 'recapitulatif'];
-  const isInitialMount = useRef(true);
+
+  const triggerFormStart = () => {
+    if (!hasStartedRef.current) {
+      hasStartedRef.current = true;
+      trackFormStart('lead_wizard');
+      trackFormStep('lead_wizard', 1, stepNames[0]);
+    }
+  };
 
   useEffect(() => {
-    if (step === 1) {
-      trackFormStart('lead_wizard');
+    if (step !== previousStepRef.current && hasStartedRef.current) {
+      trackFormStep('lead_wizard', step, stepNames[step - 1] || 'unknown');
+      if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
-    trackFormStep('lead_wizard', step, stepNames[step - 1] || 'unknown');
-    
-    // Scroll to top of form on step change (but not on initial mount)
-    if (formRef.current && !isInitialMount.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    isInitialMount.current = false;
+    previousStepRef.current = step;
   }, [step]);
 
   const updateData = <K extends keyof StepData>(key: K, value: StepData[K]) => {
@@ -121,6 +127,7 @@ export function LeadWizard() {
   };
 
   const selectPack = (packId: PackType) => {
+    triggerFormStart();
     setData((prev) => ({ ...prev, pack: packId }));
     const selectedPack = packs.find(p => p.id === packId);
     if (selectedPack) {
@@ -147,6 +154,7 @@ export function LeadWizard() {
 
   const nextStep = () => {
     if (!canProceed()) return;
+    triggerFormStart();
     if (step < 5) setStep(step + 1);
     else calculateSummary();
   };
@@ -163,6 +171,7 @@ export function LeadWizard() {
 
   const submitForm = async () => {
     setIsSubmitting(true);
+    triggerFormStart();
     
     try {
       const response = await fetch("/api/leads", {
@@ -329,6 +338,7 @@ export function LeadWizard() {
                     placeholder="Ex: Architecte, Coach sportif, Restaurant italien..."
                     value={data.activity}
                     onChange={(e) => updateData("activity", e.target.value)}
+                    onFocus={triggerFormStart}
                   />
                 </label>
                 <label className="block">
@@ -337,6 +347,7 @@ export function LeadWizard() {
                     className="w-full p-3 rounded-md border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
                     value={data.zone}
                     onChange={(e) => updateData("zone", e.target.value)}
+                    onFocus={triggerFormStart}
                   >
                     <option value="">Choisir...</option>
                     <option value="Belgique">Belgique</option>

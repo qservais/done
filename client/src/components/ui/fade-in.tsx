@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FadeInProps {
   children: ReactNode;
@@ -16,6 +17,13 @@ export function FadeIn({
   className = "",
   direction = "up" 
 }: FadeInProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+
+  if (isMobile || prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   const variants = {
     hidden: {
       opacity: 0,
@@ -56,6 +64,13 @@ export function StaggerChildren({
   staggerDelay?: number;
   className?: string;
 }) {
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+
+  if (isMobile || prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       initial="hidden"

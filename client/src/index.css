@@ -115,3 +115,13 @@ html {
     @apply tracking-tight text-balance font-bold;
   }
 }
+
+/* Mobile fallback - ensure content is always visible */
+@media (max-width: 767px) {
+  /* Target only Framer Motion animated elements that might get stuck */
+  main > section,
+  main > div {
+    opacity: 1;
+    transform: none;
+  }
+}

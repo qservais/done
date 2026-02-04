@@ -1,0 +1,71 @@
+J'ai un problème critique sur mon site madebydone.be hébergé sur Replit : le site fonctionne parfaitement sur desktop mais ne charge jamais sur mobile (iOS et Android). 
+
+SYMPTÔMES :
+- Le header "done." s'affiche correctement
+- Le contenu principal reste complètement blanc
+- La scrollbar est visible (donc du contenu existe)
+- Le problème persiste même avec une connexion 5G
+- Cela affecte probablement beaucoup d'utilisateurs mobiles
+
+DIAGNOSTIC NÉCESSAIRE :
+1. Inspecte le code pour identifier pourquoi le contenu ne s'affiche pas sur mobile
+2. Vérifie s'il y a des erreurs JavaScript qui bloquent le rendu
+3. Contrôle si les bundles JS sont trop lourds pour mobile
+4. Examine les media queries CSS qui pourraient cacher le contenu
+5. Vérifie les problèmes d'hydration si c'est un framework React/Next.js
+
+SOLUTIONS À IMPLÉMENTER :
+1. Ajoute un système de diagnostic mobile qui affiche les erreurs après 3 secondes si le contenu ne charge pas
+2. Optimise les bundles JavaScript pour qu'ils se chargent plus rapidement sur mobile
+3. Ajoute un fallback visible si JavaScript échoue
+4. Corrige tous les bugs spécifiques mobile que tu trouves
+5. Ajoute un loader visible pendant le chargement
+
+CODE DE DIAGNOSTIC À AJOUTER TEMPORAIREMENT :
+```javascript
+<script>
+  window.mobileDebug = {
+    userAgent: navigator.userAgent,
+    viewport: window.innerWidth + 'x' + window.innerHeight,
+    loaded: false,
+    errors: [],
+    loadTime: Date.now()
+  };
+  
+  window.addEventListener('error', (e) => {
+    window.mobileDebug.errors.push({
+      message: e.message,
+      source: e.filename,
+      line: e.lineno
+    });
+  });
+  
+  setTimeout(() => {
+    if (!window.mobileDebug.loaded && document.body.textContent.trim().length < 100) {
+      document.body.innerHTML = `
+        <div style="padding: 20px; font-family: Arial, sans-serif; background: #fff;">
+          <h1 style="color: #e74c3c;">🔴 Erreur de chargement mobile</h1>
+          <h2>Informations de diagnostic :</h2>
+          <pre style="background: #f4f4f4; padding: 15px; overflow-x: auto; font-size: 12px;">${JSON.stringify(window.mobileDebug, null, 2)}</pre>
+          <button onclick="location.reload()" style="padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
+            Recharger la page
+          </button>
+        </div>
+      `;
+    }
+  }, 3000);
+  
+  window.addEventListener('load', () => {
+    window.mobileDebug.loaded = true;
+    window.mobileDebug.totalLoadTime = Date.now() - window.mobileDebug.loadTime;
+  });
+</script>
+```
+
+PRIORITÉS :
+1. Faire charger le contenu sur mobile (CRITIQUE)
+2. Optimiser les performances de chargement
+3. Ajouter des messages d'erreur utiles pour diagnostiquer
+4. Tester que la solution fonctionne sur différents appareils mobiles
+
+S'il te plaît, analyse le code du projet, identifie la cause racine du problème et implémente les corrections nécessaires. Commence par ajouter le système de diagnostic pour voir exactement ce qui bloque, puis corrige les problèmes identifiés.

@@ -1,0 +1,144 @@
+Parfait ! Tu as identifié le problème : FadeIn avec Framer Motion et Intersection Observer qui ne fonctionne pas sur mobile.
+
+CORRECTIONS À IMPLÉMENTER (dans cet ordre de priorité) :
+
+1. **SOLUTION IMMÉDIATE - Fallback CSS critique** :
+   Ajoute ce CSS dans ton fichier principal pour forcer la visibilité si JS échoue :
+   ```css
+   /* Fallback mobile - afficher le contenu après 2 secondes si les animations n'ont pas fonctionné */
+   @media (max-width: 768px) {
+     @keyframes forceVisible {
+       to { opacity: 1 !important; }
+     }
+     
+     [style*="opacity: 0"] {
+       animation: forceVisible 0.1s 2s forwards;
+     }
+   }
+   ```
+
+2. **MODIFIER LE COMPOSANT FadeIn** :
+   Détecte si l'appareil est mobile et désactive les animations :
+   ```jsx
+   import { motion, useReducedMotion } from 'framer-motion';
+   import { useEffect, useState } from 'react';
+   
+   export function FadeIn({ children, ...props }) {
+     const prefersReducedMotion = useReducedMotion();
+     const [isMobile, setIsMobile] = useState(false);
+     
+     useEffect(() => {
+       // Détection mobile fiable
+       setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768);
+     }, []);
+     
+     // Sur mobile : pas d'animation, affichage direct
+     if (isMobile || prefersReducedMotion) {
+       return <div {...props}>{children}</div>;
+     }
+     
+     // Sur desktop : animation normale
+     return (
+       <motion.div
+         initial={{ opacity: 0, y: 20 }}
+         whileInView={{ opacity: 1, y: 0 }}
+         viewport={{ once: true, margin: "-100px" }}
+         transition={{ duration: 0.5 }}
+         {...props}
+       >
+         {children}
+       </motion.div>
+     );
+   }
+   ```
+
+3. **ALTERNATIVE PLUS SIMPLE** :
+   Si Framer Motion pose trop de problèmes sur mobile, utilise du CSS pur :
+   ```jsx
+   export function FadeIn({ children, className = '', ...props }) {
+     return (
+       <div 
+         className={`fade-in ${className}`}
+         {...props}
+       >
+         {children}
+       </div>
+     );
+   }
+   ```
+   
+   Avec ce CSS :
+   ```css
+   .fade-in {
+     opacity: 1; /* IMPORTANT : opacité 1 par défaut */
+     animation: fadeInUp 0.6s ease-out;
+   }
+   
+   @keyframes fadeInUp {
+     from {
+       opacity: 0;
+       transform: translateY(20px);
+     }
+     to {
+       opacity: 1;
+       transform: translateY(0);
+     }
+   }
+   
+   /* Désactiver les animations sur mobile si problème de performance */
+   @media (max-width: 768px) {
+     .fade-in {
+       animation: none;
+       opacity: 1;
+     }
+   }
+   ```
+
+4. **AJOUTER UN LOADER VISIBLE** :
+   Pendant le chargement initial, affiche quelque chose :
+   ```jsx
+   // Dans ton composant principal ou _app.js
+   useEffect(() => {
+     // Cacher le loader après que tout soit chargé
+     const timer = setTimeout(() => {
+       document.body.classList.add('loaded');
+     }, 100);
+     return () => clearTimeout(timer);
+   }, []);
+   ```
+   
+   CSS correspondant :
+   ```css
+   body:not(.loaded) .hero-content,
+   body:not(.loaded) .main-content {
+     opacity: 1 !important; /* Forcer la visibilité */
+   }
+   ```
+
+5. **DIAGNOSTIC TEMPORAIRE** :
+   Garde le code de diagnostic mobile mais modifie le délai à 1.5 secondes au lieu de 3 :
+   ```javascript
+   setTimeout(() => {
+     const contentVisible = document.querySelector('.hero-content')?.offsetHeight > 0;
+     if (!contentVisible) {
+       console.error('MOBILE DEBUG: Content not visible!', {
+         userAgent: navigator.userAgent,
+         viewportWidth: window.innerWidth,
+         documentHeight: document.body.scrollHeight
+       });
+     }
+   }, 1500);
+   ```
+
+PRIORITÉ ABSOLUE :
+- Commence par la solution 2 (modifier FadeIn pour détecter mobile)
+- C'est la plus propre et résoudra le problème à la racine
+- Teste immédiatement sur mobile après l'implémentation
+
+TESTS À FAIRE APRÈS :
+- Vérifier sur iPhone Safari
+- Vérifier sur Chrome Android
+- Tester avec et sans JavaScript activé
+- Vérifier que les animations fonctionnent toujours sur desktop
+
+Implémente ces corrections et teste sur mobile. Le problème devrait être résolu !

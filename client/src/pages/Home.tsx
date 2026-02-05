@@ -1,7 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { MobileStickyCTA } from "@/components/MobileStickyCTA";
 import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
 import { Hero } from "@/components/sections/Hero";

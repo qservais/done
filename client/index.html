@@ -4,60 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
     
-    <!-- DIAGNOSTIC MOBILE D'URGENCE -->
-    <script>
-    window.debugStartTime = Date.now();
-    window.debugErrors = [];
-    
-    window.addEventListener('error', function(e) {
-      window.debugErrors.push({
-        type: 'error',
-        message: e.message,
-        source: e.filename,
-        line: e.lineno,
-        time: Date.now() - window.debugStartTime
-      });
-      console.error('❌ ERROR:', e.message, 'at', e.filename + ':' + e.lineno);
-    }, true);
-    
-    window.addEventListener('unhandledrejection', function(e) {
-      window.debugErrors.push({
-        type: 'promise',
-        reason: String(e.reason),
-        time: Date.now() - window.debugStartTime
-      });
-      console.error('❌ PROMISE REJECTION:', e.reason);
-    });
-    
-    setTimeout(function() {
-      var bodyHeight = document.body?.offsetHeight || 0;
-      var bodyText = document.body?.innerText || '';
-      
-      console.log('=== DIAGNOSTIC MOBILE ===');
-      console.log('Time elapsed:', Date.now() - window.debugStartTime + 'ms');
-      console.log('Body height:', bodyHeight);
-      console.log('Body text length:', bodyText.length);
-      console.log('Errors:', window.debugErrors);
-      
-      if (bodyHeight < 100 || bodyText.length < 20) {
-        console.error('🚨 EMERGENCY: Content not visible!');
-        document.body.innerHTML = '<div style="padding:30px;font-family:sans-serif;background:#fee2e2;color:#991b1b;"><h1 style="margin-bottom:16px;">🚨 Erreur de chargement</h1><pre style="background:#fff;padding:15px;overflow:auto;font-size:12px;border-radius:8px;">' + JSON.stringify({
-          userAgent: navigator.userAgent,
-          viewport: window.innerWidth + 'x' + window.innerHeight,
-          screen: screen.width + 'x' + screen.height,
-          timeElapsed: Date.now() - window.debugStartTime + 'ms',
-          errors: window.debugErrors,
-          bodyHeight: bodyHeight
-        }, null, 2) + '</pre><button onclick="location.reload()" style="padding:12px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;font-size:16px;margin-top:20px;cursor:pointer;">Recharger</button><button onclick="location.href=\'/test.html\'" style="padding:12px 24px;background:#10b981;color:#fff;border:none;border-radius:8px;font-size:16px;margin-top:20px;margin-left:10px;cursor:pointer;">Page de test</button></div>';
-      } else {
-        console.log('✅ Content appears visible');
-      }
-    }, 3000);
-    
-    console.log('🔍 Mobile debugger initialized');
-    </script>
-    <!-- END DIAGNOSTIC -->
-    
     <!-- Google Tag Manager - Deferred for performance -->
     <script>
     window.addEventListener('load', function() {

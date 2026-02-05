@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { MobileStickyCTA } from "@/components/MobileStickyCTA";
 import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
 import { Hero } from "@/components/sections/Hero";
@@ -11,6 +12,7 @@ import { Subscription } from "@/components/sections/Subscription";
 import { Process } from "@/components/sections/Process";
 import { Section } from "@/components/ui/section";
 
+// Lazy load below-the-fold sections for better FCP/LCP
 const Realizations = lazy(() => import("@/components/sections/Realizations").then(m => ({ default: m.Realizations })));
 const Options = lazy(() => import("@/components/sections/Options").then(m => ({ default: m.Options })));
 const FAQ = lazy(() => import("@/components/sections/FAQ").then(m => ({ default: m.FAQ })));

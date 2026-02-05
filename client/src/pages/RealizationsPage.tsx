@@ -5,6 +5,7 @@ import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
 import { ExternalLink } from "lucide-react";
 import { projects } from "@/data/projects";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 export default function RealizationsPage() {
   return (
@@ -25,7 +26,7 @@ export default function RealizationsPage() {
       <Header />
       <main className="pt-28 md:pt-32">
         <Section className="pb-20 md:pb-28">
-          <div>
+          <FadeIn>
             <div className="max-w-3xl mb-16 md:mb-20">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 Before → <span className="text-accent">Done.</span>
@@ -35,11 +36,11 @@ export default function RealizationsPage() {
                 Chaque projet livré vite, propre, mesurable.
               </p>
             </div>
-          </div>
+          </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {projects.map((project, index) => (
-              <div key={index}>
+              <FadeIn key={index} delay={index * 0.05}>
                 <a
                   href={project.url}
                   target="_blank"
@@ -90,9 +91,9 @@ export default function RealizationsPage() {
                     </div>
                   </div>
                 </a>
-              </div>
+              </FadeIn>
             ))}
-          </div>
+          </StaggerChildren>
         </Section>
       </main>
       <Footer />

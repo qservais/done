@@ -1,4 +1,5 @@
 import { Section } from "@/components/ui/section";
+import { FadeIn } from "@/components/ui/fade-in";
 import { Check } from "lucide-react";
 import { problem } from "@/data/copy";
 
@@ -7,16 +8,16 @@ export function Problem() {
     <Section className="py-16 md:py-24">
       <div className="max-w-5xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-          <div className="lg:sticky lg:top-32">
+          <FadeIn className="lg:sticky lg:top-32">
             <span className="inline-flex items-center px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-wide mb-4">
               {problem.label}
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground leading-tight">
               {problem.title}
             </h2>
-          </div>
+          </FadeIn>
 
-          <div>
+          <FadeIn delay={0.1}>
             <div className="bg-background border border-border/60 rounded-3xl p-6 md:p-8 shadow-sm">
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
                 {problem.intro}
@@ -43,7 +44,7 @@ export function Problem() {
                 </p>
               </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </Section>

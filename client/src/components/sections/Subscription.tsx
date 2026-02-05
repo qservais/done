@@ -1,6 +1,7 @@
 import { Section } from "@/components/ui/section";
 import { Check, Server, LifeBuoy, AlertTriangle } from "lucide-react";
 import { BRAND } from "@/config/brand";
+import { FadeIn } from "@/components/ui/fade-in";
 
 const techFeatures = [
   "Hébergement & surveillance 24/7",
@@ -18,14 +19,14 @@ export function Subscription() {
   return (
     <Section className="bg-primary text-primary-foreground">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10 md:mb-14">
+        <FadeIn className="text-center mb-10 md:mb-14">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
             On ne pose pas un site et on disparaît.
           </h2>
           <p className="text-primary-foreground/70 text-sm md:text-lg max-w-xl mx-auto">
             Le suivi qui garantit un site toujours en forme.
           </p>
-        </div>
+        </FadeIn>
 
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-10 max-w-3xl mx-auto backdrop-blur-sm">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 pb-6 border-b border-white/10">

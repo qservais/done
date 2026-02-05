@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/section";
 import { Zap, Layout, Search } from "lucide-react";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 
 const features = [
   {
@@ -22,9 +23,9 @@ const features = [
 export function Why() {
   return (
     <Section className="bg-secondary/30">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {features.map((feature, index) => (
-          <div
+          <FadeIn
             key={index}
             className="bg-background p-8 rounded-xl border border-border/50 hover:border-accent/50 transition-colors shadow-sm"
           >
@@ -35,9 +36,9 @@ export function Why() {
             <p className="text-muted-foreground leading-relaxed">
               {feature.description}
             </p>
-          </div>
+          </FadeIn>
         ))}
-      </div>
+      </StaggerChildren>
     </Section>
   );
 }

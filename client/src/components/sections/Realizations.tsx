@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/section";
 import { ExternalLink } from "lucide-react";
+import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { projects } from "@/data/projects";
 import { useRef } from "react";
 import { MadeByDoneBadge, DoneStamp } from "@/components/signature";
@@ -10,20 +11,21 @@ export function Realizations() {
 
   return (
     <Section id="realizations" className="bg-secondary/20 overflow-hidden relative">
-      <div className="mb-10 md:mb-12">
+      <FadeIn className="mb-10 md:mb-12">
         <div className="text-center md:text-left">
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3">Nos clients</h2>
           <p className="text-muted-foreground text-sm md:text-base">Ils sont en ligne, et ils sont contents.</p>
         </div>
-      </div>
+      </FadeIn>
 
       <div 
         ref={scrollRef}
         className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide"
       >
         {projects.map((project, index) => (
-          <div 
+          <FadeIn 
             key={index}
+            delay={index * 0.05}
             className="w-[85%] min-w-[280px] md:w-auto shrink-0 snap-start"
           >
             <a
@@ -89,15 +91,15 @@ export function Realizations() {
                 </div>
               </div>
             </a>
-          </div>
+          </FadeIn>
         ))}
       </div>
 
-      <div className="mt-8 text-center">
+      <FadeIn delay={0.3} className="mt-8 text-center">
         <p className="text-xs text-muted-foreground/50 italic">
           Exemple de rendus livrés par done — mobile-first.
         </p>
-      </div>
+      </FadeIn>
 
       <div className="absolute bottom-8 right-8 hidden md:block">
         <DoneStamp size="md" />

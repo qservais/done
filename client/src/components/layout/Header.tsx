@@ -23,9 +23,7 @@ export function Header() {
   const navLinks = [
     { label: "Offres", href: "/#packs" },
     { label: "Réalisations", href: "/#realizations" },
-    { label: "Process", href: "/#process" },
     { label: "FAQ", href: "/#faq" },
-    { label: "Contact", href: "/#contact" },
   ];
 
   return (
@@ -56,8 +54,8 @@ export function Header() {
             <button className="text-sm font-medium text-muted-foreground hover:text-foreground">
               FR
             </button>
-            <Button size="sm" className="rounded-full font-medium" asChild>
-              <a href="#contact">Demander mon site</a>
+            <Button size="sm" className="rounded-full font-medium bg-accent hover:bg-accent/90" asChild>
+              <a href="#wizard">Commencer</a>
             </Button>
           </nav>
 
@@ -93,8 +91,8 @@ export function Header() {
               <button className="text-lg font-bold">FR</button>
               <button className="text-lg text-muted-foreground">EN</button>
             </div>
-            <Button size="lg" className="w-full mt-8 rounded-full text-lg" onClick={() => setIsOpen(false)} asChild>
-              <a href="#contact">Demander mon site</a>
+            <Button size="lg" className="w-full mt-8 rounded-full text-lg bg-accent hover:bg-accent/90" onClick={() => setIsOpen(false)} asChild>
+              <a href="#wizard">Commencer mon projet</a>
             </Button>
           </nav>
         </div>

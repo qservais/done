@@ -14,6 +14,7 @@ import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/ui/fade-in";
+import { SkeletonSection } from "@/components/ui/skeleton-section";
 
 const LeadWizard = lazy(() => import("@/components/LeadWizard").then(m => ({ default: m.LeadWizard })));
 
@@ -55,7 +56,7 @@ export default function Home() {
             <h2 className="text-2xl md:text-4xl font-bold mb-3">Commencer mon projet</h2>
             <p className="text-muted-foreground max-w-md mx-auto">Répondez à quelques questions, on vous envoie une estimation sous 24h.</p>
           </FadeIn>
-          <Suspense fallback={<div className="py-12 text-center"><div className="animate-pulse h-8 w-48 bg-secondary rounded mx-auto" /></div>}>
+          <Suspense fallback={<SkeletonSection type="wizard" />}>
             <LeadWizard />
           </Suspense>
         </Section>

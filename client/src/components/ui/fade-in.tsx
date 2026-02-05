@@ -12,8 +12,8 @@ export function FadeIn({
   delay = 0,
   className = "",
 }: FadeInProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
@@ -37,7 +37,7 @@ export function FadeIn({
     <div 
       ref={ref}
       className={cn(
-        "transition-all duration-500 ease-out",
+        "transition-all duration-700 ease-out",
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
         className
       )}

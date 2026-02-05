@@ -10,6 +10,13 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "DSV Burgers",
+    url: "https://dsvburgers.be/",
+    image: "/projects/dsvburgers_opt.webp",
+    tags: ["Restaurant", "Livraison"],
+    gradient: "from-yellow-400 to-red-500",
+  },
+  {
     name: "Maison Vagabonde",
     url: "https://maisonvagabonde.be/",
     image: "/projects/maisonvagabonde_opt.webp",

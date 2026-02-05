@@ -10,6 +10,20 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Restaurant Danieli",
+    url: "https://restaurantdanieli.be/",
+    image: "/projects/danieli_opt.webp",
+    tags: ["Restaurant", "Premium"],
+    gradient: "from-amber-800 to-stone-900",
+  },
+  {
+    name: "Mabelita Pizza",
+    url: "https://mabelita-pizza.be/",
+    image: "/projects/mabelita_opt.webp",
+    tags: ["Restaurant", "Foodtruck"],
+    gradient: "from-red-600 to-orange-500",
+  },
+  {
     name: "DSV Burgers",
     url: "https://dsvburgers.be/",
     image: "/projects/dsvburgers_opt.webp",

@@ -10,26 +10,42 @@ const comparisons = [
 
 export function RotatingText() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+
+  const currentPhrase = comparisons[currentIndex];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIsVisible(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % comparisons.length);
-        setIsVisible(true);
-      }, 300);
-    }, 3000);
+    let timeout: ReturnType<typeof setTimeout>;
 
-    return () => clearInterval(interval);
-  }, []);
+    if (isTyping) {
+      if (displayedText.length < currentPhrase.length) {
+        timeout = setTimeout(() => {
+          setDisplayedText(currentPhrase.slice(0, displayedText.length + 1));
+        }, 60);
+      } else {
+        timeout = setTimeout(() => {
+          setIsTyping(false);
+        }, 2000);
+      }
+    } else {
+      if (displayedText.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayedText((prev) => prev.slice(0, -1));
+        }, 40);
+      } else {
+        setCurrentIndex((prev) => (prev + 1) % comparisons.length);
+        setIsTyping(true);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isTyping, currentPhrase]);
 
   return (
-    <span 
-      className="transition-opacity duration-300"
-      style={{ opacity: isVisible ? 1 : 0 }}
-    >
-      {comparisons[currentIndex]}
-    </span>
+    <>
+      {displayedText}
+      <span className="inline-block w-[2px] h-[0.85em] bg-accent ml-0.5 align-baseline animate-blink" />
+    </>
   );
 }

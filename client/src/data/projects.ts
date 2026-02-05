@@ -17,6 +17,13 @@ export const projects: Project[] = [
     gradient: "from-yellow-400 to-red-500",
   },
   {
+    name: "Ideal Fitness",
+    url: "https://idealfitness.be/",
+    image: "/projects/idealfitness_opt.webp",
+    tags: ["Sport", "Coaching"],
+    gradient: "from-yellow-400 to-zinc-800",
+  },
+  {
     name: "Maison Vagabonde",
     url: "https://maisonvagabonde.be/",
     image: "/projects/maisonvagabonde_opt.webp",

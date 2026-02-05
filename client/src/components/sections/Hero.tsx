@@ -9,8 +9,8 @@ import { trackCTAClick } from "@/lib/tracking";
 export function Hero() {
   return (
     <Section className="min-h-[90vh] flex flex-col justify-center pt-28 md:pt-32 pb-16 md:pb-20 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-secondary/20 blur-[150px] rounded-full -z-10 opacity-50" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/5 blur-[100px] rounded-full -z-10" />
+      <div className="hidden md:block absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/20 blur-[150px] rounded-full -z-10 opacity-50" />
+      <div className="hidden md:block absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/5 blur-[100px] rounded-full -z-10" />
 
       <div className="max-w-4xl mx-auto text-center space-y-10 md:space-y-12 px-1">
         <FadeIn>

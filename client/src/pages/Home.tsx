@@ -8,12 +8,12 @@ import { Why } from "@/components/sections/Why";
 import { Problem } from "@/components/sections/Problem";
 import { Packs } from "@/components/sections/Packs";
 import { Subscription } from "@/components/sections/Subscription";
-import { Process } from "@/components/sections/Process";
 import { Realizations } from "@/components/sections/Realizations";
 import { Options } from "@/components/sections/Options";
 import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Section } from "@/components/ui/section";
+import { FadeIn } from "@/components/ui/fade-in";
 
 const LeadWizard = lazy(() => import("@/components/LeadWizard").then(m => ({ default: m.LeadWizard })));
 
@@ -46,20 +46,22 @@ export default function Home() {
         <Hero />
         <Problem />
         <Why />
-        <Packs />
-        <Subscription />
-        <Process />
         
-        <Section id="wizard" className="bg-secondary/30 py-24">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Commencer le projet</h2>
-            <p className="text-muted-foreground">Répondez à quelques questions pour obtenir une estimation.</p>
-          </div>
+        <Section id="wizard" className="bg-accent/5 border-y border-accent/20 py-16 md:py-20">
+          <FadeIn className="text-center mb-10">
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-wide mb-4">
+              Gratuit & sans engagement
+            </span>
+            <h2 className="text-2xl md:text-4xl font-bold mb-3">Commencer mon projet</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">Répondez à quelques questions, on vous envoie une estimation sous 24h.</p>
+          </FadeIn>
           <Suspense fallback={<div className="py-12 text-center"><div className="animate-pulse h-8 w-48 bg-secondary rounded mx-auto" /></div>}>
             <LeadWizard />
           </Suspense>
         </Section>
 
+        <Packs />
+        <Subscription />
         <Realizations />
         <Options />
         <FAQ />

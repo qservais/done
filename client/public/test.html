@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Mobile - madebydone.be</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 40px 20px;
+      background: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+    }
+    .success {
+      background: #10b981;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    h1 { font-size: 28px; margin-bottom: 20px; }
+    .info { 
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      font-family: monospace;
+      font-size: 14px;
+      word-break: break-all;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="success">
+    <h2>✅ SUCCESS - Cette page fonctionne !</h2>
+    <p>Si vous voyez ceci, le serveur Replit fonctionne sur mobile.</p>
+  </div>
+  
+  <h1>Diagnostic Mobile</h1>
+  
+  <div class="info">
+    <strong>User Agent:</strong><br>
+    <span id="ua"></span>
+  </div>
+  
+  <div class="info">
+    <strong>Viewport:</strong><br>
+    <span id="vp"></span>
+  </div>
+  
+  <div class="info">
+    <strong>Screen:</strong><br>
+    <span id="screen"></span>
+  </div>
+  
+  <div class="info">
+    <strong>Navigateur:</strong><br>
+    <span id="browser"></span>
+  </div>
+
+  <div class="info">
+    <strong>Timestamp:</strong><br>
+    <span id="timestamp"></span>
+  </div>
+  
+  <button onclick="location.href='/'">Retour au site React</button>
+  
+  <script>
+    document.getElementById('ua').textContent = navigator.userAgent;
+    document.getElementById('vp').textContent = window.innerWidth + 'x' + window.innerHeight;
+    document.getElementById('screen').textContent = screen.width + 'x' + screen.height;
+    document.getElementById('timestamp').textContent = new Date().toISOString();
+    
+    const ua = navigator.userAgent;
+    let browser = 'Inconnu';
+    if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari iOS';
+    else if (ua.includes('Chrome')) browser = 'Chrome';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
+    document.getElementById('browser').textContent = browser;
+    
+    console.log('=== TEST PAGE LOADED SUCCESSFULLY ===');
+    console.log('User Agent:', navigator.userAgent);
+    console.log('Viewport:', window.innerWidth + 'x' + window.innerHeight);
+  </script>
+</body>
+</html>

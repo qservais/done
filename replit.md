@@ -107,14 +107,15 @@ Each page uses the `<SEO>` component with:
 
 ## Recent Changes (February 2026)
 
-- Simplified lead wizard from 7 steps to 3 steps: Activité, Pack, Coordonnées
+- Replaced pack selection (Step 2) with needs assessment: pages, languages, domain, timing
+- Added beforeunload/visibilitychange listeners to save abandon data on page leave (fixes missing step 3 data)
+- Admin shows all needs data: pages, languages, domain, timing with human-readable labels
+- Email notifications show needs breakdown instead of pack/price
+- Simplified lead wizard from 7 steps to 3 steps: Activité, Besoins, Coordonnées
 - Added "Devis gratuit, sans engagement" messaging throughout
 - Name field now optional in lead form (email OR phone required)
 - Removed honeypot anti-spam — all visitors welcome
 - Fixed duplicate abandons: unique sessionId constraint + onConflictDoUpdate
-- Fixed phone number display in admin for anonymous leads
-- Updated email templates for simplified form (handles missing name/email gracefully)
-- Admin dashboard reflects 3-step progress instead of 7
 - Added client projects: Restaurant Danieli, Mabelita Pizza, DSV Burgers, Ideal Fitness
 
 ## Earlier Changes (January 2026)

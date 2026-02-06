@@ -64,28 +64,19 @@ function formatPackPrice(price: string | number | null | undefined): string {
 }
 
 function getFirstName(fullName: string): string {
+  if (!fullName || fullName === "Non renseigné") return "";
   return fullName.split(' ')[0] || fullName;
-}
-
-function getObjectifsLabels(objectifs: string | null | undefined): string {
-  if (!objectifs) return "";
-  const labels: Record<string, string> = {
-    "appel": "Vous appeler",
-    "devis": "Demander un devis",
-    "reservation": "Réserver/RDV",
-    "message": "Vous contacter",
-    "achat": "Acheter",
-  };
-  return objectifs.split(",").map(o => labels[o.trim()] || o).join(", ");
 }
 
 function buildConfirmationText(lead: LeadData): string {
   const firstName = getFirstName(lead.name);
-  return `Hello ${firstName},
+  const greeting = firstName ? `Hello ${firstName},` : "Bonjour,";
+  
+  return `${greeting}
 
-Bien reçu ! On peut sortir une première version de votre site en 72h.
+Bien reçu ! On vous prépare une proposition sous 24h.
 
-Deux options pour démarrer :
+Deux options pour avancer :
 
 OPTION 1 — Envoyez-nous quelques infos (le plus rapide)
 
@@ -98,7 +89,6 @@ Répondez directement à ce mail avec ce que vous avez :
 5. Quelques photos de vous ou de votre travail (3 à 10, sinon on prend sur vos réseaux)
 6. Vos infos pratiques : adresse, téléphone, email, horaires
 7. Ce que vous voulez que les visiteurs fassent sur votre site (vous appeler, demander un devis, réserver...)
-8. En quelle(s) langue(s) ? Français seul ou aussi en anglais ?
 
 Pas de stress si vous n'avez pas tout — envoyez ce que vous avez, on s'adapte !
 
@@ -117,15 +107,18 @@ madebydone.be`;
 }
 
 export async function sendConfirmationEmail(leadRaw: LeadData) {
+  if (!leadRaw.email) return { success: false, error: "No email provided" };
+  
   const lead = sanitizeLead(leadRaw);
   const firstName = getFirstName(lead.name);
+  const greeting = firstName ? `Hello ${firstName},` : "Bonjour,";
   
   try {
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: leadRaw.email,
       replyTo: STUDIO_EMAIL,
-      subject: "done — on lance votre site (72h) ✅",
+      subject: "done — votre proposition arrive sous 24h ✅",
       text: buildConfirmationText(leadRaw),
       html: `
         <!DOCTYPE html>
@@ -144,24 +137,20 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
               <td align="center" style="padding: 40px 20px;">
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 560px; background: white; border-radius: 16px; overflow: hidden;">
                   
-                  <!-- Header -->
                   <tr>
                     <td style="background: #0a1628; padding: 28px 32px; text-align: center;">
                       <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 700;">done<span style="color: #395af6;">.</span></h1>
                     </td>
                   </tr>
                   
-                  <!-- Content -->
                   <tr>
                     <td style="padding: 36px 32px;">
                       
-                      <!-- Intro -->
-                      <p style="color: #0a1628; font-size: 18px; margin: 0 0 8px; font-weight: 600;">Hello ${firstName},</p>
+                      <p style="color: #0a1628; font-size: 18px; margin: 0 0 8px; font-weight: 600;">${greeting}</p>
                       <p style="color: #4a5568; font-size: 15px; line-height: 1.6; margin: 0 0 28px;">
-                        Bien reçu ✅ On peut sortir une <strong>première version de votre site en 72h</strong>.
+                        Bien reçu ✅ On vous prépare une <strong>proposition sous 24h</strong>.
                       </p>
                       
-                      <!-- Option A -->
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: #f8f9fa; border-radius: 12px; margin-bottom: 20px;">
                         <tr>
                           <td style="padding: 24px;">
@@ -178,7 +167,6 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                               <tr><td style="padding: 4px 0;">5. Quelques photos (3-10, optionnel)</td></tr>
                               <tr><td style="padding: 4px 0;">6. Vos infos : adresse, téléphone, email, horaires</td></tr>
                               <tr><td style="padding: 4px 0;">7. Ce que les visiteurs doivent faire (appeler, réserver...)</td></tr>
-                              <tr><td style="padding: 4px 0;">8. Langue(s) du site : français seul ou aussi anglais ?</td></tr>
                             </table>
                             <p style="color: #718096; font-size: 13px; font-style: italic; margin: 16px 0 0;">
                               Pas de stress si vous n'avez pas tout — envoyez ce que vous avez !
@@ -187,7 +175,6 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                         </tr>
                       </table>
                       
-                      <!-- Option B -->
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background: linear-gradient(135deg, #395af6 0%, #2a47c9 100%); border-radius: 12px; margin-bottom: 28px;">
                         <tr>
                           <td style="padding: 24px; text-align: center;">
@@ -199,12 +186,10 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                         </tr>
                       </table>
                       
-                      <!-- Reminder -->
                       <p style="color: #718096; font-size: 13px; text-align: center; margin: 0 0 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
                         Pour rappel : nos sites démarrent à 197€ + 19,99€/mois (hébergement et suivi inclus).
                       </p>
                       
-                      <!-- Signature -->
                       <p style="color: #0a1628; font-size: 14px; margin: 0;">
                         À très vite,<br>
                         Quentin — <strong>done</strong><br>
@@ -214,7 +199,6 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
                     </td>
                   </tr>
                   
-                  <!-- Footer -->
                   <tr>
                     <td style="background: #f8f9fa; padding: 20px 32px; text-align: center;">
                       <p style="color: #a0aec0; font-size: 11px; margin: 0;">
@@ -250,24 +234,16 @@ export async function sendNotificationEmail(leadRaw: LeadData) {
   const packName = lead.pack || lead.siteType;
   const packPrice = formatPackPrice(leadRaw.packPrice);
   const isEcommerce = lead.siteType === "ecommerce" || packName.toLowerCase().includes("commerce");
-  const objectifLabel = getObjectifsLabels(lead.objectifs);
+  const displayName = lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity;
   
-  const textContent = `Nouveau lead — ${lead.name}
+  const textContent = `Nouveau lead — ${displayName}
 
 Activité: ${lead.activity} (${lead.zone})
 Pack: ${packName} - ${packPrice}
 
 Contact:
-- Email: ${leadRaw.email}
-- Téléphone: ${leadRaw.phone}
-
-Détails:
-- Langues: ${lead.languages === "1" ? "1 (FR)" : "2 langues"}
-- Domaine: ${lead.domain === "oui" ? "Oui" : "Non"}
-- Email pro: ${lead.emailPro === "oui" ? "Oui" : "Non"}
-- Objectif: ${objectifLabel || "Non précisé"}
-- Site inspiration: ${lead.siteInspi || "Non précisé"}
-- Timing: ${lead.timing}
+${leadRaw.email ? `- Email: ${leadRaw.email}` : "- Email: Non renseigné"}
+${leadRaw.phone ? `- Téléphone: ${leadRaw.phone}` : "- Téléphone: Non renseigné"}
 
 ${lead.message ? `Message:\n${lead.message}` : ""}
 
@@ -278,8 +254,8 @@ Voir dans l'admin: https://madebydone.be/admin`;
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: STUDIO_EMAIL,
-      replyTo: leadRaw.email,
-      subject: `${isEcommerce ? "🛒 " : ""}Nouveau lead — ${lead.name} (${packName})`,
+      replyTo: leadRaw.email || STUDIO_EMAIL,
+      subject: `${isEcommerce ? "🛒 " : ""}Nouveau lead — ${displayName} (${packName})`,
       text: textContent,
       html: `
         <!DOCTYPE html>
@@ -293,7 +269,7 @@ Voir dans l'admin: https://madebydone.be/admin`;
               <h1 style="color: white; margin: 0; font-size: 20px;">${isEcommerce ? '🛒 Nouveau lead E-commerce !' : 'Nouveau lead reçu !'}</h1>
             </div>
             <div style="padding: 32px;">
-              <h2 style="color: #0a1628; margin: 0 0 8px; font-size: 24px;">${lead.name}</h2>
+              <h2 style="color: #0a1628; margin: 0 0 8px; font-size: 24px;">${displayName}</h2>
               <p style="color: #395af6; margin: 0 0 24px; font-size: 16px;">${lead.activity} — ${lead.zone}</p>
               
               <div style="background: ${isEcommerce ? '#fffbeb' : '#f0f4ff'}; border-radius: 12px; padding: 16px; margin-bottom: 24px; border: 2px solid ${isEcommerce ? '#f59e0b' : '#395af6'};">
@@ -311,42 +287,9 @@ Voir dans l'admin: https://madebydone.be/admin`;
               </div>
               
               <div style="margin-bottom: 24px;">
-                <a href="mailto:${leadRaw.email}" style="display: block; color: #0a1628; text-decoration: none; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">
-                  📧 ${lead.email}
-                </a>
-                <a href="tel:${leadRaw.phone}" style="display: block; color: #0a1628; text-decoration: none; padding: 12px; background: #f8f9fa; border-radius: 8px;">
-                  📞 ${lead.phone}
-                </a>
+                ${leadRaw.email ? `<a href="mailto:${leadRaw.email}" style="display: block; color: #0a1628; text-decoration: none; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px;">📧 ${lead.email}</a>` : ''}
+                ${leadRaw.phone ? `<a href="tel:${leadRaw.phone}" style="display: block; color: #0a1628; text-decoration: none; padding: 12px; background: #f8f9fa; border-radius: 8px;">📞 ${lead.phone}</a>` : ''}
               </div>
-
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                  <td style="color: #718096; padding: 12px 0;">Objectif visiteur</td>
-                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${objectifLabel || "Non précisé"}</td>
-                </tr>
-                ${lead.siteInspi ? `
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                  <td style="color: #718096; padding: 12px 0;">Site inspiration</td>
-                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;"><a href="${lead.siteInspi.startsWith('http') ? lead.siteInspi : 'https://' + lead.siteInspi}" style="color: #395af6;">${lead.siteInspi}</a></td>
-                </tr>
-                ` : ''}
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                  <td style="color: #718096; padding: 12px 0;">Langues</td>
-                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${lead.languages === "1" ? "1 (FR)" : "2 langues"}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                  <td style="color: #718096; padding: 12px 0;">A un domaine</td>
-                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${lead.domain === "oui" ? "✅ Oui" : "❌ Non"}</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                  <td style="color: #718096; padding: 12px 0;">Besoin email pro</td>
-                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${lead.emailPro === "oui" ? "✅ Oui" : "❌ Non"}</td>
-                </tr>
-                <tr>
-                  <td style="color: #718096; padding: 12px 0;">Timing</td>
-                  <td style="color: #0a1628; padding: 12px 0; font-weight: 600;">${lead.timing}</td>
-                </tr>
-              </table>
 
               ${lead.message ? `
               <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 24px;">
@@ -356,7 +299,7 @@ Voir dans l'admin: https://madebydone.be/admin`;
               ` : ''}
 
               <div style="text-align: center; margin-top: 32px;">
-                <a href="mailto:${leadRaw.email}" style="display: inline-block; background: #395af6; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 8px;">Répondre</a>
+                ${leadRaw.email ? `<a href="mailto:${leadRaw.email}" style="display: inline-block; background: #395af6; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-right: 8px;">Répondre</a>` : ''}
                 <a href="https://madebydone.be/admin" style="display: inline-block; background: #e2e8f0; color: #0a1628; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">Admin</a>
               </div>
             </div>

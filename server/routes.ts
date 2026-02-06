@@ -9,31 +9,19 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Lead submission endpoint
   app.post("/api/leads", async (req, res) => {
     try {
-      const { companyWebsite, siteInspi, objectifs, ...leadPayload } = req.body;
+      const { siteInspi, objectifs, ...leadPayload } = req.body;
       
-      // Add optional fields to payload
       const fullLeadPayload = {
         ...leadPayload,
         siteInspi: siteInspi || null,
         objectifs: objectifs || null,
       };
       
-      // Honeypot check: if filled, silently return success (bot detected)
-      if (companyWebsite && companyWebsite.trim() !== "") {
-        console.log("Honeypot triggered - spam blocked");
-        return res.status(201).json({ 
-          success: true, 
-          message: "Lead créé avec succès" 
-        });
-      }
-      
       const leadData = insertLeadSchema.parse(fullLeadPayload);
       const lead = await storage.createLead(leadData);
       
-      // Send emails in parallel (don't block response)
       Promise.all([
         sendConfirmationEmail(fullLeadPayload),
         sendNotificationEmail(fullLeadPayload),
@@ -63,7 +51,6 @@ export async function registerRoutes(
     }
   });
 
-  // Get all leads (protected with basic auth)
   app.get("/api/leads", async (req, res) => {
     const authHeader = req.headers.authorization;
     const adminPassword = process.env.ADMIN_PASSWORD || "done2024";
@@ -87,7 +74,6 @@ export async function registerRoutes(
     }
   });
   
-  // Verify admin password
   app.post("/api/admin/verify", async (req, res) => {
     const { password } = req.body;
     const adminPassword = process.env.ADMIN_PASSWORD || "done2024";
@@ -99,7 +85,6 @@ export async function registerRoutes(
     }
   });
 
-  // Save partial lead progress (upsert)
   app.post("/api/partial-leads", async (req, res) => {
     try {
       const { sessionId, ...data } = req.body;
@@ -134,7 +119,6 @@ export async function registerRoutes(
     }
   });
 
-  // Mark partial lead as converted (after successful full submission)
   app.post("/api/partial-leads/:sessionId/convert", async (req, res) => {
     try {
       const { sessionId } = req.params;
@@ -149,7 +133,6 @@ export async function registerRoutes(
     }
   });
 
-  // Get all partial leads (admin only)
   app.get("/api/partial-leads", async (req, res) => {
     const authHeader = req.headers.authorization;
     const adminPassword = process.env.ADMIN_PASSWORD || "done2024";

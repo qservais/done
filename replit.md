@@ -105,7 +105,19 @@ Each page uses the `<SEO>` component with:
 | `/cookies` | Politique cookies | noindex |
 | `/admin` | Dashboard admin | Protected, noindex |
 
-## Recent Changes (January 2026)
+## Recent Changes (February 2026)
+
+- Simplified lead wizard from 7 steps to 3 steps: Activité, Pack, Coordonnées
+- Added "Devis gratuit, sans engagement" messaging throughout
+- Name field now optional in lead form (email OR phone required)
+- Removed honeypot anti-spam — all visitors welcome
+- Fixed duplicate abandons: unique sessionId constraint + onConflictDoUpdate
+- Fixed phone number display in admin for anonymous leads
+- Updated email templates for simplified form (handles missing name/email gracefully)
+- Admin dashboard reflects 3-step progress instead of 7
+- Added client projects: Restaurant Danieli, Mabelita Pizza, DSV Burgers, Ideal Fitness
+
+## Earlier Changes (January 2026)
 
 - Added comprehensive SEO: titles, metas, structured data, sitemap
 - Created signature components: DoneUnderline, DoneStamp, MadeByDoneBadge, BeforeAfter

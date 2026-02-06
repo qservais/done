@@ -53,7 +53,7 @@ type PartialLead = {
 
 type TabType = "leads" | "abandons";
 
-const stepNames = ["Besoins", "Activité", "Pack", "Détails", "Délai", "Contact", "Récap"];
+const stepNames = ["Activité", "Pack", "Contact"];
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -129,8 +129,9 @@ export default function Admin() {
     });
   };
 
-  const getStepProgress = (maxStep: number) => {
-    return `${maxStep}/7`;
+  const getStepLabel = (maxStep: number) => {
+    const cappedStep = Math.min(maxStep, stepNames.length);
+    return `${cappedStep}/${stepNames.length} - ${stepNames[cappedStep - 1] || "?"}`;
   };
 
   if (!isAuthenticated) {
@@ -184,7 +185,9 @@ export default function Admin() {
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="flex items-start justify-between mb-8">
               <div>
-                <h1 className="text-2xl font-bold text-[#0a1628]">{selectedLead.name}</h1>
+                <h1 className="text-2xl font-bold text-[#0a1628]">
+                  {selectedLead.name && selectedLead.name !== "Non renseigné" ? selectedLead.name : selectedLead.activity}
+                </h1>
                 <p className="text-gray-500">{selectedLead.activity}</p>
               </div>
               <span className="text-sm text-gray-400">{formatDate(selectedLead.createdAt)}</span>
@@ -193,18 +196,22 @@ export default function Admin() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <h3 className="font-semibold text-[#0a1628] border-b pb-2">Contact</h3>
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-[#3b5ccc]" />
-                  <a href={`mailto:${selectedLead.email}`} className="text-[#3b5ccc] hover:underline" data-testid="link-lead-email">
-                    {selectedLead.email}
-                  </a>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-[#3b5ccc]" />
-                  <a href={`tel:${selectedLead.phone}`} className="text-[#3b5ccc] hover:underline" data-testid="link-lead-phone">
-                    {selectedLead.phone}
-                  </a>
-                </div>
+                {selectedLead.email && (
+                  <div className="flex items-center gap-3">
+                    <Mail className="w-5 h-5 text-[#3b5ccc]" />
+                    <a href={`mailto:${selectedLead.email}`} className="text-[#3b5ccc] hover:underline" data-testid="link-lead-email">
+                      {selectedLead.email}
+                    </a>
+                  </div>
+                )}
+                {selectedLead.phone && (
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-5 h-5 text-[#3b5ccc]" />
+                    <a href={`tel:${selectedLead.phone}`} className="text-[#3b5ccc] hover:underline" data-testid="link-lead-phone">
+                      {selectedLead.phone}
+                    </a>
+                  </div>
+                )}
                 <div className="flex items-center gap-3">
                   <Building className="w-5 h-5 text-gray-400" />
                   <span>{selectedLead.zone}</span>
@@ -216,30 +223,10 @@ export default function Admin() {
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <span className="text-gray-500">Pack</span>
                   <span className="font-medium">{selectedLead.pack || selectedLead.siteType}</span>
-                  <span className="text-gray-500">Langues</span>
-                  <span className="font-medium">{selectedLead.languages}</span>
-                  <span className="text-gray-500">Timing</span>
-                  <span className="font-medium">{selectedLead.timing}</span>
-                  {selectedLead.objectifs && (
+                  {selectedLead.timing && selectedLead.timing !== "Normal" && (
                     <>
-                      <span className="text-gray-500">Objectifs</span>
-                      <span className="font-medium">{selectedLead.objectifs}</span>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="font-semibold text-[#0a1628] border-b pb-2">Domaine & Email</h3>
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <span className="text-gray-500">A un domaine</span>
-                  <span className="font-medium">{selectedLead.domain === "oui" ? "Oui" : "Non"}</span>
-                  <span className="text-gray-500">A un email pro</span>
-                  <span className="font-medium">{selectedLead.emailPro === "oui" ? "Oui" : "Non"}</span>
-                  {selectedLead.siteInspi && (
-                    <>
-                      <span className="text-gray-500">Site inspiration</span>
-                      <span className="font-medium">{selectedLead.siteInspi}</span>
+                      <span className="text-gray-500">Timing</span>
+                      <span className="font-medium">{selectedLead.timing}</span>
                     </>
                   )}
                 </div>
@@ -254,16 +241,20 @@ export default function Admin() {
             </div>
 
             <div className="mt-8 pt-6 border-t flex gap-4">
-              <Button asChild className="bg-[#3b5ccc] hover:bg-[#2a4bb8]">
-                <a href={`mailto:${selectedLead.email}`} data-testid="button-email-lead">
-                  <Mail className="w-4 h-4 mr-2" /> Répondre par email
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <a href={`tel:${selectedLead.phone}`} data-testid="button-call-lead">
-                  <Phone className="w-4 h-4 mr-2" /> Appeler
-                </a>
-              </Button>
+              {selectedLead.email && (
+                <Button asChild className="bg-[#3b5ccc] hover:bg-[#2a4bb8]">
+                  <a href={`mailto:${selectedLead.email}`} data-testid="button-email-lead">
+                    <Mail className="w-4 h-4 mr-2" /> Répondre par email
+                  </a>
+                </Button>
+              )}
+              {selectedLead.phone && (
+                <Button asChild variant="outline">
+                  <a href={`tel:${selectedLead.phone}`} data-testid="button-call-lead">
+                    <Phone className="w-4 h-4 mr-2" /> Appeler
+                  </a>
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -288,7 +279,7 @@ export default function Admin() {
             <div className="flex items-start justify-between mb-8">
               <div>
                 <h1 className="text-2xl font-bold text-[#0a1628]">
-                  {selectedPartialLead.name || "Visiteur anonyme"}
+                  {selectedPartialLead.name || selectedPartialLead.activity || "Visiteur anonyme"}
                 </h1>
                 <p className="text-gray-500">{selectedPartialLead.activity || "Activité non renseignée"}</p>
                 <div className="flex items-center gap-2 mt-2">
@@ -298,7 +289,7 @@ export default function Admin() {
                       ? "bg-green-100 text-green-700" 
                       : "bg-amber-100 text-amber-700"
                   )}>
-                    {selectedPartialLead.converted ? "Converti" : `Abandonné à l'étape ${selectedPartialLead.maxStepReached}`}
+                    {selectedPartialLead.converted ? "Converti" : `Abandonné à l'étape ${Math.min(selectedPartialLead.maxStepReached, stepNames.length)}`}
                   </span>
                 </div>
               </div>
@@ -313,7 +304,7 @@ export default function Admin() {
                     key={name}
                     className={cn(
                       "flex-1 p-2 rounded text-center text-xs",
-                      index + 1 <= selectedPartialLead.maxStepReached
+                      index + 1 <= Math.min(selectedPartialLead.maxStepReached, stepNames.length)
                         ? "bg-accent text-white"
                         : "bg-gray-100 text-gray-400"
                     )}
@@ -356,38 +347,33 @@ export default function Admin() {
               <div className="space-y-4">
                 <h3 className="font-semibold text-[#0a1628] border-b pb-2">Données collectées</h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  {selectedPartialLead.siteStatus && (
-                    <>
-                      <span className="text-gray-500">Situation</span>
-                      <span className="font-medium">{selectedPartialLead.siteStatus === "nouveau" ? "Nouveau site" : "Refonte"}</span>
-                    </>
-                  )}
                   {selectedPartialLead.pack && (
                     <>
                       <span className="text-gray-500">Pack</span>
                       <span className="font-medium">{selectedPartialLead.pack}</span>
                     </>
                   )}
-                  {selectedPartialLead.objectifs && (
+                  {selectedPartialLead.activity && (
                     <>
-                      <span className="text-gray-500">Objectifs</span>
-                      <span className="font-medium">{selectedPartialLead.objectifs}</span>
+                      <span className="text-gray-500">Activité</span>
+                      <span className="font-medium">{selectedPartialLead.activity}</span>
                     </>
                   )}
-                  {selectedPartialLead.timing && (
+                  {selectedPartialLead.zone && (
                     <>
-                      <span className="text-gray-500">Timing</span>
-                      <span className="font-medium">{selectedPartialLead.timing}</span>
-                    </>
-                  )}
-                  {selectedPartialLead.languages && (
-                    <>
-                      <span className="text-gray-500">Langues</span>
-                      <span className="font-medium">{selectedPartialLead.languages}</span>
+                      <span className="text-gray-500">Zone</span>
+                      <span className="font-medium">{selectedPartialLead.zone}</span>
                     </>
                   )}
                 </div>
               </div>
+
+              {selectedPartialLead.message && (
+                <div className="md:col-span-2 space-y-4">
+                  <h3 className="font-semibold text-[#0a1628] border-b pb-2">Message</h3>
+                  <p className="text-gray-600 bg-gray-50 p-4 rounded-lg">{selectedPartialLead.message}</p>
+                </div>
+              )}
             </div>
 
             {(selectedPartialLead.email || selectedPartialLead.phone) && (
@@ -466,7 +452,7 @@ export default function Admin() {
                   <tr>
                     <th className="text-left p-4 font-medium">Nom</th>
                     <th className="text-left p-4 font-medium hidden md:table-cell">Activité</th>
-                    <th className="text-left p-4 font-medium hidden lg:table-cell">Email</th>
+                    <th className="text-left p-4 font-medium hidden lg:table-cell">Contact</th>
                     <th className="text-left p-4 font-medium hidden sm:table-cell">Pack</th>
                     <th className="text-left p-4 font-medium">Date</th>
                     <th className="p-4"></th>
@@ -484,11 +470,15 @@ export default function Admin() {
                       data-testid={`row-lead-${lead.id}`}
                     >
                       <td className="p-4">
-                        <div className="font-medium text-[#0a1628]">{lead.name}</div>
+                        <div className="font-medium text-[#0a1628]">
+                          {lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity}
+                        </div>
                         <div className="text-sm text-gray-500 md:hidden">{lead.activity}</div>
                       </td>
                       <td className="p-4 hidden md:table-cell text-gray-600">{lead.activity}</td>
-                      <td className="p-4 hidden lg:table-cell text-gray-600">{lead.email}</td>
+                      <td className="p-4 hidden lg:table-cell text-gray-600">
+                        {lead.email || lead.phone || "—"}
+                      </td>
                       <td className="p-4 hidden sm:table-cell">
                         <span className="px-2 py-1 bg-[#3b5ccc]/10 text-[#3b5ccc] rounded-full text-sm">
                           {lead.pack || lead.siteType}
@@ -519,7 +509,7 @@ export default function Admin() {
                   <tr>
                     <th className="text-left p-4 font-medium">Visiteur</th>
                     <th className="text-left p-4 font-medium hidden md:table-cell">Activité</th>
-                    <th className="text-left p-4 font-medium hidden lg:table-cell">Email</th>
+                    <th className="text-left p-4 font-medium hidden lg:table-cell">Contact</th>
                     <th className="text-left p-4 font-medium">Étape</th>
                     <th className="text-left p-4 font-medium hidden sm:table-cell">Dernière activité</th>
                     <th className="p-4"></th>
@@ -538,7 +528,7 @@ export default function Admin() {
                     >
                       <td className="p-4">
                         <div className="font-medium text-[#0a1628]">
-                          {lead.name || "Visiteur anonyme"}
+                          {lead.name || lead.activity || "Visiteur anonyme"}
                         </div>
                         <div className="text-sm text-gray-500 md:hidden">
                           {lead.activity || "—"}
@@ -548,14 +538,14 @@ export default function Admin() {
                         {lead.activity || "—"}
                       </td>
                       <td className="p-4 hidden lg:table-cell text-gray-600">
-                        {lead.email || "—"}
+                        {lead.email || lead.phone || "—"}
                       </td>
                       <td className="p-4">
                         <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-sm">
-                          {getStepProgress(lead.maxStepReached)} - {stepNames[lead.maxStepReached - 1] || "?"}
+                          {getStepLabel(lead.maxStepReached)}
                         </span>
                       </td>
-                      <td className="p-4 text-sm text-gray-500 hidden sm:table-cell">
+                      <td className="p-4 hidden sm:table-cell text-sm text-gray-500">
                         {formatDate(lead.updatedAt)}
                       </td>
                       <td className="p-4">

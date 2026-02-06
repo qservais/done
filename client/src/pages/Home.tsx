@@ -53,8 +53,8 @@ export default function Home() {
             <span className="inline-flex items-center px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold tracking-wide mb-4">
               Gratuit & sans engagement
             </span>
-            <h2 className="text-2xl md:text-4xl font-bold mb-3">Commencer mon projet</h2>
-            <p className="text-muted-foreground max-w-md mx-auto">Répondez à quelques questions, on vous envoie une estimation sous 24h.</p>
+            <h2 className="text-2xl md:text-4xl font-bold mb-3">Recevez votre proposition</h2>
+            <p className="text-muted-foreground max-w-md mx-auto">3 questions rapides et on vous envoie une proposition V1 sous 24h.</p>
           </FadeIn>
           <Suspense fallback={<SkeletonSection type="wizard" />}>
             <LeadWizard />

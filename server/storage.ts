@@ -1,5 +1,5 @@
 import { db } from "@db";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { type Lead, type InsertLead, leads, type PartialLead, type InsertPartialLead, partialLeads } from "@shared/schema";
 
 export interface IStorage {
@@ -23,32 +23,27 @@ export class DatabaseStorage implements IStorage {
   }
 
   async upsertPartialLead(sessionId: string, data: Partial<InsertPartialLead>): Promise<PartialLead> {
-    const existing = await this.getPartialLead(sessionId);
+    const currentStep = data.currentStep || 1;
     
-    if (existing) {
-      const newMaxStep = Math.max(existing.maxStepReached, data.currentStep || 1);
-      const [updated] = await db
-        .update(partialLeads)
-        .set({
+    const [result] = await db
+      .insert(partialLeads)
+      .values({
+        sessionId,
+        currentStep,
+        maxStepReached: currentStep,
+        ...data,
+      })
+      .onConflictDoUpdate({
+        target: [partialLeads.sessionId],
+        set: {
           ...data,
-          maxStepReached: newMaxStep,
+          maxStepReached: sql`GREATEST(${partialLeads.maxStepReached}, ${currentStep})`,
           updatedAt: new Date(),
-        })
-        .where(eq(partialLeads.sessionId, sessionId))
-        .returning();
-      return updated;
-    } else {
-      const [created] = await db
-        .insert(partialLeads)
-        .values({
-          sessionId,
-          currentStep: 1,
-          maxStepReached: 1,
-          ...data,
-        })
-        .returning();
-      return created;
-    }
+        },
+      })
+      .returning();
+    
+    return result;
   }
 
   async getPartialLead(sessionId: string): Promise<PartialLead | null> {

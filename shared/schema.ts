@@ -5,6 +5,7 @@ import { z } from "zod";
 
 export const leads = pgTable("leads", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessName: text("business_name"),
   activity: text("activity").notNull(),
   zone: text("zone").notNull(),
   siteType: text("site_type").notNull(),
@@ -39,6 +40,7 @@ export const partialLeads = pgTable("partial_leads", {
   maxStepReached: integer("max_step_reached").notNull().default(1),
   siteStatus: text("site_status"),
   objectifs: text("objectifs"),
+  businessName: text("business_name"),
   activity: text("activity"),
   zone: text("zone"),
   pack: text("pack"),

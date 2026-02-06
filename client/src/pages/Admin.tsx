@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 type Lead = {
   id: string;
+  businessName: string | null;
   activity: string;
   zone: string;
   siteType: string;
@@ -29,6 +30,7 @@ type PartialLead = {
   sessionId: string;
   currentStep: number;
   maxStepReached: number;
+  businessName: string | null;
   activity: string | null;
   zone: string | null;
   pack: string | null;
@@ -222,9 +224,12 @@ export default function Admin() {
             <div className="flex items-start justify-between mb-8">
               <div>
                 <h1 className="text-2xl font-bold text-[#0a1628]">
-                  {selectedLead.name && selectedLead.name !== "Non renseigné" ? selectedLead.name : selectedLead.activity}
+                  {selectedLead.businessName || selectedLead.activity}
                 </h1>
-                <p className="text-gray-500">{selectedLead.activity}</p>
+                <p className="text-gray-500">{selectedLead.activity}{selectedLead.businessName ? ` — ${selectedLead.zone}` : ''}</p>
+                {selectedLead.name && selectedLead.name !== "Non renseigné" && (
+                  <p className="text-gray-400 text-sm">{selectedLead.name}</p>
+                )}
               </div>
               <span className="text-sm text-gray-400">{formatDate(selectedLead.createdAt)}</span>
             </div>
@@ -317,7 +322,7 @@ export default function Admin() {
             <div className="flex items-start justify-between mb-8">
               <div>
                 <h1 className="text-2xl font-bold text-[#0a1628]">
-                  {selectedPartialLead.name || selectedPartialLead.activity || "Visiteur anonyme"}
+                  {selectedPartialLead.businessName || selectedPartialLead.activity || "Visiteur anonyme"}
                 </h1>
                 <p className="text-gray-500">{selectedPartialLead.activity || "Activité non renseignée"}</p>
                 <div className="flex items-center gap-2 mt-2">
@@ -385,6 +390,12 @@ export default function Admin() {
               <div className="space-y-4">
                 <h3 className="font-semibold text-[#0a1628] border-b pb-2">Données collectées</h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
+                  {selectedPartialLead.businessName && (
+                    <>
+                      <span className="text-gray-500">Business</span>
+                      <span className="font-medium">{selectedPartialLead.businessName}</span>
+                    </>
+                  )}
                   {selectedPartialLead.activity && (
                     <>
                       <span className="text-gray-500">Activité</span>
@@ -535,7 +546,7 @@ export default function Admin() {
                     >
                       <td className="p-4">
                         <div className="font-medium text-[#0a1628]">
-                          {lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity}
+                          {lead.businessName || lead.activity}
                         </div>
                         <div className="text-sm text-gray-500 md:hidden">{lead.activity}</div>
                       </td>
@@ -592,7 +603,7 @@ export default function Admin() {
                     >
                       <td className="p-4">
                         <div className="font-medium text-[#0a1628]">
-                          {lead.name || lead.activity || "Visiteur anonyme"}
+                          {lead.businessName || lead.activity || "Visiteur anonyme"}
                         </div>
                         <div className="text-sm text-gray-500 md:hidden">
                           {lead.activity || "—"}

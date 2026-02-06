@@ -7,6 +7,7 @@ const FROM_EMAIL = "done. <no-reply@madebydone.be>";
 const CAL_BOOKING_URL = process.env.CAL_BOOKING_URL || "https://cal.com/madebydone/30min";
 
 type LeadData = {
+  businessName?: string | null;
   name: string;
   email: string;
   phone: string;
@@ -34,6 +35,7 @@ function escapeHtml(text: string): string {
 function sanitizeLead(lead: LeadData): LeadData {
   return {
     ...lead,
+    businessName: lead.businessName ? escapeHtml(lead.businessName) : null,
     name: escapeHtml(lead.name),
     email: escapeHtml(lead.email),
     phone: escapeHtml(lead.phone),
@@ -253,7 +255,7 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
 
 export async function sendNotificationEmail(leadRaw: LeadData) {
   const lead = sanitizeLead(leadRaw);
-  const displayName = lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity;
+  const displayName = lead.businessName || (lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity);
   const pagesLabel = formatPages(lead.pages);
   const langLabel = formatLanguages(lead.languages);
   const domainLabel = formatDomain(lead.domain);

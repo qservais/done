@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight, ChevronLeft, Loader2, Phone, Mail, User, MessageSquare, MapPin, Briefcase, Shield, FileText, Languages, Globe, Clock } from "lucide-react";
+import { Check, ChevronRight, ChevronLeft, Loader2, Phone, Mail, User, MessageSquare, MapPin, Briefcase, Shield, FileText, Languages, Globe, Clock, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 import { DoneStamp } from "@/components/signature";
@@ -9,6 +9,7 @@ import { trackFormStart, trackFormStep, trackFormSubmit, trackFormError } from "
 import { CalPopupButton } from "@/components/CalEmbed";
 
 type StepData = {
+  businessName: string;
   activity: string;
   zone: string;
   pages: string;
@@ -22,6 +23,7 @@ type StepData = {
 };
 
 const initialData: StepData = {
+  businessName: "",
   activity: "",
   zone: "",
   pages: "",
@@ -104,6 +106,7 @@ export function LeadWizard() {
         body: JSON.stringify({
           sessionId: sessionIdRef.current,
           currentStep,
+          businessName: currentData.businessName || null,
           activity: currentData.activity || null,
           zone: currentData.zone || null,
           pages: currentData.pages || null,
@@ -127,6 +130,7 @@ export function LeadWizard() {
         const payload = JSON.stringify({
           sessionId: sessionIdRef.current,
           currentStep: stepRef.current,
+          businessName: dataRef.current.businessName || null,
           activity: dataRef.current.activity || null,
           zone: dataRef.current.zone || null,
           pages: dataRef.current.pages || null,
@@ -214,6 +218,7 @@ export function LeadWizard() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          businessName: data.businessName || null,
           activity: data.activity,
           zone: data.zone,
           siteType: data.pages === "1" ? "landing" : data.pages === "2-3" ? "vitrine" : "multipage",
@@ -301,6 +306,21 @@ export function LeadWizard() {
                 <p className="text-sm text-muted-foreground mt-1">Pour vous proposer la meilleure formule.</p>
               </div>
               <div className="space-y-4">
+                <label className="block">
+                  <span className="text-sm font-medium mb-1.5 block">Nom de votre business</span>
+                  <div className="relative">
+                    <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input 
+                      type="text" 
+                      className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
+                      placeholder="Ex: Chez Marco, Studio Zen, FitPro..."
+                      value={data.businessName}
+                      onChange={(e) => updateData("businessName", e.target.value)}
+                      onFocus={triggerFormStart}
+                      data-testid="input-wizard-business-name"
+                    />
+                  </div>
+                </label>
                 <label className="block">
                   <span className="text-sm font-medium mb-1.5 block">Votre activité</span>
                   <div className="relative">

@@ -43,6 +43,7 @@ export const partialLeads = pgTable("partial_leads", {
   zone: text("zone"),
   pack: text("pack"),
   packPrice: text("pack_price"),
+  pages: text("pages"),
   languages: text("languages"),
   domain: text("domain"),
   emailPro: text("email_pro"),

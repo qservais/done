@@ -13,14 +13,9 @@ type LeadData = {
   activity: string;
   zone: string;
   siteType: string;
-  pack?: string;
-  packPrice?: string | number | null;
   pages: string;
   languages: string;
   domain: string;
-  emailPro: string;
-  siteInspi?: string | null;
-  objectifs?: string | null;
   timing: string;
   message?: string | null;
 };
@@ -45,27 +40,54 @@ function sanitizeLead(lead: LeadData): LeadData {
     activity: escapeHtml(lead.activity),
     zone: escapeHtml(lead.zone),
     siteType: escapeHtml(lead.siteType),
-    pack: lead.pack ? escapeHtml(lead.pack) : undefined,
     pages: escapeHtml(lead.pages),
     languages: escapeHtml(lead.languages),
     domain: escapeHtml(lead.domain),
-    emailPro: escapeHtml(lead.emailPro),
-    siteInspi: lead.siteInspi ? escapeHtml(lead.siteInspi) : null,
-    objectifs: lead.objectifs ? escapeHtml(lead.objectifs) : null,
     timing: escapeHtml(lead.timing),
     message: lead.message ? escapeHtml(lead.message) : null,
   };
 }
 
-function formatPackPrice(price: string | number | null | undefined): string {
-  if (!price) return "Sur devis";
-  const numPrice = typeof price === "string" ? parseFloat(price) : price;
-  return isNaN(numPrice) ? "Sur devis" : `${numPrice}€`;
-}
-
 function getFirstName(fullName: string): string {
   if (!fullName || fullName === "Non renseigné") return "";
   return fullName.split(' ')[0] || fullName;
+}
+
+function formatPages(pages: string): string {
+  const map: Record<string, string> = {
+    "1": "1 page (landing)",
+    "2-3": "2-3 pages (vitrine)",
+    "4-5": "4-5 pages (complet)",
+    "5+": "5+ pages (sur mesure)",
+  };
+  return map[pages] || pages;
+}
+
+function formatLanguages(lang: string): string {
+  const map: Record<string, string> = {
+    "1": "1 langue",
+    "2": "2 langues",
+    "3+": "3+ langues",
+  };
+  return map[lang] || lang;
+}
+
+function formatDomain(domain: string): string {
+  const map: Record<string, string> = {
+    "oui": "Oui",
+    "non": "Non",
+    "ne-sais-pas": "Ne sait pas",
+  };
+  return map[domain] || domain;
+}
+
+function formatTiming(timing: string): string {
+  const map: Record<string, string> = {
+    "pas-presse": "Pas pressé (1-2 mois)",
+    "normal": "Normal (2-4 semaines)",
+    "urgent": "Urgent (< 2 semaines)",
+  };
+  return map[timing] || timing;
 }
 
 function buildConfirmationText(lead: LeadData): string {
@@ -231,15 +253,22 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
 
 export async function sendNotificationEmail(leadRaw: LeadData) {
   const lead = sanitizeLead(leadRaw);
-  const packName = lead.pack || lead.siteType;
-  const packPrice = formatPackPrice(leadRaw.packPrice);
-  const isEcommerce = lead.siteType === "ecommerce" || packName.toLowerCase().includes("commerce");
   const displayName = lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity;
+  const pagesLabel = formatPages(lead.pages);
+  const langLabel = formatLanguages(lead.languages);
+  const domainLabel = formatDomain(lead.domain);
+  const timingLabel = formatTiming(lead.timing);
+  const isUrgent = lead.timing === "urgent";
   
   const textContent = `Nouveau lead — ${displayName}
 
 Activité: ${lead.activity} (${lead.zone})
-Pack: ${packName} - ${packPrice}
+
+Besoins:
+- Pages: ${pagesLabel}
+- Langues: ${langLabel}
+- Domaine: ${domainLabel}
+- Timing: ${timingLabel}
 
 Contact:
 ${leadRaw.email ? `- Email: ${leadRaw.email}` : "- Email: Non renseigné"}
@@ -255,7 +284,7 @@ Voir dans l'admin: https://madebydone.be/admin`;
       from: FROM_EMAIL,
       to: STUDIO_EMAIL,
       replyTo: leadRaw.email || STUDIO_EMAIL,
-      subject: `${isEcommerce ? "🛒 " : ""}Nouveau lead — ${displayName} (${packName})`,
+      subject: `${isUrgent ? "🔥 " : ""}Nouveau lead — ${displayName} (${pagesLabel})`,
       text: textContent,
       html: `
         <!DOCTYPE html>
@@ -265,23 +294,31 @@ Voir dans l'admin: https://madebydone.be/admin`;
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f5f5f3; margin: 0; padding: 40px 20px;">
           <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <div style="background: ${isEcommerce ? '#f59e0b' : '#0a1628'}; padding: 24px 32px;">
-              <h1 style="color: white; margin: 0; font-size: 20px;">${isEcommerce ? '🛒 Nouveau lead E-commerce !' : 'Nouveau lead reçu !'}</h1>
+            <div style="background: ${isUrgent ? '#dc2626' : '#0a1628'}; padding: 24px 32px;">
+              <h1 style="color: white; margin: 0; font-size: 20px;">${isUrgent ? '🔥 Nouveau lead URGENT !' : 'Nouveau lead reçu !'}</h1>
             </div>
             <div style="padding: 32px;">
               <h2 style="color: #0a1628; margin: 0 0 8px; font-size: 24px;">${displayName}</h2>
               <p style="color: #395af6; margin: 0 0 24px; font-size: 16px;">${lead.activity} — ${lead.zone}</p>
               
-              <div style="background: ${isEcommerce ? '#fffbeb' : '#f0f4ff'}; border-radius: 12px; padding: 16px; margin-bottom: 24px; border: 2px solid ${isEcommerce ? '#f59e0b' : '#395af6'};">
-                <table role="presentation" width="100%">
+              <div style="background: #f0f4ff; border-radius: 12px; padding: 20px; margin-bottom: 24px; border: 1px solid #dbe4ff;">
+                <p style="margin: 0 0 12px; font-size: 14px; font-weight: 700; color: #395af6; text-transform: uppercase; letter-spacing: 0.5px;">Besoins</p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 14px;">
                   <tr>
-                    <td>
-                      <p style="margin: 0; font-size: 12px; color: #718096; text-transform: uppercase;">Pack choisi</p>
-                      <p style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: #0a1628;">${packName}</p>
-                    </td>
-                    <td style="text-align: right;">
-                      <p style="margin: 0; font-size: 24px; font-weight: 700; color: ${isEcommerce ? '#f59e0b' : '#395af6'};">${packPrice}</p>
-                    </td>
+                    <td style="padding: 6px 0; color: #718096; width: 100px;">Pages</td>
+                    <td style="padding: 6px 0; color: #0a1628; font-weight: 600;">${pagesLabel}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 6px 0; color: #718096;">Langues</td>
+                    <td style="padding: 6px 0; color: #0a1628; font-weight: 600;">${langLabel}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 6px 0; color: #718096;">Domaine</td>
+                    <td style="padding: 6px 0; color: #0a1628; font-weight: 600;">${domainLabel}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 6px 0; color: #718096;">Délai</td>
+                    <td style="padding: 6px 0; color: ${isUrgent ? '#dc2626' : '#0a1628'}; font-weight: 600;">${timingLabel}</td>
                   </tr>
                 </table>
               </div>

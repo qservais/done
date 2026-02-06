@@ -12,17 +12,15 @@ type Lead = {
   zone: string;
   siteType: string;
   pack?: string;
-  pages: string;
-  languages: string;
-  domain: string;
-  emailPro: string;
-  timing: string;
-  name: string;
-  email: string;
-  phone: string;
+  pages: string | null;
+  languages: string | null;
+  domain: string | null;
+  emailPro?: string | null;
+  timing: string | null;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
   message: string | null;
-  objectifs?: string | null;
-  siteInspi?: string | null;
   createdAt: string;
 };
 
@@ -31,16 +29,13 @@ type PartialLead = {
   sessionId: string;
   currentStep: number;
   maxStepReached: number;
-  siteStatus: string | null;
-  objectifs: string | null;
   activity: string | null;
   zone: string | null;
   pack: string | null;
   packPrice: string | null;
+  pages: string | null;
   languages: string | null;
   domain: string | null;
-  emailPro: string | null;
-  siteInspi: string | null;
   timing: string | null;
   name: string | null;
   email: string | null;
@@ -53,7 +48,48 @@ type PartialLead = {
 
 type TabType = "leads" | "abandons";
 
-const stepNames = ["Activité", "Pack", "Contact"];
+const stepNames = ["Activité", "Besoins", "Contact"];
+
+function formatPages(pages: string | null): string {
+  if (!pages) return "—";
+  const map: Record<string, string> = {
+    "1": "1 page (landing)",
+    "2-3": "2-3 pages (vitrine)",
+    "4-5": "4-5 pages (complet)",
+    "5+": "5+ pages (sur mesure)",
+  };
+  return map[pages] || pages;
+}
+
+function formatLanguages(lang: string | null): string {
+  if (!lang) return "—";
+  const map: Record<string, string> = {
+    "1": "1 langue",
+    "2": "2 langues",
+    "3+": "3+ langues",
+  };
+  return map[lang] || lang;
+}
+
+function formatDomain(domain: string | null): string {
+  if (!domain) return "—";
+  const map: Record<string, string> = {
+    "oui": "Oui",
+    "non": "Non",
+    "ne-sais-pas": "Ne sait pas",
+  };
+  return map[domain] || domain;
+}
+
+function formatTiming(timing: string | null): string {
+  if (!timing) return "—";
+  const map: Record<string, string> = {
+    "pas-presse": "Pas pressé",
+    "normal": "Normal",
+    "urgent": "Urgent",
+  };
+  return map[timing] || timing;
+}
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -219,16 +255,18 @@ export default function Admin() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="font-semibold text-[#0a1628] border-b pb-2">Projet</h3>
+                <h3 className="font-semibold text-[#0a1628] border-b pb-2">Besoins</h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  <span className="text-gray-500">Pack</span>
-                  <span className="font-medium">{selectedLead.pack || selectedLead.siteType}</span>
-                  {selectedLead.timing && selectedLead.timing !== "Normal" && (
-                    <>
-                      <span className="text-gray-500">Timing</span>
-                      <span className="font-medium">{selectedLead.timing}</span>
-                    </>
-                  )}
+                  <span className="text-gray-500">Pages</span>
+                  <span className="font-medium">{formatPages(selectedLead.pages)}</span>
+                  <span className="text-gray-500">Langues</span>
+                  <span className="font-medium">{formatLanguages(selectedLead.languages)}</span>
+                  <span className="text-gray-500">Domaine</span>
+                  <span className="font-medium">{formatDomain(selectedLead.domain)}</span>
+                  <span className="text-gray-500">Délai</span>
+                  <span className={cn("font-medium", selectedLead.timing === "urgent" && "text-red-600")}>
+                    {formatTiming(selectedLead.timing)}
+                  </span>
                 </div>
               </div>
 
@@ -347,12 +385,6 @@ export default function Admin() {
               <div className="space-y-4">
                 <h3 className="font-semibold text-[#0a1628] border-b pb-2">Données collectées</h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  {selectedPartialLead.pack && (
-                    <>
-                      <span className="text-gray-500">Pack</span>
-                      <span className="font-medium">{selectedPartialLead.pack}</span>
-                    </>
-                  )}
                   {selectedPartialLead.activity && (
                     <>
                       <span className="text-gray-500">Activité</span>
@@ -363,6 +395,38 @@ export default function Admin() {
                     <>
                       <span className="text-gray-500">Zone</span>
                       <span className="font-medium">{selectedPartialLead.zone}</span>
+                    </>
+                  )}
+                  {selectedPartialLead.pages && (
+                    <>
+                      <span className="text-gray-500">Pages</span>
+                      <span className="font-medium">{formatPages(selectedPartialLead.pages)}</span>
+                    </>
+                  )}
+                  {selectedPartialLead.languages && (
+                    <>
+                      <span className="text-gray-500">Langues</span>
+                      <span className="font-medium">{formatLanguages(selectedPartialLead.languages)}</span>
+                    </>
+                  )}
+                  {selectedPartialLead.domain && (
+                    <>
+                      <span className="text-gray-500">Domaine</span>
+                      <span className="font-medium">{formatDomain(selectedPartialLead.domain)}</span>
+                    </>
+                  )}
+                  {selectedPartialLead.timing && (
+                    <>
+                      <span className="text-gray-500">Délai</span>
+                      <span className={cn("font-medium", selectedPartialLead.timing === "urgent" && "text-red-600")}>
+                        {formatTiming(selectedPartialLead.timing)}
+                      </span>
+                    </>
+                  )}
+                  {selectedPartialLead.pack && (
+                    <>
+                      <span className="text-gray-500">Pack</span>
+                      <span className="font-medium">{selectedPartialLead.pack}</span>
                     </>
                   )}
                 </div>
@@ -453,7 +517,7 @@ export default function Admin() {
                     <th className="text-left p-4 font-medium">Nom</th>
                     <th className="text-left p-4 font-medium hidden md:table-cell">Activité</th>
                     <th className="text-left p-4 font-medium hidden lg:table-cell">Contact</th>
-                    <th className="text-left p-4 font-medium hidden sm:table-cell">Pack</th>
+                    <th className="text-left p-4 font-medium hidden sm:table-cell">Pages</th>
                     <th className="text-left p-4 font-medium">Date</th>
                     <th className="p-4"></th>
                   </tr>
@@ -481,7 +545,7 @@ export default function Admin() {
                       </td>
                       <td className="p-4 hidden sm:table-cell">
                         <span className="px-2 py-1 bg-[#3b5ccc]/10 text-[#3b5ccc] rounded-full text-sm">
-                          {lead.pack || lead.siteType}
+                          {formatPages(lead.pages)}
                         </span>
                       </td>
                       <td className="p-4 text-sm text-gray-500">{formatDate(lead.createdAt)}</td>

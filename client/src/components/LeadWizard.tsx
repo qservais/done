@@ -1,19 +1,20 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight, ChevronLeft, Loader2, FileText, Layout, Layers, ShoppingCart, Phone, Mail, User, MessageSquare, MapPin, Briefcase, Shield } from "lucide-react";
+import { Check, ChevronRight, ChevronLeft, Loader2, Phone, Mail, User, MessageSquare, MapPin, Briefcase, Shield, FileText, Languages, Globe, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 import { DoneStamp } from "@/components/signature";
-import { trackFormStart, trackFormStep, trackFormSubmit, trackFormError, trackPackSelect } from "@/lib/tracking";
+import { trackFormStart, trackFormStep, trackFormSubmit, trackFormError } from "@/lib/tracking";
 import { CalPopupButton } from "@/components/CalEmbed";
-
-type PackType = "landing" | "vitrine" | "multipage" | "ecommerce" | "";
 
 type StepData = {
   activity: string;
   zone: string;
-  pack: PackType;
+  pages: string;
+  languages: string;
+  domain: string;
+  timing: string;
   name: string;
   email: string;
   phone: string;
@@ -23,48 +24,39 @@ type StepData = {
 const initialData: StepData = {
   activity: "",
   zone: "",
-  pack: "",
+  pages: "",
+  languages: "",
+  domain: "",
+  timing: "",
   name: "",
   email: "",
   phone: "",
   message: "",
 };
 
-const packs = [
-  {
-    id: "landing" as PackType,
-    name: "Landing Express",
-    price: BRAND.PRICING.PACK_LANDING,
-    description: "1 page claire et premium",
-    icon: FileText,
-    features: ["Design mobile-first", "Sections essentielles", "1 langue"],
-  },
-  {
-    id: "vitrine" as PackType,
-    name: "Vitrine Contact",
-    price: BRAND.PRICING.PACK_VITRINE,
-    description: "Pour capter des clients",
-    icon: Layout,
-    popular: true,
-    features: ["Tout de Landing +", "Formulaire de contact", "Plusieurs pages"],
-  },
-  {
-    id: "multipage" as PackType,
-    name: "Multi-page Premium",
-    price: BRAND.PRICING.PACK_MULTIPAGE,
-    description: "Jusqu'à 5 pages",
-    icon: Layers,
-    features: ["Tout de Vitrine +", "Jusqu'à 5 pages", "Animations premium"],
-  },
-  {
-    id: "ecommerce" as PackType,
-    name: "E-commerce",
-    price: null,
-    description: "Vente en ligne",
-    icon: ShoppingCart,
-    features: ["Boutique complète", "Paiement sécurisé", "Gestion produits"],
-    onQuote: true,
-  },
+const pagesOptions = [
+  { value: "1", label: "1 page", description: "Landing page" },
+  { value: "2-3", label: "2-3 pages", description: "Site vitrine" },
+  { value: "4-5", label: "4-5 pages", description: "Site complet" },
+  { value: "5+", label: "5+ pages", description: "Sur mesure" },
+];
+
+const languagesOptions = [
+  { value: "1", label: "1 langue" },
+  { value: "2", label: "2 langues" },
+  { value: "3+", label: "3+ langues" },
+];
+
+const domainOptions = [
+  { value: "oui", label: "Oui, j'en ai un" },
+  { value: "non", label: "Non, pas encore" },
+  { value: "ne-sais-pas", label: "Je ne sais pas" },
+];
+
+const timingOptions = [
+  { value: "pas-presse", label: "Pas pressé", description: "1-2 mois" },
+  { value: "normal", label: "Normal", description: "2-4 semaines" },
+  { value: "urgent", label: "Urgent", description: "< 2 semaines" },
 ];
 
 function generateSessionId(): string {
@@ -80,11 +72,21 @@ export function LeadWizard() {
   const hasStartedRef = useRef(false);
   const previousStepRef = useRef(1);
   const sessionIdRef = useRef<string>("");
+  const dataRef = useRef<StepData>(initialData);
+  const stepRef = useRef(1);
 
   const totalSteps = 3;
   const progress = Math.min((step / totalSteps) * 100, 100);
 
-  const stepNames = ['activite', 'pack', 'coordonnees'];
+  const stepNames = ['activite', 'besoins', 'coordonnees'];
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
 
   useEffect(() => {
     if (!sessionIdRef.current) {
@@ -96,7 +98,6 @@ export function LeadWizard() {
     if (!sessionIdRef.current) return;
     
     try {
-      const selectedPack = packs.find(p => p.id === currentData.pack);
       await fetch("/api/partial-leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -105,8 +106,10 @@ export function LeadWizard() {
           currentStep,
           activity: currentData.activity || null,
           zone: currentData.zone || null,
-          pack: selectedPack?.name || currentData.pack || null,
-          packPrice: selectedPack?.price ? String(selectedPack.price) : null,
+          pages: currentData.pages || null,
+          languages: currentData.languages || null,
+          domain: currentData.domain || null,
+          timing: currentData.timing || null,
           name: currentData.name || null,
           email: currentData.email || null,
           phone: currentData.phone || null,
@@ -116,6 +119,42 @@ export function LeadWizard() {
     } catch (error) {
       console.warn("Failed to save partial lead:", error);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (hasStartedRef.current && sessionIdRef.current) {
+        const payload = JSON.stringify({
+          sessionId: sessionIdRef.current,
+          currentStep: stepRef.current,
+          activity: dataRef.current.activity || null,
+          zone: dataRef.current.zone || null,
+          pages: dataRef.current.pages || null,
+          languages: dataRef.current.languages || null,
+          domain: dataRef.current.domain || null,
+          timing: dataRef.current.timing || null,
+          name: dataRef.current.name || null,
+          email: dataRef.current.email || null,
+          phone: dataRef.current.phone || null,
+          message: dataRef.current.message || null,
+        });
+        navigator.sendBeacon("/api/partial-leads", new Blob([payload], { type: "application/json" }));
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && hasStartedRef.current) {
+        handleBeforeUnload();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   const triggerFormStart = () => {
@@ -141,21 +180,12 @@ export function LeadWizard() {
     setData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const selectPack = (packId: PackType) => {
-    triggerFormStart();
-    setData((prev) => ({ ...prev, pack: packId }));
-    const selectedPack = packs.find(p => p.id === packId);
-    if (selectedPack) {
-      trackPackSelect(selectedPack.name, selectedPack.price || 0);
-    }
-  };
-
   const canProceed = (): boolean => {
     switch (step) {
       case 1:
         return Boolean(data.activity.trim() && data.zone);
       case 2:
-        return Boolean(data.pack);
+        return Boolean(data.pages);
       case 3:
         return Boolean(data.email.trim() || data.phone.trim());
       default:
@@ -173,8 +203,6 @@ export function LeadWizard() {
     if (step > 1) setStep(step - 1);
   };
 
-  const selectedPack = packs.find(p => p.id === data.pack);
-
   const submitForm = async () => {
     setIsSubmitting(true);
     triggerFormStart();
@@ -188,14 +216,11 @@ export function LeadWizard() {
         body: JSON.stringify({
           activity: data.activity,
           zone: data.zone,
-          siteType: data.pack || "landing",
-          pack: selectedPack?.name || data.pack || "Landing Express",
-          packPrice: selectedPack?.price ? String(selectedPack.price) : null,
-          pages: data.pack === "multipage" ? "2-5" : "1",
-          languages: "1",
-          domain: "non",
-          emailPro: "non",
-          timing: "Normal",
+          siteType: data.pages === "1" ? "landing" : data.pages === "2-3" ? "vitrine" : "multipage",
+          pages: data.pages || "1",
+          languages: data.languages || "1",
+          domain: data.domain || "ne-sais-pas",
+          timing: data.timing || "normal",
           name: data.name || "Non renseigné",
           email: data.email || "",
           phone: data.phone || "",
@@ -214,8 +239,8 @@ export function LeadWizard() {
       }
 
       trackFormSubmit('lead_wizard', {
-        pack_name: selectedPack?.name || data.pack,
-        pack_price: selectedPack?.price || 0,
+        pages: data.pages,
+        languages: data.languages,
         zone: data.zone,
       });
       setIsSuccess(true);
@@ -236,15 +261,19 @@ export function LeadWizard() {
         </div>
         <h3 className="text-2xl font-bold mb-2">C'est parti !</h3>
         <p className="text-muted-foreground mb-4">
-          Votre demande a été envoyée. On vous répond sous 24h avec une proposition.
+          Votre demande a été envoyée. On vous répond sous 24h avec une proposition adaptée.
         </p>
         <div className="bg-secondary/50 border border-border rounded-lg p-4 mb-6 text-left">
           <p className="text-sm font-medium mb-2">Récapitulatif :</p>
           <div className="text-sm text-muted-foreground space-y-1">
-            <p><strong>Pack :</strong> {selectedPack?.name || data.pack}</p>
-            <p><strong>Prix :</strong> {selectedPack?.price ? `${selectedPack.price}€` : "Sur devis"} + {BRAND.SUB_PRICE}€/mois</p>
+            <p><strong>Activité :</strong> {data.activity}</p>
+            <p><strong>Pages :</strong> {pagesOptions.find(p => p.value === data.pages)?.label || data.pages}</p>
+            {data.languages && <p><strong>Langues :</strong> {languagesOptions.find(l => l.value === data.languages)?.label || data.languages}</p>}
           </div>
         </div>
+        <p className="text-xs text-muted-foreground mb-2">
+          Nos sites démarrent à {BRAND.PRICING.PACK_LANDING}€ + {BRAND.SUB_PRICE}€/mois
+        </p>
         <p className="text-sm text-muted-foreground mb-4">
           Envie d'en parler de vive voix ?
         </p>
@@ -316,59 +345,108 @@ export function LeadWizard() {
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Étape 2/3</span>
                 </div>
-                <h3 className="text-xl font-bold">Choisissez votre formule</h3>
-                <p className="text-sm text-muted-foreground mt-1">Pas d'engagement — on adapte si besoin.</p>
+                <h3 className="text-xl font-bold">Vos besoins</h3>
+                <p className="text-sm text-muted-foreground mt-1">On adapte la formule à votre projet.</p>
               </div>
-              <div className="space-y-3">
-                {packs.map((pack) => (
-                  <button
-                    key={pack.id}
-                    onClick={() => selectPack(pack.id)}
-                    className={cn(
-                      "w-full p-4 border rounded-xl text-left hover:border-accent transition-all relative",
-                      data.pack === pack.id ? "border-accent bg-accent/5 ring-1 ring-accent" : "border-input",
-                      pack.popular && "border-accent/50"
-                    )}
-                    data-testid={`button-pack-${pack.id}`}
-                  >
-                    {pack.popular && (
-                      <span className="absolute -top-2 right-4 bg-accent text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                        Populaire
-                      </span>
-                    )}
-                    <div className="flex items-start gap-4">
-                      <div className={cn(
-                        "w-10 h-10 rounded-full flex items-center justify-center shrink-0",
-                        data.pack === pack.id ? "bg-accent text-white" : "bg-secondary"
-                      )}>
-                        <pack.icon className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-bold">{pack.name}</span>
-                          <span className={cn(
-                            "font-bold text-lg",
-                            pack.onQuote ? "text-amber-600" : "text-accent"
-                          )}>
-                            {pack.onQuote ? "Sur devis" : `${pack.price}€`}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{pack.description}</p>
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {pack.features.map((f, i) => (
-                            <span key={i} className="text-xs bg-secondary px-2 py-0.5 rounded">
-                              {f}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
+              <div className="space-y-4">
+                <div>
+                  <span className="text-sm font-medium mb-2 block flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-muted-foreground" />
+                    Combien de pages ?
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    {pagesOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => updateData("pages", opt.value)}
+                        className={cn(
+                          "p-3 border rounded-lg text-left transition-all text-sm",
+                          data.pages === opt.value
+                            ? "border-accent bg-accent/5 ring-1 ring-accent"
+                            : "border-input hover:border-accent/50"
+                        )}
+                        data-testid={`button-pages-${opt.value}`}
+                      >
+                        <span className="font-medium block">{opt.label}</span>
+                        <span className="text-xs text-muted-foreground">{opt.description}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-sm font-medium mb-2 block flex items-center gap-1.5">
+                    <Languages className="w-4 h-4 text-muted-foreground" />
+                    Combien de langues ?
+                  </span>
+                  <div className="grid grid-cols-3 gap-2">
+                    {languagesOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => updateData("languages", opt.value)}
+                        className={cn(
+                          "p-3 border rounded-lg text-center transition-all text-sm",
+                          data.languages === opt.value
+                            ? "border-accent bg-accent/5 ring-1 ring-accent"
+                            : "border-input hover:border-accent/50"
+                        )}
+                        data-testid={`button-languages-${opt.value}`}
+                      >
+                        <span className="font-medium">{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-sm font-medium mb-2 block flex items-center gap-1.5">
+                    <Globe className="w-4 h-4 text-muted-foreground" />
+                    Avez-vous un nom de domaine ?
+                  </span>
+                  <div className="grid grid-cols-3 gap-2">
+                    {domainOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => updateData("domain", opt.value)}
+                        className={cn(
+                          "p-2.5 border rounded-lg text-center transition-all text-sm",
+                          data.domain === opt.value
+                            ? "border-accent bg-accent/5 ring-1 ring-accent"
+                            : "border-input hover:border-accent/50"
+                        )}
+                        data-testid={`button-domain-${opt.value}`}
+                      >
+                        <span className="font-medium text-xs">{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-sm font-medium mb-2 block flex items-center gap-1.5">
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    Quel délai ?
+                  </span>
+                  <div className="grid grid-cols-3 gap-2">
+                    {timingOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => updateData("timing", opt.value)}
+                        className={cn(
+                          "p-2.5 border rounded-lg text-center transition-all text-sm",
+                          data.timing === opt.value
+                            ? "border-accent bg-accent/5 ring-1 ring-accent"
+                            : "border-input hover:border-accent/50"
+                        )}
+                        data-testid={`button-timing-${opt.value}`}
+                      >
+                        <span className="font-medium text-xs block">{opt.label}</span>
+                        <span className="text-xs text-muted-foreground">{opt.description}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground text-center">
-                + {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements inclus)
-              </p>
             </motion.div>
           )}
 

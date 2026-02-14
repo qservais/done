@@ -14,10 +14,10 @@ export function Problem() {
               Pourquoi autant d'indépendants repoussent leur site ?
             </h2>
             <p className="text-muted-foreground text-base md:text-lg mb-6">
-              Pas par manque d'envie. Juste parce qu'on leur a vendu le web comme un truc trop cher, trop long, trop compliqué.
+              Pas par manque d'envie. Juste parce qu'on leur a vendu le web comme un truc trop cher, trop long, trop compliqué. Et surtout : livré puis abandonné.
             </p>
             <p className="text-foreground font-medium">
-              <span className="text-accent font-bold">done</span>, c'est l'alternative : un site premium, simple, accessible.
+              <span className="text-accent font-bold">done</span>, c'est un vrai partenaire digital. On conçoit ensemble, on construit pour vous, et on reste à vos côtés.
             </p>
           </FadeIn>
 

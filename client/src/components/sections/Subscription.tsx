@@ -10,9 +10,9 @@ const techFeatures = [
 ];
 
 const supportFeatures = [
-  "2 demandes d'ajustements/mois",
+  "2 évolutions ou ajustements/mois",
   "Réponse sous 48h",
-  "Petits changements business",
+  "Conseils & idées pour votre business",
 ];
 
 export function Subscription() {
@@ -21,10 +21,10 @@ export function Subscription() {
       <div className="max-w-4xl mx-auto">
         <FadeIn className="text-center mb-10 md:mb-14">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-            On ne pose pas un site et on disparaît.
+            Votre partenaire digital, mois après mois.
           </h2>
           <p className="text-primary-foreground/70 text-sm md:text-lg max-w-xl mx-auto">
-            Le suivi qui garantit un site toujours en forme.
+            On reste à vos côtés pour faire évoluer votre site au rythme de votre activité.
           </p>
         </FadeIn>
 

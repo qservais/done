@@ -66,7 +66,7 @@ export function Hero() {
             {hero.disclaimer}
           </p>
           <p className="text-xs text-muted-foreground/40 italic">
-            On fait simple. Et bien fait.
+            On avance ensemble. Et on fait bien.
           </p>
         </FadeIn>
       </div>

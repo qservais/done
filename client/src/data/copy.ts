@@ -1,9 +1,9 @@
 export const hero = {
   title: "Un site premium qui coûte moins qu'un logo.",
   highlightWord: "logo",
-  subtitle: "Sites web & landing pages au rendu haut de gamme, pensés mobile-first, livrés en 72h. Simple, beau, efficace.",
+  subtitle: "On vous accompagne de A à Z : design, contenu, mise en ligne. Vous nous expliquez votre métier, on s'occupe du reste.",
   chips: [
-    { label: "Rendu premium", icon: "star" },
+    { label: "Accompagnement complet", icon: "star" },
     { label: "Mobile-first", icon: "smartphone" },
     { label: "V1 en 72h", icon: "clock" },
     { label: "19.99€/mois", icon: "creditcard" },
@@ -23,5 +23,5 @@ export const problem = {
     "Trop compliqué",
   ],
   punchline: "Le problème n'est pas votre activité. C'est la façon dont on vous vend le web.",
-  solution: "done, c'est l'alternative : un site premium, simple, accessible.",
+  solution: "done, c'est l'alternative : un vrai partenaire digital qui avance avec vous.",
 };

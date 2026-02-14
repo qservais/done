@@ -136,7 +136,7 @@ export function Packs() {
                 <h3 className="text-lg md:text-xl font-bold">Sur mesure</h3>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                Besoin de plus ? On peut aller beaucoup plus loin ensemble.
+                Votre projet va plus loin qu'un site vitrine ? On construit la solution ensemble, étape par étape.
               </p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {surMesureFeatures.map((feature, i) => (

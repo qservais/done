@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Sparkles } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { trackPackSelect } from "@/lib/tracking";
@@ -44,6 +44,15 @@ const packs = [
       "SEO de base (structure clean)",
     ],
   },
+];
+
+const surMesureFeatures = [
+  "E-commerce / Webshop",
+  "Connexion CRM & outils métier",
+  "Réservation en ligne",
+  "Espace client / membres",
+  "Multi-langue avancé",
+  "Fonctionnalités sur mesure",
 ];
 
 export function Packs() {
@@ -117,7 +126,46 @@ export function Packs() {
         ))}
       </StaggerChildren>
 
-      <FadeIn delay={0.3} className="text-center mt-8 md:mt-10 space-y-2">
+      <FadeIn delay={0.3} className="max-w-5xl mx-auto mt-6 md:mt-8">
+        <div className="relative p-5 md:p-8 rounded-2xl border border-border bg-gradient-to-br from-foreground/[0.02] to-accent/[0.04] overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+          <div className="flex flex-col md:flex-row md:items-center gap-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-5 h-5 text-accent" />
+                <h3 className="text-lg md:text-xl font-bold">Sur mesure</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Besoin de plus ? On peut aller beaucoup plus loin ensemble.
+              </p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                {surMesureFeatures.map((feature, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm text-foreground/80">
+                    <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                    <span>{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col items-center md:items-end gap-3 md:min-w-[180px]">
+              <div className="text-center md:text-right">
+                <span className="text-2xl md:text-3xl font-bold text-foreground">Sur devis</span>
+                <p className="text-xs text-muted-foreground mt-1">Tarif adapté à vos besoins</p>
+              </div>
+              <Button
+                className="w-full md:w-auto rounded-full px-8 py-5 font-semibold text-sm bg-foreground text-background hover:bg-foreground/90"
+                asChild
+              >
+                <a href="#wizard" className="flex items-center justify-center gap-1.5" data-testid="link-pack-surmesure" onClick={() => trackPackSelect('Sur mesure', 0)}>
+                  Discutons-en <ChevronRight className="w-4 h-4" />
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={0.4} className="text-center mt-8 md:mt-10 space-y-2">
         <p className="text-sm text-muted-foreground">
           + Abonnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
         </p>

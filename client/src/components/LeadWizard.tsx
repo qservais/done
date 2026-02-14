@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronRight, ChevronLeft, Loader2, Phone, Mail, User, MessageSquare, MapPin, Briefcase, Shield, FileText, Languages, Globe, Clock, Store } from "lucide-react";
+import { Check, ChevronRight, ChevronLeft, Loader2, Phone, Mail, User, MessageSquare, Shield, FileText, Languages, Globe, Clock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/config/brand";
 import { DoneStamp } from "@/components/signature";
@@ -35,6 +35,22 @@ const initialData: StepData = {
   phone: "",
   message: "",
 };
+
+const activityOptions = [
+  { value: "artisan", label: "Artisan / métier de service", description: "Plombier, électricien, peintre...", icon: "🔧" },
+  { value: "horeca", label: "Restaurant / Horeca", description: "Restaurant, café, traiteur...", icon: "🍽️" },
+  { value: "commerce", label: "Commerce / Boutique", description: "Fleuriste, coiffeur, magasin...", icon: "🏪" },
+  { value: "tpe-pme", label: "TPE / PME", description: "Comptable, avocat, consultant...", icon: "🏢" },
+  { value: "sante-beaute", label: "Santé / Beauté", description: "Esthétique, onglerie, bien-être...", icon: "💆" },
+  { value: "autre", label: "Autre activité", description: "Association, freelance...", icon: "💼" },
+];
+
+const zoneOptions = [
+  { value: "Belgique", label: "Belgique", flag: "🇧🇪" },
+  { value: "France", label: "France", flag: "🇫🇷" },
+  { value: "Luxembourg", label: "Luxembourg", flag: "🇱🇺" },
+  { value: "Autre", label: "Autre pays", flag: "🌍" },
+];
 
 const pagesOptions = [
   { value: "1", label: "1 page", description: "Landing page" },
@@ -107,7 +123,7 @@ export function LeadWizard() {
           sessionId: sessionIdRef.current,
           currentStep,
           businessName: currentData.businessName || null,
-          activity: currentData.activity || null,
+          activity: (activityOptions.find(a => a.value === currentData.activity)?.label || currentData.activity) || null,
           zone: currentData.zone || null,
           pages: currentData.pages || null,
           languages: currentData.languages || null,
@@ -131,7 +147,7 @@ export function LeadWizard() {
           sessionId: sessionIdRef.current,
           currentStep: stepRef.current,
           businessName: dataRef.current.businessName || null,
-          activity: dataRef.current.activity || null,
+          activity: (activityOptions.find(a => a.value === dataRef.current.activity)?.label || dataRef.current.activity) || null,
           zone: dataRef.current.zone || null,
           pages: dataRef.current.pages || null,
           languages: dataRef.current.languages || null,
@@ -219,7 +235,7 @@ export function LeadWizard() {
         },
         body: JSON.stringify({
           businessName: data.businessName || null,
-          activity: data.activity,
+          activity: activityOptions.find(a => a.value === data.activity)?.label || data.activity,
           zone: data.zone,
           siteType: data.pages === "1" ? "landing" : data.pages === "2-3" ? "vitrine" : "multipage",
           pages: data.pages || "1",
@@ -271,7 +287,7 @@ export function LeadWizard() {
         <div className="bg-secondary/50 border border-border rounded-lg p-4 mb-6 text-left">
           <p className="text-sm font-medium mb-2">Récapitulatif :</p>
           <div className="text-sm text-muted-foreground space-y-1">
-            <p><strong>Activité :</strong> {data.activity}</p>
+            <p><strong>Activité :</strong> {activityOptions.find(a => a.value === data.activity)?.label || data.activity}</p>
             <p><strong>Pages :</strong> {pagesOptions.find(p => p.value === data.pages)?.label || data.pages}</p>
             {data.languages && <p><strong>Langues :</strong> {languagesOptions.find(l => l.value === data.languages)?.label || data.languages}</p>}
           </div>
@@ -288,7 +304,7 @@ export function LeadWizard() {
   }
 
   return (
-    <div ref={formRef} className="w-full max-w-lg mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[420px] scroll-mt-8">
+    <div ref={formRef} className="w-full max-w-lg mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
       <div className="h-2 bg-secondary w-full">
         <div className="h-full bg-accent transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
       </div>
@@ -299,63 +315,92 @@ export function LeadWizard() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Étape 1/3</span>
-                  <span className="text-xs text-muted-foreground">— 30 secondes</span>
+                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Question 1/3</span>
                 </div>
-                <h3 className="text-xl font-bold">Parlez-nous de vous</h3>
-                <p className="text-sm text-muted-foreground mt-1">Pour vous proposer la meilleure formule.</p>
+                <h3 className="text-xl font-bold">Quelle est votre activité ?</h3>
               </div>
-              <div className="space-y-4">
-                <label className="block">
-                  <span className="text-sm font-medium mb-1.5 block">Nom de votre business</span>
-                  <div className="relative">
-                    <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input 
-                      type="text" 
-                      className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
-                      placeholder="Ex: Chez Marco, Studio Zen, FitPro..."
-                      value={data.businessName}
-                      onChange={(e) => updateData("businessName", e.target.value)}
-                      onFocus={triggerFormStart}
-                      data-testid="input-wizard-business-name"
-                    />
-                  </div>
-                </label>
-                <label className="block">
-                  <span className="text-sm font-medium mb-1.5 block">Votre activité</span>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input 
-                      type="text" 
-                      className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
-                      placeholder="Ex: Restaurant, Coach sportif, Architecte..."
-                      value={data.activity}
-                      onChange={(e) => updateData("activity", e.target.value)}
-                      onFocus={triggerFormStart}
-                      data-testid="input-wizard-activity"
-                    />
-                  </div>
-                </label>
-                <label className="block">
-                  <span className="text-sm font-medium mb-1.5 block">Où êtes-vous basé ?</span>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <select 
-                      className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none appearance-none"
-                      value={data.zone}
-                      onChange={(e) => updateData("zone", e.target.value)}
-                      onFocus={triggerFormStart}
-                      data-testid="select-wizard-zone"
-                    >
-                      <option value="">Choisir...</option>
-                      <option value="Belgique">Belgique</option>
-                      <option value="France">France</option>
-                      <option value="Luxembourg">Luxembourg</option>
-                      <option value="Autre">Autre pays</option>
-                    </select>
-                  </div>
-                </label>
+              <div className="space-y-2.5">
+                {activityOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => {
+                      triggerFormStart();
+                      updateData("activity", opt.value);
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-3.5 p-3.5 border rounded-xl text-left transition-all group",
+                      data.activity === opt.value
+                        ? "border-accent bg-accent/5 ring-1 ring-accent"
+                        : "border-input hover:border-accent/40 hover:bg-accent/[0.02]"
+                    )}
+                    data-testid={`button-activity-${opt.value}`}
+                  >
+                    <span className={cn(
+                      "w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0 transition-colors",
+                      data.activity === opt.value
+                        ? "bg-accent/15"
+                        : "bg-secondary"
+                    )}>
+                      {opt.icon}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-semibold text-sm block">{opt.label}</span>
+                      <span className="text-xs text-muted-foreground">{opt.description}</span>
+                    </div>
+                    <ArrowRight className={cn(
+                      "w-4 h-4 flex-shrink-0 transition-all",
+                      data.activity === opt.value
+                        ? "text-accent"
+                        : "text-muted-foreground/40 group-hover:text-muted-foreground"
+                    )} />
+                  </button>
+                ))}
               </div>
+
+              {data.activity && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 pt-2">
+                  <div>
+                    <h3 className="text-lg font-bold mb-2">Où êtes-vous basé ?</h3>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {zoneOptions.map((opt) => (
+                        <button
+                          key={opt.value}
+                          onClick={() => {
+                            triggerFormStart();
+                            updateData("zone", opt.value);
+                          }}
+                          className={cn(
+                            "flex items-center gap-2.5 p-3 border rounded-xl text-left transition-all",
+                            data.zone === opt.value
+                              ? "border-accent bg-accent/5 ring-1 ring-accent"
+                              : "border-input hover:border-accent/40 hover:bg-accent/[0.02]"
+                          )}
+                          data-testid={`button-zone-${opt.value}`}
+                        >
+                          <span className="text-2xl leading-none">{opt.flag}</span>
+                          <span className="font-medium text-sm">{opt.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {data.zone && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                      <label className="block">
+                        <span className="text-sm font-medium mb-1.5 block">Nom de votre business <span className="text-muted-foreground font-normal">(optionnel)</span></span>
+                        <input 
+                          type="text" 
+                          className="w-full p-3 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm"
+                          placeholder="Ex: Chez Marco, Studio Zen..."
+                          value={data.businessName}
+                          onChange={(e) => updateData("businessName", e.target.value)}
+                          data-testid="input-wizard-business-name"
+                        />
+                      </label>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
             </motion.div>
           )}
 
@@ -363,7 +408,7 @@ export function LeadWizard() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Étape 2/3</span>
+                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Question 2/3</span>
                 </div>
                 <h3 className="text-xl font-bold">Vos besoins</h3>
                 <p className="text-sm text-muted-foreground mt-1">On adapte la formule à votre projet.</p>
@@ -474,7 +519,7 @@ export function LeadWizard() {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Étape 3/3</span>
+                  <span className="text-xs font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">Question 3/3</span>
                   <span className="text-xs text-muted-foreground">— dernière étape</span>
                 </div>
                 <h3 className="text-xl font-bold">Comment vous joindre ?</h3>

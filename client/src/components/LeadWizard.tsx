@@ -87,6 +87,8 @@ export function LeadWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const zoneRef = useRef<HTMLDivElement>(null);
+  const businessRef = useRef<HTMLDivElement>(null);
   const hasStartedRef = useRef(false);
   const previousStepRef = useRef(1);
   const sessionIdRef = useRef<string>("");
@@ -326,6 +328,9 @@ export function LeadWizard() {
                     onClick={() => {
                       triggerFormStart();
                       updateData("activity", opt.value);
+                      setTimeout(() => {
+                        zoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }, 100);
                     }}
                     className={cn(
                       "w-full flex items-center gap-3.5 p-3.5 border rounded-xl text-left transition-all group",
@@ -359,7 +364,7 @@ export function LeadWizard() {
 
               {data.activity && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 pt-2">
-                  <div>
+                  <div ref={zoneRef}>
                     <h3 className="text-lg font-bold mb-2">Où êtes-vous basé ?</h3>
                     <div className="grid grid-cols-2 gap-2.5">
                       {zoneOptions.map((opt) => (
@@ -368,6 +373,9 @@ export function LeadWizard() {
                           onClick={() => {
                             triggerFormStart();
                             updateData("zone", opt.value);
+                            setTimeout(() => {
+                              businessRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 100);
                           }}
                           className={cn(
                             "flex items-center gap-2.5 p-3 border rounded-xl text-left transition-all",
@@ -385,7 +393,7 @@ export function LeadWizard() {
                   </div>
 
                   {data.zone && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                    <motion.div ref={businessRef} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                       <label className="block">
                         <span className="text-sm font-medium mb-1.5 block">Nom de votre business <span className="text-muted-foreground font-normal">(optionnel)</span></span>
                         <input 

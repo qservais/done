@@ -46,6 +46,7 @@ export default function Home() {
       <main>
         <Hero />
         <Problem />
+        <Realizations />
         <Why />
         
         <Section id="wizard" className="bg-accent/5 border-y border-accent/20 py-16 md:py-20">
@@ -63,7 +64,6 @@ export default function Home() {
 
         <Packs />
         <Subscription />
-        <Realizations />
         <Options />
         <FAQ />
         <Contact />

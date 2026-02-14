@@ -65,18 +65,4 @@ export const projects: Project[] = [
     tags: ["Sport", "Vitrine"],
     gradient: "from-sky-100 to-sky-200",
   },
-  {
-    name: "Examtir",
-    url: "https://examtir.be/",
-    image: "/projects/examtir_opt.webp",
-    tags: ["Formation", "Contact"],
-    gradient: "from-emerald-100 to-emerald-200",
-  },
-  {
-    name: "Valoriser Mon Entreprise",
-    url: "https://valorisermonentreprise.be/",
-    image: "/projects/valoriser_opt.webp",
-    tags: ["Corporate", "Premium"],
-    gradient: "from-violet-100 to-violet-200",
-  },
 ];

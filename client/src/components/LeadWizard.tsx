@@ -304,7 +304,7 @@ export function LeadWizard() {
   }
 
   return (
-    <div ref={formRef} className="w-full max-w-lg mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
+    <div ref={formRef} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
       <div className="h-2 bg-secondary w-full">
         <div className="h-full bg-accent transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
       </div>

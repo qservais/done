@@ -12,6 +12,7 @@ import { Realizations } from "@/components/sections/Realizations";
 import { Options } from "@/components/sections/Options";
 import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
+import { Trustpilot } from "@/components/sections/Trustpilot";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/ui/fade-in";
 import { SkeletonSection } from "@/components/ui/skeleton-section";
@@ -48,6 +49,7 @@ export default function Home() {
         <Problem />
         <Realizations />
         <Why />
+        <Trustpilot />
         
         <Section id="wizard" className="bg-accent/5 border-y border-accent/20 py-16 md:py-20">
           <FadeIn className="text-center mb-10">

@@ -65,4 +65,18 @@ export const projects: Project[] = [
     tags: ["Sport", "Vitrine"],
     gradient: "from-sky-100 to-sky-200",
   },
+  {
+    name: "ProMax Direct",
+    url: "https://www.promaxdirect.com/",
+    image: "/projects/promaxdirect_opt.webp",
+    tags: ["E-commerce", "B2B"],
+    gradient: "from-zinc-900 to-zinc-700",
+  },
+  {
+    name: "Nov-Isol",
+    url: "https://www.nov-isol.be/",
+    image: "/projects/novisol_opt.webp",
+    tags: ["Isolation", "Multi-page"],
+    gradient: "from-green-600 to-green-800",
+  },
 ];

@@ -1,10 +1,23 @@
 import { Section } from "@/components/ui/section";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
 
 const TRUSTPILOT_URL = "https://fr-be.trustpilot.com/review/madebydone.be";
 const TRUSTPILOT_SCORE = "5.0";
 const TRUSTPILOT_REVIEW_COUNT = 5;
+
+const reviews = [
+  {
+    name: "Salomé L.-G.",
+    project: "Maison Vagabonde",
+    text: "Ils ont été à l'écoute, ont rapidement saisi les objectifs, les besoins ainsi que la direction artistique. Rapide, premium et accessible, je recommande vivement !",
+  },
+  {
+    name: "Ideal Fitness Embourg",
+    project: "Ideal Fitness",
+    text: "Nous avons fait appel à Madebydone pour la conception de notre site, depuis nos clients sont ravis ! Service rapide et de qualité.",
+  },
+];
 
 function TrustpilotStar({ index }: { index: number }) {
   return (
@@ -26,6 +39,22 @@ function TrustpilotStar({ index }: { index: number }) {
   );
 }
 
+function MiniStars() {
+  return (
+    <div className="flex gap-0.5">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <svg key={i} viewBox="0 0 24 24" className="w-4 h-4" fill="none">
+          <rect width="24" height="24" rx="2" fill="#00b67a" />
+          <path
+            d="M12 4l2.35 4.76 5.25.77-3.8 3.7.9 5.23L12 15.77l-4.7 2.69.9-5.23-3.8-3.7 5.25-.77L12 4z"
+            fill="white"
+          />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
 function TrustpilotLogo() {
   return (
     <span className="inline-flex items-center gap-1">
@@ -34,6 +63,30 @@ function TrustpilotLogo() {
       </svg>
       <span className="font-semibold text-sm md:text-base tracking-tight">Trustpilot</span>
     </span>
+  );
+}
+
+function ReviewCard({ review, index }: { review: typeof reviews[0]; index: number }) {
+  return (
+    <motion.div
+      className="bg-background border border-border rounded-2xl p-5 md:p-6 text-left max-w-sm w-full"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: 0.3 + index * 0.15, duration: 0.5, ease: "easeOut" }}
+    >
+      <MiniStars />
+      <p className="text-sm md:text-base text-foreground/90 mt-3 leading-relaxed">
+        "{review.text}"
+      </p>
+      <div className="mt-4 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-foreground">{review.name}</p>
+          <p className="text-xs text-muted-foreground">{review.project}</p>
+        </div>
+        <Star className="w-3.5 h-3.5 text-[#00b67a]" fill="#00b67a" />
+      </div>
+    </motion.div>
   );
 }
 
@@ -75,6 +128,12 @@ export function Trustpilot() {
           Voir les avis <ExternalLink className="w-3.5 h-3.5" />
         </span>
       </motion.a>
+
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10">
+        {reviews.map((review, i) => (
+          <ReviewCard key={i} review={review} index={i} />
+        ))}
+      </div>
     </Section>
   );
 }

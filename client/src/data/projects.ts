@@ -6,6 +6,7 @@ export type Project = {
   afterImage?: string;
   tags: string[];
   gradient: string;
+  hasReview?: boolean;
 };
 
 export const projects: Project[] = [
@@ -36,6 +37,7 @@ export const projects: Project[] = [
     image: "/projects/idealfitness_opt.webp",
     tags: ["Sport", "Coaching"],
     gradient: "from-yellow-400 to-zinc-800",
+    hasReview: true,
   },
   {
     name: "Maison Vagabonde",
@@ -43,6 +45,7 @@ export const projects: Project[] = [
     image: "/projects/maisonvagabonde_opt.webp",
     tags: ["Vitrine", "Premium"],
     gradient: "from-amber-100 to-amber-200",
+    hasReview: true,
   },
   {
     name: "Aste Esthétique",

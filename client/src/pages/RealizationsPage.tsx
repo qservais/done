@@ -3,9 +3,11 @@ import { Footer } from "@/components/layout/Footer";
 import { Section } from "@/components/ui/section";
 import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
 import { projects } from "@/data/projects";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
+import { MadeByDoneBadge } from "@/components/signature";
+import { trackProjectClick } from "@/lib/tracking";
 
 export default function RealizationsPage() {
   return (
@@ -45,8 +47,9 @@ export default function RealizationsPage() {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block bg-background border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-xl h-full"
+                  className="group block bg-background border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-xl hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 h-full"
                   data-testid={`link-project-page-${index}`}
+                  onClick={() => trackProjectClick(project.name, project.url)}
                 >
                   <div className="bg-secondary/30 rounded-t-xl overflow-hidden">
                     <div className="flex items-center gap-1.5 px-4 py-2.5 bg-secondary/50 border-b border-border/50">
@@ -58,13 +61,29 @@ export default function RealizationsPage() {
                       </div>
                     </div>
                     
-                    <div className={`aspect-[16/10] bg-gradient-to-br ${project.gradient} flex items-center justify-center relative`}>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="font-bold text-foreground/15 text-2xl md:text-3xl tracking-widest uppercase">
-                          {project.name.split(' ')[0]}
-                        </span>
-                      </div>
+                    <div className={`aspect-[16/10] bg-gradient-to-br ${project.gradient} flex items-center justify-center relative overflow-hidden`}>
+                      {project.image ? (
+                        <img
+                          src={project.image}
+                          alt={project.name}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover group-hover:scale-[1.02] transition-all duration-500 motion-reduce:group-hover:scale-100 project-preview"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="font-bold text-foreground/15 text-2xl md:text-3xl tracking-widest uppercase">
+                            {project.name.split(' ')[0]}
+                          </span>
+                        </div>
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent" />
+                      {project.hasReview && (
+                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm text-[#00b67a] text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm">
+                          <Star className="w-3 h-3" fill="#00b67a" />
+                          <span>Avis 5/5</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -74,7 +93,7 @@ export default function RealizationsPage() {
                         <h2 className="font-bold text-lg md:text-xl text-foreground group-hover:text-accent transition-colors">
                           {project.name}
                         </h2>
-                        <div className="flex flex-wrap gap-2 mt-3">
+                        <div className="flex flex-wrap items-center gap-2 mt-3">
                           {project.tags.map((tag, i) => (
                             <span 
                               key={i}
@@ -83,6 +102,7 @@ export default function RealizationsPage() {
                               {tag}
                             </span>
                           ))}
+                          <MadeByDoneBadge variant="subtle" />
                         </div>
                       </div>
                       <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-foreground group-hover:bg-accent group-hover:text-white transition-all shrink-0">
@@ -97,6 +117,16 @@ export default function RealizationsPage() {
         </Section>
       </main>
       <Footer />
+
+      <style>{`
+        .project-preview {
+          filter: grayscale(100%) sepia(15%) saturate(200%) hue-rotate(180deg) brightness(0.95);
+          transition: filter 0.5s ease, transform 0.3s ease;
+        }
+        .group:hover .project-preview {
+          filter: none;
+        }
+      `}</style>
     </div>
   );
 }

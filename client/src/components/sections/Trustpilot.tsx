@@ -15,6 +15,11 @@ const reviews = [
     project: "Ideal Fitness",
     text: "Nous avons fait appel à Madebydone pour la conception de notre site, depuis nos clients sont ravis ! Service rapide et de qualité.",
   },
+  {
+    name: "Philippe S.",
+    project: "Guardians of Light",
+    text: "Professionnalisme, écoute, de très bons conseils pour réaliser notre website. En 24 heures il était fait. Pour un prix modique il fait des merveilles, très réactif même durant les week-ends.",
+  },
 ];
 
 function ReviewStar({ index }: { index: number }) {

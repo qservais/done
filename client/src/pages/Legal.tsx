@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Section } from "@/components/ui/section";
 import { SEO } from "@/components/SEO";
+import { StructuredData } from "@/components/StructuredData";
 import { BRAND } from "@/config/brand";
 import { useLocation } from "wouter";
 
@@ -39,6 +40,7 @@ export default function Legal() {
         canonical={content.canonical}
         noindex={true}
       />
+      <StructuredData type="localBusiness" />
       
       <Header />
       <main className="pt-28 md:pt-32">

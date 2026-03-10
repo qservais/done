@@ -17,6 +17,7 @@ export default function RealizationsPage() {
         description="Avant/Après, choix UX, tracking, Ads. Des projets livrés vite, propres, mesurables."
         canonical="https://madebydone.be/realisations"
       />
+      <StructuredData type="localBusiness" />
       <StructuredData 
         type="breadcrumb" 
         breadcrumbs={[

@@ -1,20 +1,64 @@
 import { useEffect } from "react";
+import { BRAND } from "@/config/brand";
 
-const organizationSchema = {
+const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "ProfessionalService",
   "name": "done",
+  "alternateName": "madebydone",
   "url": "https://madebydone.be",
   "logo": "https://madebydone.be/logo.svg",
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "email": "hello@madebydone.be",
-    "contactType": "customer service",
-    "areaServed": ["BE", "FR", "LU"],
-    "availableLanguage": ["French", "English"]
+  "image": "https://madebydone.be/og-image.jpg",
+  "description": "Studio de création web premium pour freelances et PME en Belgique, France et Luxembourg. Sites vitrines, landing pages et sites multi-pages livrés en 72h.",
+  "email": BRAND.CONTACT_EMAIL,
+  "telephone": BRAND.PHONE,
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "BE",
+    "addressRegion": "Wallonie"
   },
+  "areaServed": [
+    { "@type": "Country", "name": "Belgium" },
+    { "@type": "Country", "name": "France" },
+    { "@type": "Country", "name": "Luxembourg" }
+  ],
+  "serviceType": ["Web Design", "Web Development", "Landing Page", "Site Vitrine"],
+  "priceRange": "€€",
+  "knowsLanguage": ["fr", "en"],
   "sameAs": [
-    "https://instagram.com/done.studio"
+    BRAND.INSTAGRAM_URL,
+    BRAND.FACEBOOK_URL
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "bestRating": "5",
+    "worstRating": "1",
+    "ratingCount": "5",
+    "reviewCount": "5"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "author": { "@type": "Person", "name": "Salomé L.-G." },
+      "datePublished": "2026-02-21",
+      "reviewBody": "Ils ont été à l'écoute, ont rapidement saisi les objectifs, les besoins ainsi que la direction artistique. Rapide, premium et accessible, je recommande vivement !",
+      "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }
+    },
+    {
+      "@type": "Review",
+      "author": { "@type": "Organization", "name": "Ideal Fitness Embourg" },
+      "datePublished": "2026-02-20",
+      "reviewBody": "Nous avons fait appel à Madebydone pour la conception de notre site, depuis nos clients sont ravis ! Service rapide et de qualité.",
+      "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }
+    },
+    {
+      "@type": "Review",
+      "author": { "@type": "Person", "name": "Philippe S." },
+      "datePublished": "2026-02-08",
+      "reviewBody": "Professionnalisme, écoute, de très bons conseils pour réaliser notre website. En 24 heures il était fait. Pour un prix modique il fait des merveilles, très réactif même durant les week-ends.",
+      "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }
+    }
   ]
 };
 
@@ -44,7 +88,7 @@ function createBreadcrumbSchema(items: BreadcrumbItem[]) {
 }
 
 interface StructuredDataProps {
-  type: "organization" | "website" | "breadcrumb";
+  type: "localBusiness" | "website" | "breadcrumb";
   breadcrumbs?: BreadcrumbItem[];
 }
 
@@ -62,8 +106,8 @@ export function StructuredData({ type, breadcrumbs }: StructuredDataProps) {
 
     let schema;
     switch (type) {
-      case "organization":
-        schema = organizationSchema;
+      case "localBusiness":
+        schema = localBusinessSchema;
         break;
       case "website":
         schema = websiteSchema;

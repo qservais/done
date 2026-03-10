@@ -39,7 +39,7 @@ export default function Home() {
         description="Sites web & landing pages au rendu haut de gamme, pensés mobile-first, livrés en 72h. Simple, beau, efficace — madebydone.be"
         canonical="https://madebydone.be/"
       />
-      <StructuredData type="organization" />
+      <StructuredData type="localBusiness" />
       <StructuredData type="website" />
       
       <Header />

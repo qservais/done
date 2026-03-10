@@ -79,8 +79,8 @@ export default function RealizationsPage() {
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent" />
                       {project.hasReview && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm text-[#00b67a] text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm">
-                          <Star className="w-3 h-3" fill="#00b67a" />
+                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm text-accent text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm">
+                          <Star className="w-3 h-3 text-accent" fill="currentColor" />
                           <span>Avis 5/5</span>
                         </div>
                       )}

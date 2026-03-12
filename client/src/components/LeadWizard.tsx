@@ -86,7 +86,7 @@ export function LeadWizard() {
   const [data, setData] = useState<StepData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const formRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const zoneRef = useRef<HTMLDivElement>(null);
   const businessRef = useRef<HTMLDivElement>(null);
   const hasStartedRef = useRef(false);
@@ -266,6 +266,12 @@ export function LeadWizard() {
         languages: data.languages,
         zone: data.zone,
       });
+
+      if (formRef.current) {
+        const nativeSubmit = new Event("submit", { bubbles: true, cancelable: true });
+        formRef.current.dispatchEvent(nativeSubmit);
+      }
+
       setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting lead:", error);
@@ -306,7 +312,14 @@ export function LeadWizard() {
   }
 
   return (
-    <div ref={formRef} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
+    <form ref={formRef} onSubmit={(e) => e.preventDefault()} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
+      <input type="hidden" name="activity" value={activityOptions.find(a => a.value === data.activity)?.label || data.activity} />
+      <input type="hidden" name="zone" value={data.zone} />
+      <input type="hidden" name="pages" value={pagesOptions.find(p => p.value === data.pages)?.label || data.pages} />
+      <input type="hidden" name="languages" value={languagesOptions.find(l => l.value === data.languages)?.label || data.languages} />
+      <input type="hidden" name="domain" value={domainOptions.find(d => d.value === data.domain)?.label || data.domain} />
+      <input type="hidden" name="timing" value={timingOptions.find(t => t.value === data.timing)?.label || data.timing} />
+
       <div className="h-2 bg-secondary w-full">
         <div className="h-full bg-accent transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
       </div>
@@ -398,6 +411,7 @@ export function LeadWizard() {
                         <span className="text-sm font-medium mb-1.5 block">Nom de votre business <span className="text-muted-foreground font-normal">(optionnel)</span></span>
                         <input 
                           type="text" 
+                          name="company"
                           className="w-full p-3 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm"
                           placeholder="Ex: Chez Marco, Studio Zen..."
                           value={data.businessName}
@@ -540,6 +554,7 @@ export function LeadWizard() {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input 
                       type="text" 
+                      name="firstname"
                       className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
                       placeholder="Jean Dupont"
                       value={data.name}
@@ -554,6 +569,7 @@ export function LeadWizard() {
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input 
                       type="email" 
+                      name="email"
                       className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
                       placeholder="votre@email.com"
                       value={data.email}
@@ -568,6 +584,7 @@ export function LeadWizard() {
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input 
                       type="tel" 
+                      name="phone"
                       className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
                       placeholder="0498 12 34 56"
                       value={data.phone}
@@ -581,6 +598,7 @@ export function LeadWizard() {
                   <div className="relative">
                     <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                     <textarea 
+                      name="message"
                       className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none resize-none"
                       rows={2}
                       placeholder="Détails, questions, délai souhaité..."
@@ -642,6 +660,6 @@ export function LeadWizard() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

@@ -3,6 +3,7 @@ import { type Server } from "http";
 import { storage } from "./storage";
 import { insertLeadSchema, insertPartialLeadSchema } from "@shared/schema";
 import { sendConfirmationEmail, sendNotificationEmail } from "./email";
+import { pushLeadToHubSpot } from "./hubspot";
 import { z } from "zod";
 
 export async function registerRoutes(
@@ -25,8 +26,22 @@ export async function registerRoutes(
       Promise.all([
         sendConfirmationEmail(fullLeadPayload),
         sendNotificationEmail(fullLeadPayload),
+        pushLeadToHubSpot({
+          firstname: fullLeadPayload.name,
+          lastname: fullLeadPayload.lastname || null,
+          email: fullLeadPayload.email || null,
+          phone: fullLeadPayload.phone || null,
+          company: fullLeadPayload.businessName || null,
+          activity: fullLeadPayload.activity,
+          zone: fullLeadPayload.zone,
+          pages: fullLeadPayload.pages || null,
+          languages: fullLeadPayload.languages || null,
+          domain: fullLeadPayload.domain || null,
+          timing: fullLeadPayload.timing || null,
+          message: fullLeadPayload.message || null,
+        }),
       ]).catch((err) => {
-        console.error("Error sending emails:", err);
+        console.error("Error sending emails/HubSpot:", err);
       });
       
       res.status(201).json({ 

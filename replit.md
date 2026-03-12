@@ -93,6 +93,7 @@ Each page uses the `<SEO>` component with:
 - `DATABASE_URL`: PostgreSQL connection string
 - `RESEND_API_KEY`: Resend email service API key
 - `STUDIO_EMAIL`: Destination email for lead notifications (optional, defaults to hello@madebydone.be)
+- `HUBSPOT_ACCESS_TOKEN`: HubSpot Private App access token for CRM contact sync (requires `crm.objects.contacts.write` + `crm.objects.contacts.read` scopes)
 
 ## Routes
 
@@ -105,7 +106,13 @@ Each page uses the `<SEO>` component with:
 | `/cookies` | Politique cookies | noindex |
 | `/admin` | Dashboard admin | Protected, noindex |
 
-## Recent Changes (February 2026)
+## Recent Changes (March 2026)
+
+- Split single "name" field into separate "Prénom" (firstname) and "Nom" (lastname) fields in lead wizard
+- Added HubSpot CRM integration: server-side sync via `server/hubspot.ts` pushes all lead data (firstname, lastname, email, phone, company, activity, zone, pages, languages, domain, timing, message) to HubSpot contacts on every form submission
+- Replaced "abonnement" terminology with "accompagnement" site-wide (Packs, Subscription section, FAQ, Hero)
+
+## Earlier Changes (February 2026)
 
 - Replaced pack selection (Step 2) with needs assessment: pages, languages, domain, timing
 - Added beforeunload/visibilitychange listeners to save abandon data on page leave (fixes missing step 3 data)

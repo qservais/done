@@ -16,7 +16,8 @@ type StepData = {
   languages: string;
   domain: string;
   timing: string;
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   phone: string;
   message: string;
@@ -30,7 +31,8 @@ const initialData: StepData = {
   languages: "",
   domain: "",
   timing: "",
-  name: "",
+  firstname: "",
+  lastname: "",
   email: "",
   phone: "",
   message: "",
@@ -131,7 +133,8 @@ export function LeadWizard() {
           languages: currentData.languages || null,
           domain: currentData.domain || null,
           timing: currentData.timing || null,
-          name: currentData.name || null,
+          name: currentData.firstname || null,
+          lastname: currentData.lastname || null,
           email: currentData.email || null,
           phone: currentData.phone || null,
           message: currentData.message || null,
@@ -155,7 +158,8 @@ export function LeadWizard() {
           languages: dataRef.current.languages || null,
           domain: dataRef.current.domain || null,
           timing: dataRef.current.timing || null,
-          name: dataRef.current.name || null,
+          name: dataRef.current.firstname || null,
+          lastname: dataRef.current.lastname || null,
           email: dataRef.current.email || null,
           phone: dataRef.current.phone || null,
           message: dataRef.current.message || null,
@@ -244,7 +248,8 @@ export function LeadWizard() {
           languages: data.languages || "1",
           domain: data.domain || "ne-sais-pas",
           timing: data.timing || "normal",
-          name: data.name || "Non renseigné",
+          name: data.firstname || "Non renseigné",
+          lastname: data.lastname || "",
           email: data.email || "",
           phone: data.phone || "",
           message: data.message || "",
@@ -557,21 +562,38 @@ export function LeadWizard() {
                 <p className="text-sm text-muted-foreground mt-1">On vous envoie une proposition sous 24h.</p>
               </div>
               <div className="space-y-3">
-                <label className="block">
-                  <span className="text-sm font-medium mb-1.5 block">Votre nom <span className="text-muted-foreground font-normal">(optionnel)</span></span>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input 
-                      type="text" 
-                      name="firstname"
-                      className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
-                      placeholder="Jean Dupont"
-                      value={data.name}
-                      onChange={(e) => updateData("name", e.target.value)}
-                      data-testid="input-wizard-name"
-                    />
-                  </div>
-                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="block">
+                    <span className="text-sm font-medium mb-1.5 block">Prénom <span className="text-muted-foreground font-normal">(optionnel)</span></span>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input 
+                        type="text" 
+                        name="firstname"
+                        className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
+                        placeholder="Jean"
+                        value={data.firstname}
+                        onChange={(e) => updateData("firstname", e.target.value)}
+                        data-testid="input-wizard-firstname"
+                      />
+                    </div>
+                  </label>
+                  <label className="block">
+                    <span className="text-sm font-medium mb-1.5 block">Nom <span className="text-muted-foreground font-normal">(optionnel)</span></span>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <input 
+                        type="text" 
+                        name="lastname"
+                        className="w-full p-3 pl-10 rounded-lg border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none"
+                        placeholder="Dupont"
+                        value={data.lastname}
+                        onChange={(e) => updateData("lastname", e.target.value)}
+                        data-testid="input-wizard-lastname"
+                      />
+                    </div>
+                  </label>
+                </div>
                 <label className="block">
                   <span className="text-sm font-medium mb-1.5 block">Email</span>
                   <div className="relative">

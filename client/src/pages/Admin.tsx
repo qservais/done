@@ -227,8 +227,8 @@ export default function Admin() {
                   {selectedLead.businessName || selectedLead.activity}
                 </h1>
                 <p className="text-gray-500">{selectedLead.activity}{selectedLead.businessName ? ` — ${selectedLead.zone}` : ''}</p>
-                {selectedLead.name && selectedLead.name !== "Non renseigné" && (
-                  <p className="text-gray-400 text-sm">{selectedLead.name}</p>
+                {(selectedLead.name && selectedLead.name !== "Non renseigné" || selectedLead.lastname) && (
+                  <p className="text-gray-400 text-sm">{[selectedLead.name !== "Non renseigné" ? selectedLead.name : null, selectedLead.lastname].filter(Boolean).join(" ")}</p>
                 )}
               </div>
               <span className="text-sm text-gray-400">{formatDate(selectedLead.createdAt)}</span>

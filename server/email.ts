@@ -9,6 +9,7 @@ const CAL_BOOKING_URL = process.env.CAL_BOOKING_URL || "https://cal.com/madebydo
 type LeadData = {
   businessName?: string | null;
   name: string;
+  lastname?: string | null;
   email: string;
   phone: string;
   activity: string;
@@ -37,6 +38,7 @@ function sanitizeLead(lead: LeadData): LeadData {
     ...lead,
     businessName: lead.businessName ? escapeHtml(lead.businessName) : null,
     name: escapeHtml(lead.name),
+    lastname: lead.lastname ? escapeHtml(lead.lastname) : null,
     email: escapeHtml(lead.email),
     phone: escapeHtml(lead.phone),
     activity: escapeHtml(lead.activity),
@@ -255,7 +257,8 @@ export async function sendConfirmationEmail(leadRaw: LeadData) {
 
 export async function sendNotificationEmail(leadRaw: LeadData) {
   const lead = sanitizeLead(leadRaw);
-  const displayName = lead.businessName || (lead.name && lead.name !== "Non renseigné" ? lead.name : lead.activity);
+  const fullName = [lead.name, lead.lastname].filter(n => n && n !== "Non renseigné").join(" ");
+  const displayName = lead.businessName || (fullName || lead.activity);
   const pagesLabel = formatPages(lead.pages);
   const langLabel = formatLanguages(lead.languages);
   const domainLabel = formatDomain(lead.domain);

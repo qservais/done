@@ -268,8 +268,11 @@ export function LeadWizard() {
       });
 
       if (formRef.current) {
-        const nativeSubmit = new Event("submit", { bubbles: true, cancelable: true });
-        formRef.current.dispatchEvent(nativeSubmit);
+        try {
+          formRef.current.requestSubmit();
+        } catch {
+          formRef.current.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+        }
       }
 
       setIsSuccess(true);
@@ -312,7 +315,7 @@ export function LeadWizard() {
   }
 
   return (
-    <form ref={formRef} method="post" onSubmit={(e) => e.preventDefault()} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
+    <form ref={formRef} method="post" action="/" onSubmit={(e) => e.preventDefault()} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
       <input type="hidden" name="activity" value={activityOptions.find(a => a.value === data.activity)?.label || data.activity} />
       <input type="hidden" name="zone" value={data.zone} />
       <input type="hidden" name="pages" value={pagesOptions.find(p => p.value === data.pages)?.label || data.pages} />

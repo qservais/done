@@ -272,14 +272,6 @@ export function LeadWizard() {
         zone: data.zone,
       });
 
-      if (formRef.current) {
-        try {
-          formRef.current.requestSubmit();
-        } catch {
-          formRef.current.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-        }
-      }
-
       setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting lead:", error);

@@ -10,7 +10,7 @@ export const hero = {
   ],
   ctaPrimary: "Démarrer mon projet",
   ctaSecondary: "Voir les packs",
-  disclaimer: "À partir de 197€ + abonnement mensuel",
+  disclaimer: "À partir de 197€ + accompagnement mensuel",
 };
 
 export const problem = {

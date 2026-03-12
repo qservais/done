@@ -167,7 +167,7 @@ export function Packs() {
 
       <FadeIn delay={0.4} className="text-center mt-8 md:mt-10 space-y-2">
         <p className="text-sm text-muted-foreground">
-          + Abonnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
+          + Accompagnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
         </p>
         <p className="text-xs text-muted-foreground/50 italic">
           Pas de blabla. Du concret.

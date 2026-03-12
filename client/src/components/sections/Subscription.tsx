@@ -31,7 +31,7 @@ export function Subscription() {
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-10 max-w-3xl mx-auto backdrop-blur-sm">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 pb-6 border-b border-white/10">
             <div className="text-center sm:text-left">
-              <h3 className="text-xl md:text-2xl font-bold">Abonnement {BRAND.STUDIO_NAME}</h3>
+              <h3 className="text-xl md:text-2xl font-bold">Accompagnement {BRAND.STUDIO_NAME}</h3>
               <p className="text-primary-foreground/60 text-sm mt-1">Tout inclus, sans surprise</p>
             </div>
             <div className="flex items-baseline gap-1">

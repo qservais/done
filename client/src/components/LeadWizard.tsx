@@ -312,7 +312,7 @@ export function LeadWizard() {
   }
 
   return (
-    <form ref={formRef} onSubmit={(e) => e.preventDefault()} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
+    <form ref={formRef} method="post" onSubmit={(e) => e.preventDefault()} className="w-full max-w-lg md:max-w-2xl mx-auto bg-background border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col scroll-mt-8">
       <input type="hidden" name="activity" value={activityOptions.find(a => a.value === data.activity)?.label || data.activity} />
       <input type="hidden" name="zone" value={data.zone} />
       <input type="hidden" name="pages" value={pagesOptions.find(p => p.value === data.pages)?.label || data.pages} />
@@ -337,6 +337,7 @@ export function LeadWizard() {
               <div className="space-y-2.5">
                 {activityOptions.map((opt) => (
                   <button
+                    type="button"
                     key={opt.value}
                     onClick={() => {
                       triggerFormStart();
@@ -382,6 +383,7 @@ export function LeadWizard() {
                     <div className="grid grid-cols-2 gap-2.5">
                       {zoneOptions.map((opt) => (
                         <button
+                          type="button"
                           key={opt.value}
                           onClick={() => {
                             triggerFormStart();
@@ -444,6 +446,7 @@ export function LeadWizard() {
                   <div className="grid grid-cols-2 gap-2">
                     {pagesOptions.map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() => updateData("pages", opt.value)}
                         className={cn(
@@ -469,6 +472,7 @@ export function LeadWizard() {
                   <div className="grid grid-cols-3 gap-2">
                     {languagesOptions.map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() => updateData("languages", opt.value)}
                         className={cn(
@@ -493,6 +497,7 @@ export function LeadWizard() {
                   <div className="grid grid-cols-3 gap-2">
                     {domainOptions.map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() => updateData("domain", opt.value)}
                         className={cn(
@@ -517,6 +522,7 @@ export function LeadWizard() {
                   <div className="grid grid-cols-3 gap-2">
                     {timingOptions.map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() => updateData("timing", opt.value)}
                         className={cn(
@@ -620,6 +626,7 @@ export function LeadWizard() {
           <div className="flex gap-3">
             {step > 1 && (
               <Button 
+                type="button"
                 variant="outline" 
                 onClick={prevStep}
                 className="flex-shrink-0"
@@ -630,6 +637,7 @@ export function LeadWizard() {
             )}
             {step < totalSteps ? (
               <Button
+                type="button"
                 onClick={nextStep}
                 disabled={!canProceed()}
                 className="flex-1 bg-accent hover:bg-accent/90 text-white rounded-full h-12"
@@ -639,6 +647,7 @@ export function LeadWizard() {
               </Button>
             ) : (
               <Button
+                type="button"
                 onClick={submitForm}
                 disabled={isSubmitting || !canProceed()}
                 className="flex-1 bg-accent hover:bg-accent/90 text-white rounded-full h-12"

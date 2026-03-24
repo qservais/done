@@ -49,32 +49,30 @@ export default function Legal() {
           
           {page === "mentions" && (
             <>
+              <h3>Éditeur du site</h3>
               <p>
-                Conformément aux dispositions de la loi, voici les informations légales concernant le site de {BRAND.STUDIO_NAME}.
-              </p>
-
-              <h3>Éditeur</h3>
-              <p>
-                {BRAND.STUDIO_NAME}<br />
-                Adresse : [Adresse du studio]<br />
-                Email : hello@madebydone.be<br />
-                Numéro d'entreprise : [BE 0000.000.000]
+                <strong>DONE.</strong><br />
+                Rue Haute 12, Boîte 003<br />
+                4460 Grâce-Hollogne — Belgique<br />
+                Email : <a href="mailto:hello@madebydone.be">hello@madebydone.be</a><br />
+                Numéro d'entreprise (BCE) : BE 1035.756.397<br />
+                Représentée par : Maxime Gillent et Quentin Servais
               </p>
 
               <h3>Hébergement</h3>
               <p>
-                Le site est hébergé par Replit, Inc.<br />
-                Données localisées selon les standards en vigueur.
+                Ce site est hébergé par <strong>Replit, Inc.</strong><br />
+                767 Bryant St. #203, San Francisco, CA 94107, États-Unis
               </p>
 
-              <h3>Propriété Intellectuelle</h3>
+              <h3>Propriété intellectuelle</h3>
               <p>
-                Tout le contenu du présent site (images, textes, vidéos) est la propriété exclusive de {BRAND.STUDIO_NAME}, sauf mention contraire.
+                L'ensemble des contenus présents sur ce site (textes, visuels, logotype, structure) est la propriété exclusive de DONE., sauf mention contraire. Toute reproduction ou utilisation sans autorisation préalable est interdite.
               </p>
 
               <h3>Responsabilité</h3>
               <p>
-                {BRAND.STUDIO_NAME} ne peut être tenu responsable des dommages directs et indirects causés au matériel de l'utilisateur lors de l'accès au site.
+                DONE. met tout en œuvre pour assurer l'exactitude des informations publiées sur ce site. Toutefois, nous ne pouvons garantir l'exhaustivité ou l'actualité de ces informations et déclinons toute responsabilité pour les dommages directs ou indirects liés à leur utilisation.
               </p>
             </>
           )}

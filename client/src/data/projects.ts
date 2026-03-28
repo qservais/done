@@ -82,4 +82,25 @@ export const projects: Project[] = [
     tags: ["Isolation", "Multi-page"],
     gradient: "from-green-600 to-green-800",
   },
+  {
+    name: "On-Site Medic",
+    url: "https://onsitemedic.be/",
+    image: "/projects/onsitemedic_opt.webp",
+    tags: ["Médical", "Multi-page"],
+    gradient: "from-sky-600 to-blue-900",
+  },
+  {
+    name: "SL Rejointoyage",
+    url: "https://sl-rejointoyage.be/",
+    image: "/projects/slrejointoyage_opt.webp",
+    tags: ["Artisan", "Vitrine"],
+    gradient: "from-stone-700 to-stone-900",
+  },
+  {
+    name: "Urban Jungle",
+    url: "https://www.urban-jungle.net/",
+    image: "/projects/urbanjungle_opt.webp",
+    tags: ["Événementiel", "Premium"],
+    gradient: "from-yellow-400 to-pink-600",
+  },
 ];

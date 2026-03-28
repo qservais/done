@@ -3,50 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, Sparkles } from "lucide-react";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { trackPackSelect } from "@/lib/tracking";
-
-const packs = [
-  {
-    id: "vitrine",
-    name: "Site Vitrine Premium",
-    price: 197,
-    description: "Pour démarrer proprement.",
-    features: [
-      "Site one-page professionnel",
-      "Jusqu'à 6 sections sur mesure",
-      "Formulaire contact / devis intégré",
-      "Design moderne & responsive",
-      "Nom de domaine + mise en ligne",
-    ],
-  },
-  {
-    id: "multipage",
-    name: "Site Multi-pages Premium",
-    price: 297,
-    popular: true,
-    description: "Pour capter et convertir.",
-    features: [
-      "Structure multi-pages sur mesure",
-      "Système de réservation intégré",
-      "Interface d'administration",
-      "Design professionnel & responsive",
-      "Nom de domaine + mise en ligne",
-    ],
-  },
-  {
-    id: "ecommerce",
-    name: "Boutique E-commerce",
-    price: 797,
-    description: "Pour vendre en ligne.",
-    features: [
-      "Boutique en ligne complète",
-      "Catalogue produits illimité",
-      "Paiement sécurisé (Stripe/Mollie)",
-      "Admin complet (commandes, stocks)",
-      "Design optimisé conversion",
-      "Nom de domaine + mise en ligne",
-    ],
-  },
-];
+import { packs, MODULE_PRICES } from "@/data/pricing";
 
 const surMesureFeatures = [
   "Connexion CRM & outils métier",
@@ -171,7 +128,7 @@ export function Packs() {
 
       <FadeIn delay={0.4} className="text-center mt-8 md:mt-10 space-y-2">
         <p className="text-sm text-muted-foreground">
-          + Module mensuel dès 5,90€/mois (hébergement, maintenance, ajustements)
+          + Module mensuel dès {MODULE_PRICES.essentiel.toFixed(2).replace(".", ",")}€/mois (hébergement, maintenance, ajustements)
         </p>
         <p className="text-xs text-muted-foreground/50 italic">
           Pas de blabla. Du concret.

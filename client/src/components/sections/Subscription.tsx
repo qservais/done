@@ -1,52 +1,13 @@
 import { Section } from "@/components/ui/section";
 import { Check, Zap, Shield, TrendingUp } from "lucide-react";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
+import { modules } from "@/data/pricing";
 
-const modules = [
-  {
-    id: "essentiel",
-    name: "Module Essentiel",
-    price: 5.90,
-    description: "L'essentiel pour rester en ligne.",
-    icon: Shield,
-    features: [
-      "Hébergement du site",
-      "Sécurité & certificat SSL",
-      "Sauvegardes automatiques",
-      "Monitoring de disponibilité",
-    ],
-  },
-  {
-    id: "performance",
-    name: "Module Performance",
-    price: 19.90,
-    popular: true,
-    description: "Le suivi complet, mois après mois.",
-    icon: Zap,
-    features: [
-      "Hébergement & sécurité",
-      "Sauvegardes automatiques",
-      "Maintenance & mises à jour",
-      "Améliorations / ajustements",
-      "Support sous 48h",
-      "Conseils d'optimisation",
-    ],
-  },
-  {
-    id: "boost",
-    name: "Module Google Boost",
-    price: 49.90,
-    description: "Pour dominer Google.",
-    icon: TrendingUp,
-    features: [
-      "Tout ce qui est dans Performance",
-      "Optimisation SEO continue",
-      "Amélioration référencement Google",
-      "Optimisation technique (vitesse)",
-      "Conseils visibilité & positionnement",
-    ],
-  },
-];
+const iconMap: Record<string, React.ElementType> = {
+  essentiel: Shield,
+  performance: Zap,
+  boost: TrendingUp,
+};
 
 export function Subscription() {
   return (
@@ -63,7 +24,7 @@ export function Subscription() {
 
         <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
           {modules.map((mod) => {
-            const Icon = mod.icon;
+            const Icon = iconMap[mod.id] ?? Shield;
             return (
               <FadeIn
                 key={mod.id}
@@ -85,7 +46,9 @@ export function Subscription() {
                   </div>
                   <h3 className="text-lg font-bold text-white mb-1">{mod.name}</h3>
                   <div className="flex items-baseline justify-center gap-1 mb-1">
-                    <span className="text-3xl font-bold text-white">{mod.price.toFixed(2).replace(".", ",")}€</span>
+                    <span className="text-3xl font-bold text-white">
+                      {mod.price.toFixed(2).replace(".", ",")}€
+                    </span>
                     <span className="text-primary-foreground/60 text-sm">/mois</span>
                   </div>
                   <p className="text-xs text-primary-foreground/50">HTVA</p>

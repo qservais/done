@@ -301,7 +301,7 @@ export function LeadWizard() {
           </div>
         </div>
         <p className="text-xs text-muted-foreground mb-2">
-          Nos sites démarrent à {BRAND.PRICING.PACK_LANDING}€ + {BRAND.SUB_PRICE}€/mois
+          Nos sites démarrent à {BRAND.PRICING.PACK_VITRINE}€ + module mensuel dès {BRAND.PRICING.MODULE_ESSENTIEL}€/mois
         </p>
         <p className="text-sm text-muted-foreground mb-4">
           Envie d'en parler de vive voix ?

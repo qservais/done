@@ -4,7 +4,7 @@
 
 This is a premium web design studio website ("done") targeting freelancers and small businesses in Belgium, France, and Luxembourg. The platform serves as both a marketing showcase and a lead generation funnel, featuring a multi-step qualification wizard to capture potential clients.
 
-The site is built as a mobile-first, single-page application with smooth animations and a premium agency aesthetic. It offers tiered website packages (Landing, Vitrine, Multi-page) with a subscription-based hosting and maintenance model.
+The site is built as a mobile-first, single-page application with smooth animations and a premium agency aesthetic. It offers tiered website packages (Vitrine Premium 197€, Multi-pages Premium 297€, Boutique E-commerce 797€) with 3 monthly accompagnement modules (Essentiel 5,90€, Performance 19,90€, Google Boost 49,90€).
 
 **Domain**: madebydone.be
 
@@ -108,6 +108,11 @@ Each page uses the `<SEO>` component with:
 
 ## Recent Changes (March 2026)
 
+- **Refonte tarifaire complète**: 3 nouveaux packs one-time (Vitrine Premium 197€, Multi-pages Premium 297€, Boutique E-commerce 797€) + 3 modules mensuels (Essentiel 5,90€, Performance 19,90€, Google Boost 49,90€)
+- Subscription section redesigned: 3 cards côte à côte avec highlight sur Performance (recommandé)
+- Hero chip updated: "dès 5,90€/mois" + disclaimer "À partir de 197€ + module mensuel dès 5,90€"
+- FAQ updated to reference the 3 modules and their prices
+- LeadWizard micro-copy updated with new pricing
 - Split single "name" field into separate "Prénom" (firstname) and "Nom" (lastname) fields in lead wizard
 - Added HubSpot CRM integration: server-side sync via `server/hubspot.ts` pushes all lead data (firstname, lastname, email, phone, company, activity, zone, pages, languages, domain, timing, message) to HubSpot contacts on every form submission
 - Replaced "abonnement" terminology with "accompagnement" site-wide (Packs, Subscription section, FAQ, Hero)

@@ -6,11 +6,11 @@ export const hero = {
     { label: "Accompagnement complet", icon: "star" },
     { label: "Mobile-first", icon: "smartphone" },
     { label: "V1 en 72h", icon: "clock" },
-    { label: "19.99€/mois", icon: "creditcard" },
+    { label: "Dès 5,90€/mois", icon: "creditcard" },
   ],
   ctaPrimary: "Démarrer mon projet",
   ctaSecondary: "Voir les packs",
-  disclaimer: "À partir de 197€ + accompagnement mensuel",
+  disclaimer: "À partir de 197€ + module mensuel dès 5,90€",
 };
 
 export const problem = {

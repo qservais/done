@@ -6,7 +6,7 @@ export type FAQItem = {
 export const faqItems: FAQItem[] = [
   {
     question: "Pourquoi l'accompagnement est-il obligatoire ?",
-    answer: "L'accompagnement couvre l'hébergement, la maintenance, la sécurité et les petits ajustements mensuels. C'est ce qui nous permet de proposer des prix aussi bas sur les packs. Un site abandonné = un site vulnérable.",
+    answer: "L'accompagnement couvre l'hébergement, la sécurité et la maintenance de votre site. Sans lui, le site n'est pas en ligne. On propose 3 modules selon vos besoins : Essentiel (5,90€/mois), Performance (19,90€/mois) ou Google Boost (49,90€/mois).",
   },
   {
     question: "Comment se passe la livraison en 72h ?",
@@ -25,7 +25,7 @@ export const faqItems: FAQItem[] = [
     answer: "Bonne nouvelle ! On adapte la solution technique avec vous. Pas de surprises, on en discute pour trouver la meilleure option.",
   },
   {
-    question: "C'est quoi les 2 demandes d'ajustement/mois ?",
-    answer: "Chaque mois, vous pouvez demander 2 lots de petits changements (texte, image, ajout de section simple). Chaque demande = jusqu'à 30 min de travail + 1 aller-retour de validation.",
+    question: "C'est quoi les ajustements inclus dans Performance ?",
+    answer: "Avec le Module Performance, vous pouvez demander des modifications régulières (texte, image, ajout de section simple). Chaque demande couvre un lot de changements réalisables en 30 minutes, avec un aller-retour de validation.",
   },
 ];

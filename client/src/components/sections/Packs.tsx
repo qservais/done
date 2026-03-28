@@ -1,58 +1,60 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, Sparkles } from "lucide-react";
-import { BRAND } from "@/config/brand";
 import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
 import { trackPackSelect } from "@/lib/tracking";
 
 const packs = [
   {
-    id: "landing",
-    name: "Landing Express",
-    price: BRAND.PRICING.PACK_LANDING,
+    id: "vitrine",
+    name: "Site Vitrine Premium",
+    price: 197,
     description: "Pour démarrer proprement.",
     features: [
-      "1 page claire et premium",
-      "Sections essentielles",
-      "Design mobile-first",
-      "1 langue (FR)",
-      "1 aller-retour inclus",
-    ],
-  },
-  {
-    id: "vitrine",
-    name: "Vitrine Contact",
-    price: BRAND.PRICING.PACK_VITRINE,
-    popular: true,
-    description: "Pour capter des clients.",
-    includesPrevious: "Landing Express",
-    features: [
-      "Formulaire de contact efficace",
-      "Réception directe par email",
-      "Protection anti-spam",
+      "Site one-page professionnel",
+      "Jusqu'à 6 sections sur mesure",
+      "Formulaire contact / devis intégré",
+      "Design moderne & responsive",
+      "Nom de domaine + mise en ligne",
     ],
   },
   {
     id: "multipage",
-    name: "Multi-page Premium",
-    price: BRAND.PRICING.PACK_MULTIPAGE,
-    description: "Pour tout expliquer.",
-    includesPrevious: "Vitrine Contact",
+    name: "Site Multi-pages Premium",
+    price: 297,
+    popular: true,
+    description: "Pour capter et convertir.",
     features: [
-      "Jusqu'à 5 pages complètes",
-      "Animations légères premium",
-      "SEO de base (structure clean)",
+      "Structure multi-pages sur mesure",
+      "Système de réservation intégré",
+      "Interface d'administration",
+      "Design professionnel & responsive",
+      "Nom de domaine + mise en ligne",
+    ],
+  },
+  {
+    id: "ecommerce",
+    name: "Boutique E-commerce",
+    price: 797,
+    description: "Pour vendre en ligne.",
+    features: [
+      "Boutique en ligne complète",
+      "Catalogue produits illimité",
+      "Paiement sécurisé (Stripe/Mollie)",
+      "Admin complet (commandes, stocks)",
+      "Design optimisé conversion",
+      "Nom de domaine + mise en ligne",
     ],
   },
 ];
 
 const surMesureFeatures = [
-  "E-commerce / Webshop",
   "Connexion CRM & outils métier",
-  "Réservation en ligne",
   "Espace client / membres",
   "Multi-langue avancé",
+  "Automatisations & intégrations",
   "Fonctionnalités sur mesure",
+  "Architecture complexe",
 ];
 
 export function Packs() {
@@ -61,12 +63,12 @@ export function Packs() {
       <FadeIn className="text-center mb-12 md:mb-16">
         <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">Nos Packs</h2>
         <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto">
-          Des offres cumulatives. Plus vous montez, plus vous avez de valeur.
+          Choisissez la prestation adaptée à votre projet. Tous les prix sont HTVA.
         </p>
       </FadeIn>
 
       <StaggerChildren className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto">
-        {packs.map((pack, index) => (
+        {packs.map((pack) => (
           <FadeIn
             key={pack.id}
             className={`relative p-5 md:p-6 lg:p-8 rounded-2xl flex flex-col ${
@@ -77,7 +79,7 @@ export function Packs() {
           >
             {pack.popular && (
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-sm">
-                Recommandé
+                Populaire
               </span>
             )}
 
@@ -85,24 +87,16 @@ export function Packs() {
               <h3 className="text-lg md:text-xl font-bold mb-2 text-foreground">{pack.name}</h3>
               <div className="flex items-baseline justify-center gap-1 mb-2">
                 <span className="text-3xl md:text-4xl font-bold text-foreground">{pack.price}€</span>
+                <span className="text-sm text-muted-foreground ml-1">HTVA</span>
               </div>
               <p className="text-muted-foreground text-sm">{pack.description}</p>
             </div>
 
             <div className="flex-1 space-y-4 mb-6 md:mb-8">
-              {pack.includesPrevious && (
-                <div className="bg-accent/5 border border-accent/20 rounded-lg p-3 mb-4">
-                  <p className="text-xs font-semibold text-accent flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5" />
-                    Tout ce qu'il y a dans {pack.includesPrevious}
-                  </p>
-                </div>
-              )}
-
               <ul className="space-y-2.5">
                 {pack.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/80">
-                    <Check className={`w-4 h-4 shrink-0 mt-0.5 ${pack.includesPrevious ? 'text-accent' : 'text-primary'}`} />
+                    <Check className={`w-4 h-4 shrink-0 mt-0.5 ${pack.popular ? "text-accent" : "text-primary"}`} />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -118,7 +112,12 @@ export function Packs() {
               variant={pack.popular ? "default" : "outline"}
               asChild
             >
-              <a href="#wizard" className="flex items-center justify-center gap-1.5" data-testid={`link-pack-${pack.id}`} onClick={() => trackPackSelect(pack.name, pack.price)}>
+              <a
+                href="#wizard"
+                className="flex items-center justify-center gap-1.5"
+                data-testid={`link-pack-${pack.id}`}
+                onClick={() => trackPackSelect(pack.name, pack.price)}
+              >
                 Choisir ce pack <ChevronRight className="w-4 h-4" />
               </a>
             </Button>
@@ -156,7 +155,12 @@ export function Packs() {
                 className="w-full md:w-auto rounded-full px-8 py-5 font-semibold text-sm bg-foreground text-background hover:bg-foreground/90"
                 asChild
               >
-                <a href="#wizard" className="flex items-center justify-center gap-1.5" data-testid="link-pack-surmesure" onClick={() => trackPackSelect('Sur mesure', 0)}>
+                <a
+                  href="#wizard"
+                  className="flex items-center justify-center gap-1.5"
+                  data-testid="link-pack-surmesure"
+                  onClick={() => trackPackSelect("Sur mesure", 0)}
+                >
                   Discutons-en <ChevronRight className="w-4 h-4" />
                 </a>
               </Button>
@@ -167,7 +171,7 @@ export function Packs() {
 
       <FadeIn delay={0.4} className="text-center mt-8 md:mt-10 space-y-2">
         <p className="text-sm text-muted-foreground">
-          + Accompagnement {BRAND.SUB_PRICE}€/mois (hébergement, maintenance, ajustements)
+          + Module mensuel dès 5,90€/mois (hébergement, maintenance, ajustements)
         </p>
         <p className="text-xs text-muted-foreground/50 italic">
           Pas de blabla. Du concret.

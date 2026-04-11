@@ -94,6 +94,7 @@ Each page uses the `<SEO>` component with:
 - `RESEND_API_KEY`: Resend email service API key
 - `STUDIO_EMAIL`: Destination email for lead notifications (optional, defaults to hello@madebydone.be)
 - `HUBSPOT_ACCESS_TOKEN`: HubSpot Private App access token for CRM contact sync (requires `crm.objects.contacts.write` + `crm.objects.contacts.read` scopes)
+- `ANTHROPIC_API_KEY`: Anthropic API key for Claude AI description generation in /devis wizard (Step 3)
 
 ## Routes
 
@@ -105,6 +106,18 @@ Each page uses the `<SEO>` component with:
 | `/privacy` | Politique vie privée | noindex |
 | `/cookies` | Politique cookies | noindex |
 | `/admin` | Dashboard admin | Protected, noindex |
+| `/devis` | Wizard brief 13 étapes | noindex |
+
+## Recent Changes (April 2026)
+
+- **Page /devis — Wizard de qualification 13 étapes**: nouvelle page fullscreen `/devis` avec le composant `DevisWizard.tsx` (13 étapes + écran de confirmation); mobile-first app-like, animations Framer Motion glissement horizontal; progress bar; transitions entre étapes
+- **Étapes wizard**: Nom entreprise, Activité, Description IA (Claude claude-opus-4-5), Services/tags, Différenciation, Actions visiteurs (multi-choix), Réseaux sociaux, Langues, Objectifs, Coordonnées site, Photos, Module mensuel, Contact
+- **Claude AI**: Génération de description via `POST /api/briefs/generate-description` (ANTHROPIC_API_KEY déjà configuré); suggestion en card jaune cliquable
+- **Table briefs**: nouvelle table DB `briefs` (27 colonnes) pour stocker les briefs complets; `createBrief()` dans storage.ts
+- **Email notification briefs**: `server/email-brief.ts` → `sendBriefNotification()` envoie un email HTML formaté à hello@madebydone.be
+- **HubSpot sync**: les briefs sont pushés vers HubSpot contacts comme les leads
+- **CTAs mis à jour**: tous les boutons "Commencer", "Demander mon site", "Remplir le formulaire" pointent maintenant vers `/devis` (au lieu de `#wizard`)
+- **Module cards**: Step 12 importe les features depuis `data/pricing.ts` (single source of truth)
 
 ## Recent Changes (March 2026)
 

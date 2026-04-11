@@ -70,3 +70,39 @@ export const insertPartialLeadSchema = createInsertSchema(partialLeads).omit({
 
 export type InsertPartialLead = z.infer<typeof insertPartialLeadSchema>;
 export type PartialLead = typeof partialLeads.$inferSelect;
+
+export const briefs = pgTable("briefs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  companyName: text("company_name").notNull(),
+  activity: text("activity").notNull(),
+  activityDescription: text("activity_description"),
+  services: text("services"),
+  differentiator: text("differentiator"),
+  visitorActions: text("visitor_actions"),
+  socialInstagram: text("social_instagram"),
+  socialFacebook: text("social_facebook"),
+  socialGoogle: text("social_google"),
+  socialTiktok: text("social_tiktok"),
+  socialLinkedin: text("social_linkedin"),
+  languages: text("languages"),
+  objectives: text("objectives"),
+  sitePhone: text("site_phone"),
+  siteEmail: text("site_email"),
+  siteAddress: text("site_address"),
+  siteHours: text("site_hours"),
+  hasPhotos: boolean("has_photos"),
+  module: text("module"),
+  firstname: text("firstname").notNull(),
+  lastname: text("lastname"),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertBriefSchema = createInsertSchema(briefs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertBrief = z.infer<typeof insertBriefSchema>;
+export type Brief = typeof briefs.$inferSelect;

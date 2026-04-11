@@ -55,7 +55,7 @@ export function Header() {
               FR
             </button>
             <Button size="sm" className="rounded-full font-medium bg-accent hover:bg-accent/90" asChild>
-              <a href="#wizard">Commencer</a>
+              <Link href="/devis">Commencer</Link>
             </Button>
           </nav>
 
@@ -92,7 +92,7 @@ export function Header() {
               <button className="text-lg text-muted-foreground">EN</button>
             </div>
             <Button size="lg" className="w-full mt-8 rounded-full text-lg bg-accent hover:bg-accent/90" onClick={() => setIsOpen(false)} asChild>
-              <a href="#wizard">Commencer mon projet</a>
+              <Link href="/devis">Commencer mon projet</Link>
             </Button>
           </nav>
         </div>

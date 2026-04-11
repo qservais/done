@@ -85,7 +85,7 @@ export function MobileStickyCTA() {
                 className="flex-1 h-12 text-sm font-semibold bg-accent text-white hover:bg-accent/90 rounded-full shadow-lg shadow-accent/20"
                 asChild
               >
-                <a href="#wizard" data-testid="link-sticky-cta-primary" aria-label="Demander mon site" onClick={() => trackCTAClick('demander_site', 'sticky_mobile')}>
+                <a href="/devis" data-testid="link-sticky-cta-primary" aria-label="Demander mon site" onClick={() => trackCTAClick('demander_site', 'sticky_mobile')}>
                   Demander mon site <ArrowRight className="ml-1.5 w-4 h-4" />
                 </a>
               </Button>

@@ -70,7 +70,7 @@ export function Packs() {
               asChild
             >
               <a
-                href="#wizard"
+                href="/devis"
                 className="flex items-center justify-center gap-1.5"
                 data-testid={`link-pack-${pack.id}`}
                 onClick={() => trackPackSelect(pack.name, pack.price)}
@@ -113,7 +113,7 @@ export function Packs() {
                 asChild
               >
                 <a
-                  href="#wizard"
+                  href="/devis"
                   className="flex items-center justify-center gap-1.5"
                   data-testid="link-pack-surmesure"
                   onClick={() => trackPackSelect("Sur mesure", 0)}

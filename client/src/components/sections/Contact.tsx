@@ -26,7 +26,7 @@ export function Contact() {
         <FadeIn delay={0.2}>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             <Button size="lg" className="h-14 px-8 text-lg w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 rounded-full" asChild>
-              <a href="#wizard" onClick={() => trackCTAClick('remplir_formulaire', 'contact')}>
+              <a href="/devis" onClick={() => trackCTAClick('remplir_formulaire', 'contact')}>
                 Remplir le formulaire (2 min)
               </a>
             </Button>

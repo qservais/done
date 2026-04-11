@@ -8,6 +8,7 @@ import Home from "@/pages/Home";
 import RealizationsPage from "@/pages/RealizationsPage";
 import Legal from "@/pages/Legal";
 import Admin from "@/pages/Admin";
+import DevisPage from "@/pages/DevisPage";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -44,6 +45,7 @@ function Router() {
         <Route path="/privacy" component={Legal} />
         <Route path="/cookies" component={Legal} />
         <Route path="/admin" component={Admin} />
+        <Route path="/devis" component={DevisPage} />
         <Route component={NotFound} />
       </Switch>
     </>

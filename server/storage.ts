@@ -1,6 +1,6 @@
 import { db } from "@db";
 import { eq, desc, sql } from "drizzle-orm";
-import { type Lead, type InsertLead, leads, type PartialLead, type InsertPartialLead, partialLeads } from "@shared/schema";
+import { type Lead, type InsertLead, leads, type PartialLead, type InsertPartialLead, partialLeads, type Brief, type InsertBrief, briefs } from "@shared/schema";
 
 export interface IStorage {
   createLead(lead: InsertLead): Promise<Lead>;
@@ -10,6 +10,8 @@ export interface IStorage {
   markPartialLeadConverted(sessionId: string): Promise<void>;
   getAllPartialLeads(): Promise<PartialLead[]>;
   getUnconvertedPartialLeads(): Promise<PartialLead[]>;
+  createBrief(brief: InsertBrief): Promise<Brief>;
+  getAllBriefs(): Promise<Brief[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -71,6 +73,15 @@ export class DatabaseStorage implements IStorage {
       .from(partialLeads)
       .where(eq(partialLeads.converted, false))
       .orderBy(desc(partialLeads.updatedAt));
+  }
+
+  async createBrief(insertBrief: InsertBrief): Promise<Brief> {
+    const [brief] = await db.insert(briefs).values(insertBrief).returning();
+    return brief;
+  }
+
+  async getAllBriefs(): Promise<Brief[]> {
+    return await db.select().from(briefs).orderBy(desc(briefs.createdAt));
   }
 }
 

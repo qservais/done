@@ -289,8 +289,8 @@ export function DevisWizard() {
     </button>
   );
 
-  const inputClass = "w-full p-3 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm transition-all";
-  const textareaClass = "w-full p-3 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm resize-none transition-all";
+  const inputClass = "w-full p-3 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-base transition-all";
+  const textareaClass = "w-full p-3 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-base resize-none transition-all";
 
   const stepContent = () => {
     switch (step) {
@@ -303,12 +303,13 @@ export function DevisWizard() {
             </div>
             <input
               type="text"
-              autoFocus
               value={data.companyName}
               onChange={e => set("companyName", e.target.value)}
               onKeyDown={e => e.key === "Enter" && isStepValid(1, data) && goTo(2)}
               placeholder="Ex: Cabinet Dupont, La Bonne Fourchette…"
               className={inputClass}
+              autoComplete="organization"
+              enterKeyHint="next"
               data-testid="input-devis-company"
             />
           </div>
@@ -324,12 +325,13 @@ export function DevisWizard() {
             </div>
             <input
               type="text"
-              autoFocus
               value={data.activity}
               onChange={e => set("activity", e.target.value)}
               onKeyDown={e => e.key === "Enter" && isStepValid(2, data) && goTo(3)}
               placeholder="Ex: Dentiste spécialisé en orthodontie, Restaurant italien…"
               className={inputClass}
+              autoComplete="off"
+              enterKeyHint="next"
               data-testid="input-devis-activity"
             />
           </div>
@@ -345,12 +347,13 @@ export function DevisWizard() {
             </div>
             <div className="space-y-3">
               <textarea
-                autoFocus
                 value={data.activityDescription}
                 onChange={e => set("activityDescription", e.target.value)}
                 placeholder="Ce qui vous rend unique, votre histoire, vos atouts…"
                 rows={4}
                 className={textareaClass}
+                autoComplete="off"
+                enterKeyHint="next"
                 data-testid="textarea-devis-description"
               />
               <button
@@ -393,12 +396,13 @@ export function DevisWizard() {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  autoFocus
                   value={serviceInput}
                   onChange={e => setServiceInput(e.target.value)}
                   onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addService(); } }}
                   placeholder="Ex: Coiffure femme, Balayage…"
                   className={cn(inputClass, "flex-1")}
+                  autoComplete="off"
+                  enterKeyHint="done"
                   data-testid="input-devis-service"
                 />
                 <button
@@ -434,12 +438,13 @@ export function DevisWizard() {
               <p className="text-sm text-muted-foreground mt-1">Ce qui fait que vos clients vous choisissent.</p>
             </div>
             <textarea
-              autoFocus
               value={data.differentiator}
               onChange={e => set("differentiator", e.target.value)}
               placeholder="Ex: 15 ans d'expérience, service personnalisé, livraison gratuite…"
               rows={3}
               className={textareaClass}
+              autoComplete="off"
+              enterKeyHint="next"
               data-testid="textarea-devis-differentiator"
             />
           </div>
@@ -490,7 +495,9 @@ export function DevisWizard() {
                       value={data[f.key]}
                       onChange={e => set(f.key, e.target.value)}
                       placeholder={f.placeholder}
-                      className="w-full text-sm focus:outline-none bg-transparent"
+                      className="w-full text-base focus:outline-none bg-transparent"
+                      enterKeyHint="next"
+                      autoComplete="off"
                     />
                   </div>
                 </div>
@@ -563,7 +570,9 @@ export function DevisWizard() {
                       value={data[f.key]}
                       onChange={e => set(f.key, e.target.value as never)}
                       placeholder={f.placeholder}
-                      className="w-full text-sm focus:outline-none bg-transparent"
+                      className="w-full text-base focus:outline-none bg-transparent"
+                      enterKeyHint="next"
+                      autoComplete={f.type === "email" ? "email" : f.type === "tel" ? "tel" : "off"}
                     />
                   </div>
                 </div>
@@ -662,11 +671,12 @@ export function DevisWizard() {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                       type="text"
-                      autoFocus
                       value={data.firstname}
                       onChange={e => set("firstname", e.target.value)}
                       placeholder="Jean"
-                      className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm transition-all"
+                      className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-base transition-all"
+                      autoComplete="given-name"
+                      enterKeyHint="next"
                       data-testid="input-devis-firstname"
                     />
                   </div>
@@ -680,7 +690,9 @@ export function DevisWizard() {
                       value={data.lastname}
                       onChange={e => set("lastname", e.target.value)}
                       placeholder="Dupont"
-                      className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm transition-all"
+                      className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-base transition-all"
+                      autoComplete="family-name"
+                      enterKeyHint="next"
                       data-testid="input-devis-lastname"
                     />
                   </div>
@@ -695,7 +707,10 @@ export function DevisWizard() {
                     value={data.email}
                     onChange={e => set("email", e.target.value)}
                     placeholder="votre@email.com"
-                    className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm transition-all"
+                    className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-base transition-all"
+                    autoComplete="email"
+                    inputMode="email"
+                    enterKeyHint="next"
                     data-testid="input-devis-email"
                   />
                 </div>
@@ -709,7 +724,10 @@ export function DevisWizard() {
                     value={data.phone}
                     onChange={e => set("phone", e.target.value)}
                     placeholder="0498 12 34 56"
-                    className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-sm transition-all"
+                    className="w-full p-3 pl-10 rounded-xl border border-input bg-transparent focus:ring-1 focus:ring-accent outline-none text-base transition-all"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    enterKeyHint="done"
                     data-testid="input-devis-phone"
                   />
                 </div>

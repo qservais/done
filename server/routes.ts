@@ -12,6 +12,33 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+const aiRateLimiter = new Map<string, { count: number; resetAt: number }>();
+const AI_RATE_LIMIT = 5;
+const AI_RATE_WINDOW_MS = 60 * 1000;
+
+function checkAiRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = aiRateLimiter.get(ip);
+  if (!entry || now > entry.resetAt) {
+    aiRateLimiter.set(ip, { count: 1, resetAt: now + AI_RATE_WINDOW_MS });
+    return true;
+  }
+  if (entry.count >= AI_RATE_LIMIT) return false;
+  entry.count += 1;
+  return true;
+}
+
+function safeParseJsonArray(val: string | null | undefined): string | null {
+  if (!val) return null;
+  try {
+    const arr = JSON.parse(val);
+    if (Array.isArray(arr)) return arr.join(", ");
+    return val;
+  } catch {
+    return val;
+  }
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -182,14 +209,26 @@ export async function registerRoutes(
 
   app.post("/api/briefs/generate-description", async (req, res) => {
     try {
+      const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "unknown";
+      if (!checkAiRateLimit(ip)) {
+        return res.status(429).json({
+          success: false,
+          message: "Trop de requêtes. Veuillez réessayer dans une minute.",
+        });
+      }
+
       const { businessName, activity } = req.body;
       
-      if (!businessName || !activity) {
+      if (!businessName || typeof businessName !== "string" || businessName.trim().length === 0 ||
+          !activity || typeof activity !== "string" || activity.trim().length === 0) {
         return res.status(400).json({
           success: false,
           message: "businessName et activity sont requis",
         });
       }
+
+      const safeBusinessName = businessName.trim().slice(0, 200);
+      const safeActivity = activity.trim().slice(0, 200);
 
       if (!process.env.ANTHROPIC_API_KEY) {
         return res.status(503).json({
@@ -204,7 +243,7 @@ export async function registerRoutes(
         messages: [
           {
             role: "user",
-            content: `Génère une description professionnelle en français pour le site web de "${businessName}", une entreprise spécialisée en "${activity}". 
+            content: `Génère une description professionnelle en français pour le site web de "${safeBusinessName}", une entreprise spécialisée en "${safeActivity}". 
 
 La description doit :
 - Faire 2 à 3 phrases maximum
@@ -248,13 +287,13 @@ Réponds uniquement avec la description, sans introduction ni commentaire.`,
           activity: briefData.activity,
           zone: null,
           pages: null,
-          languages: briefData.languages ? JSON.parse(briefData.languages).join(", ") : null,
+          languages: safeParseJsonArray(briefData.languages),
           domain: null,
           timing: null,
           message: [
             briefData.activityDescription ? `Description: ${briefData.activityDescription}` : null,
             briefData.differentiator ? `Différenciation: ${briefData.differentiator}` : null,
-            briefData.objectives ? `Objectifs: ${JSON.parse(briefData.objectives).join(", ")}` : null,
+            briefData.objectives ? `Objectifs: ${safeParseJsonArray(briefData.objectives)}` : null,
             briefData.module ? `Module: ${briefData.module}` : null,
           ].filter(Boolean).join(" | ") || null,
         }),

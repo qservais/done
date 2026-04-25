@@ -20,6 +20,16 @@ const reviews = [
     project: "Guardians of Light",
     text: "Professionnalisme, écoute, de très bons conseils pour réaliser notre website. En 24 heures il était fait. Pour un prix modique il fait des merveilles, très réactif même durant les week-ends.",
   },
+  {
+    name: "Vanessa Gavage",
+    project: "Client Belgique",
+    text: "À l'écoute, très professionnel et disponible. Je recommande sans hésitation. D'ailleurs merci à vous pour votre travail.",
+  },
+  {
+    name: "Yann Stroobant",
+    project: "Client Belgique",
+    text: "Réactivité et suivi au top pour les mises à jour et les questions. Professionnel et efficace !",
+  },
 ];
 
 function ReviewStar({ index }: { index: number }) {
@@ -89,11 +99,11 @@ export function Reviews() {
         </div>
 
         <p className="text-sm text-muted-foreground" data-testid="text-review-count">
-          5/5 — basé sur les retours de nos clients
+          5/5 — 5 avis vérifiés Trustpilot
         </p>
       </motion.div>
 
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10 max-w-4xl mx-auto">
         {reviews.map((review, i) => (
           <ReviewCard key={i} review={review} index={i} />
         ))}

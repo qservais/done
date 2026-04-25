@@ -5,45 +5,74 @@ import { SEO } from "@/components/SEO";
 import { StructuredData } from "@/components/StructuredData";
 import { ExternalLink, Star } from "lucide-react";
 import { projects } from "@/data/projects";
-import { FadeIn, StaggerChildren } from "@/components/ui/fade-in";
+import { FadeIn } from "@/components/ui/fade-in";
 import { MadeByDoneBadge } from "@/components/signature";
 import { trackProjectClick } from "@/lib/tracking";
+import { useState } from "react";
+
+const ALL_TAGS = ["Tous", ...Array.from(new Set(projects.flatMap(p => p.tags))).sort()];
 
 export default function RealizationsPage() {
+  const [activeTag, setActiveTag] = useState("Tous");
+
+  const filtered = activeTag === "Tous"
+    ? projects
+    : projects.filter(p => p.tags.includes(activeTag));
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
       <SEO
-        title="Projets & études de cas — done"
-        description="Avant/Après, choix UX, tracking, Ads. Des projets livrés vite, propres, mesurables."
+        title="Réalisations — done. · Sites web Belgique"
+        description="19+ sites livrés pour des restaurants, artisans, médecins et commerces belges. Mobile-first, rapide, premium."
         canonical="https://madebydone.be/realisations"
       />
       <StructuredData type="localBusiness" />
-      <StructuredData 
-        type="breadcrumb" 
+      <StructuredData
+        type="breadcrumb"
         breadcrumbs={[
           { name: "Accueil", url: "https://madebydone.be" },
           { name: "Réalisations", url: "https://madebydone.be/realisations" }
-        ]} 
+        ]}
       />
-      
+
       <Header />
       <main className="pt-28 md:pt-32">
         <Section className="pb-20 md:pb-28">
           <FadeIn>
-            <div className="max-w-3xl mb-16 md:mb-20">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <div className="max-w-3xl mb-10 md:mb-14">
+              <p className="text-xs tracking-widest uppercase font-medium text-muted-foreground/60 mb-4">Réalisations</p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
                 Before → <span className="text-accent">Done.</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-xl">
-                Des sites vitrines, des landing pages et des projets sur-mesure.
-                Chaque projet livré vite, propre, mesurable.
+                {projects.length} projets livrés — restaurants, artisans, médecins, commerces.
+                Mobile-first, propres, mesurables.
               </p>
             </div>
           </FadeIn>
 
-          <StaggerChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {projects.map((project, index) => (
-              <FadeIn key={index} delay={index * 0.05}>
+          <FadeIn delay={0.1}>
+            <div className="flex flex-wrap gap-2 mb-10 md:mb-12">
+              {ALL_TAGS.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setActiveTag(tag)}
+                  className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-all border ${
+                    activeTag === tag
+                      ? "bg-accent text-white border-accent"
+                      : "bg-background text-muted-foreground border-border hover:border-accent/50 hover:text-accent"
+                  }`}
+                  data-testid={`filter-${tag.toLowerCase().replace(/\s/g, "-")}`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {filtered.map((project, index) => (
+              <FadeIn key={project.name} delay={index * 0.04}>
                 <a
                   href={project.url}
                   target="_blank"
@@ -61,7 +90,6 @@ export default function RealizationsPage() {
                         <div className="bg-background/80 rounded-md h-5 w-full max-w-[140px] mx-auto" />
                       </div>
                     </div>
-                    
                     <div className={`aspect-[16/10] bg-gradient-to-br ${project.gradient} flex items-center justify-center relative overflow-hidden`}>
                       {project.image ? (
                         <img
@@ -87,26 +115,26 @@ export default function RealizationsPage() {
                       )}
                     </div>
                   </div>
-
                   <div className="p-5 md:p-6">
                     <div className="flex justify-between items-start gap-3">
                       <div className="min-w-0">
-                        <h2 className="font-bold text-lg md:text-xl text-foreground group-hover:text-accent transition-colors">
+                        <h2 className="font-bold text-base md:text-lg text-foreground group-hover:text-accent transition-colors truncate">
                           {project.name}
                         </h2>
-                        <div className="flex flex-wrap items-center gap-2 mt-3">
+                        <div className="flex flex-wrap items-center gap-2 mt-2.5">
                           {project.tags.map((tag, i) => (
-                            <span 
+                            <button
                               key={i}
-                              className="px-2.5 py-1 bg-secondary text-muted-foreground text-xs font-medium rounded-full"
+                              onClick={e => { e.preventDefault(); setActiveTag(tag); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                              className="px-2.5 py-0.5 bg-secondary text-muted-foreground text-xs font-medium rounded-full hover:bg-accent/10 hover:text-accent transition-colors"
                             >
                               {tag}
-                            </span>
+                            </button>
                           ))}
                           <MadeByDoneBadge variant="subtle" />
                         </div>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-foreground group-hover:bg-accent group-hover:text-white transition-all shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-foreground group-hover:bg-accent group-hover:text-white transition-all shrink-0 mt-0.5">
                         <ExternalLink className="w-4 h-4" />
                       </div>
                     </div>
@@ -114,7 +142,21 @@ export default function RealizationsPage() {
                 </a>
               </FadeIn>
             ))}
-          </StaggerChildren>
+          </div>
+
+          {filtered.length === 0 && (
+            <FadeIn>
+              <div className="text-center py-20 text-muted-foreground">
+                Aucun projet dans cette catégorie pour l'instant.
+              </div>
+            </FadeIn>
+          )}
+
+          <FadeIn delay={0.3} className="mt-14 text-center">
+            <p className="text-xs text-muted-foreground/40 italic">
+              Tous les projets sont livrés par done — mobile-first, hébergés, maintenus.
+            </p>
+          </FadeIn>
         </Section>
       </main>
       <Footer />

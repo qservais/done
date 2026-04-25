@@ -7,9 +7,71 @@ export type Project = {
   tags: string[];
   gradient: string;
   hasReview?: boolean;
+  featured?: boolean;
 };
 
 export const projects: Project[] = [
+  {
+    name: "Kuore",
+    url: "https://kuore.be/",
+    image: "/projects/kuore_opt.webp",
+    tags: ["Restaurant", "Premium"],
+    gradient: "from-red-900 to-stone-800",
+    featured: true,
+  },
+  {
+    name: "Mood BXL",
+    url: "https://moodbxl.com/",
+    image: "/projects/moodbxl_opt.webp",
+    tags: ["Mode", "E-commerce"],
+    gradient: "from-stone-200 to-stone-400",
+    featured: true,
+  },
+  {
+    name: "Laser Cleaning",
+    url: "https://lasercleaning.pro/",
+    image: "/projects/lasercleaning_opt.webp",
+    tags: ["Industrie", "Multi-page"],
+    gradient: "from-slate-800 to-orange-900",
+    featured: true,
+  },
+  {
+    name: "Assitel",
+    url: "https://assitel.be/",
+    image: "/projects/assitel_opt.webp",
+    tags: ["Médical", "Services"],
+    gradient: "from-blue-600 to-blue-900",
+    featured: true,
+  },
+  {
+    name: "Kollich Toiture",
+    url: "https://kollich-toiture.be/",
+    image: "/projects/kollichtoiture_opt.webp",
+    tags: ["Artisan", "Multi-page"],
+    gradient: "from-orange-600 to-zinc-800",
+    featured: true,
+  },
+  {
+    name: "Maymss Car",
+    url: "https://maymss-car.be/",
+    image: "/projects/maymsscar_opt.webp",
+    tags: ["Automobile", "Multi-page"],
+    gradient: "from-zinc-800 to-yellow-900",
+    featured: true,
+  },
+  {
+    name: "Frites & Fourchettes",
+    url: "https://fritesetfourchette.be/",
+    image: "/projects/fritesetfourchette_opt.webp",
+    tags: ["Friterie", "Livraison"],
+    gradient: "from-amber-700 to-yellow-900",
+  },
+  {
+    name: "Quebarca",
+    url: "https://quebarca.be/",
+    tags: ["Bar", "Restaurant"],
+    gradient: "from-red-900 to-zinc-900",
+  },
   {
     name: "Restaurant Danieli",
     url: "https://restaurantdanieli.be/",
@@ -23,13 +85,6 @@ export const projects: Project[] = [
     image: "/projects/mabelita_opt.webp",
     tags: ["Restaurant", "Foodtruck"],
     gradient: "from-red-600 to-orange-500",
-  },
-  {
-    name: "DSV Burgers",
-    url: "https://dsvburgers.be/",
-    image: "/projects/dsvburgers_opt.webp",
-    tags: ["Restaurant", "Livraison"],
-    gradient: "from-yellow-400 to-red-500",
   },
   {
     name: "Ideal Fitness",
@@ -97,3 +152,5 @@ export const projects: Project[] = [
     gradient: "from-yellow-400 to-pink-600",
   },
 ];
+
+export const featuredProjects = projects.filter(p => p.featured);

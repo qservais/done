@@ -69,6 +69,7 @@ export const projects: Project[] = [
   {
     name: "Quebarca",
     url: "https://quebarca.be/",
+    image: "/projects/quebarca_opt.webp",
     tags: ["Bar", "Restaurant"],
     gradient: "from-red-900 to-zinc-900",
   },

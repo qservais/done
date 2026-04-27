@@ -1,7 +1,7 @@
 import { Section } from "@/components/ui/section";
 import { ExternalLink, Star, ArrowRight } from "lucide-react";
 import { FadeIn } from "@/components/ui/fade-in";
-import { featuredProjects } from "@/data/projects";
+import { featuredProjects, projects } from "@/data/projects";
 import { MadeByDoneBadge, DoneStamp } from "@/components/signature";
 import { trackProjectClick } from "@/lib/tracking";
 import { Link } from "wouter";
@@ -104,7 +104,7 @@ export function Realizations() {
 
       <FadeIn delay={0.4} className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border pt-8">
         <p className="text-sm text-muted-foreground/60">
-          +19 projets livrés — secteurs variés, Belgique & Luxembourg.
+          +{projects.length} projets livrés — secteurs variés, Belgique & Luxembourg.
         </p>
         <Link
           href="/realisations"

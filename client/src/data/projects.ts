@@ -73,6 +73,13 @@ export const projects: Project[] = [
     gradient: "from-red-900 to-zinc-900",
   },
   {
+    name: "Vert & Vie",
+    url: "https://www.vert-et-vie.be/",
+    image: "/projects/vertetvie_opt.webp",
+    tags: ["Association", "Multi-page"],
+    gradient: "from-green-700 to-green-900",
+  },
+  {
     name: "Restaurant Danieli",
     url: "https://restaurantdanieli.be/",
     image: "/projects/danieli_opt.webp",

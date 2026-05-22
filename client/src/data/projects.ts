@@ -12,6 +12,13 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Heron Solutions",
+    url: "https://heronsolutions.be/",
+    image: "/projects/heronsolutions_opt.webp",
+    tags: ["Artisan", "Multi-page"],
+    gradient: "from-green-800 to-green-950",
+  },
+  {
     name: "Smart Analytics",
     url: "https://smartanalytics.be/",
     image: "/projects/smartanalytics_opt.webp",

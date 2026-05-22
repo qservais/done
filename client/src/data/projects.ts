@@ -12,6 +12,13 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Mon Réseau Immo",
+    url: "https://monreseauimmo.be/",
+    image: "/projects/reseauimmo_opt.webp",
+    tags: ["Immobilier", "Événementiel"],
+    gradient: "from-amber-900 to-zinc-900",
+  },
+  {
     name: "Évasion Camping-Car",
     url: "https://mon-evasion-campingcar.fr/",
     image: "/projects/evasioncampingcar_opt.webp",

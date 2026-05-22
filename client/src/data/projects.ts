@@ -12,6 +12,13 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Smart Analytics",
+    url: "https://smartanalytics.be/",
+    image: "/projects/smartanalytics_opt.webp",
+    tags: ["Tech", "Multi-page"],
+    gradient: "from-violet-600 to-purple-900",
+  },
+  {
     name: "Mon Réseau Immo",
     url: "https://monreseauimmo.be/",
     image: "/projects/reseauimmo_opt.webp",

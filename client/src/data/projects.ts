@@ -60,7 +60,6 @@ export const projects: Project[] = [
     image: "/projects/moodbxl_opt.webp",
     tags: ["Mode", "E-commerce"],
     gradient: "from-stone-200 to-stone-400",
-    featured: true,
   },
   {
     name: "Laser Cleaning",
@@ -68,7 +67,6 @@ export const projects: Project[] = [
     image: "/projects/lasercleaning_opt.webp",
     tags: ["Industrie", "Multi-page"],
     gradient: "from-slate-800 to-orange-900",
-    featured: true,
   },
   {
     name: "Assitel",
@@ -76,7 +74,6 @@ export const projects: Project[] = [
     image: "/projects/assitel_opt.webp",
     tags: ["Médical", "Services"],
     gradient: "from-blue-600 to-blue-900",
-    featured: true,
   },
   {
     name: "Kollich Toiture",
@@ -84,7 +81,6 @@ export const projects: Project[] = [
     image: "/projects/kollichtoiture_opt.webp",
     tags: ["Artisan", "Multi-page"],
     gradient: "from-orange-600 to-zinc-800",
-    featured: true,
   },
   {
     name: "Maymss Car",
@@ -92,7 +88,6 @@ export const projects: Project[] = [
     image: "/projects/maymsscar_opt.webp",
     tags: ["Automobile", "Multi-page"],
     gradient: "from-zinc-800 to-yellow-900",
-    featured: true,
   },
   {
     name: "Frites & Fourchettes",
@@ -100,6 +95,7 @@ export const projects: Project[] = [
     image: "/projects/fritesetfourchette_opt.webp",
     tags: ["Friterie", "Livraison"],
     gradient: "from-amber-700 to-yellow-900",
+    featured: true,
   },
   {
     name: "Quebarca",
@@ -107,6 +103,7 @@ export const projects: Project[] = [
     image: "/projects/quebarca_opt.webp",
     tags: ["Bar", "Restaurant"],
     gradient: "from-red-900 to-zinc-900",
+    featured: true,
   },
   {
     name: "Vert & Vie",
@@ -114,6 +111,7 @@ export const projects: Project[] = [
     image: "/projects/vertetvie_opt.webp",
     tags: ["Association", "Multi-page"],
     gradient: "from-green-700 to-green-900",
+    featured: true,
   },
   {
     name: "Restaurant Danieli",
@@ -144,6 +142,7 @@ export const projects: Project[] = [
     tags: ["Vitrine", "Premium"],
     gradient: "from-amber-100 to-amber-200",
     hasReview: true,
+    featured: true,
   },
   {
     name: "Aste Esthétique",
@@ -158,6 +157,7 @@ export const projects: Project[] = [
     image: "/projects/dissocle_opt.webp",
     tags: ["Architecture", "Multi-page"],
     gradient: "from-slate-100 to-slate-200",
+    featured: true,
   },
   {
     name: "Mouv'Up",

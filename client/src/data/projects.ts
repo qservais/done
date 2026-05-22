@@ -12,12 +12,19 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Moment.",
+    url: "https://moment-liege.be/",
+    image: "/projects/moment_opt.webp",
+    tags: ["Restaurant", "Premium"],
+    gradient: "from-stone-800 to-zinc-900",
+    featured: true,
+  },
+  {
     name: "Kuore",
     url: "https://kuore.be/",
     image: "/projects/kuore_opt.webp",
     tags: ["Restaurant", "Premium"],
     gradient: "from-red-900 to-stone-800",
-    featured: true,
   },
   {
     name: "Mood BXL",

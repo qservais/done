@@ -5,6 +5,7 @@ import { insertLeadSchema, insertPartialLeadSchema, insertBriefSchema } from "@s
 import { sendConfirmationEmail, sendNotificationEmail } from "./email";
 import { sendBriefNotification } from "./email-brief";
 import { pushLeadToHubSpot } from "./hubspot";
+import { registerBlogRoutes } from "./blog-routes";
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 
@@ -43,6 +44,8 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  registerBlogRoutes(app);
+
   app.post("/api/leads", async (req, res) => {
     try {
       const { siteInspi, objectifs, ...leadPayload } = req.body;

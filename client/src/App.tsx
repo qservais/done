@@ -9,6 +9,8 @@ import RealizationsPage from "@/pages/RealizationsPage";
 import Legal from "@/pages/Legal";
 import Admin from "@/pages/Admin";
 import DevisPage from "@/pages/DevisPage";
+import Guides from "@/pages/Guides";
+import GuideArticle from "@/pages/GuideArticle";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -46,6 +48,8 @@ function Router() {
         <Route path="/cookies" component={Legal} />
         <Route path="/admin" component={Admin} />
         <Route path="/devis" component={DevisPage} />
+        <Route path="/guides" component={Guides} />
+        <Route path="/guides/:slug" component={GuideArticle} />
         <Route component={NotFound} />
       </Switch>
     </>

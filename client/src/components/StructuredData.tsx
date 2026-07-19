@@ -87,16 +87,46 @@ function createBreadcrumbSchema(items: BreadcrumbItem[]) {
   };
 }
 
-interface StructuredDataProps {
-  type: "localBusiness" | "website" | "breadcrumb";
-  breadcrumbs?: BreadcrumbItem[];
+interface ArticleData {
+  headline: string;
+  description: string;
+  image?: string;
+  datePublished: string;
+  dateModified: string;
+  authorName: string;
+  url: string;
 }
 
-export function StructuredData({ type, breadcrumbs }: StructuredDataProps) {
+function createArticleSchema(article: ArticleData) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.headline,
+    "description": article.description,
+    ...(article.image ? { "image": [article.image] } : {}),
+    "datePublished": article.datePublished,
+    "dateModified": article.dateModified,
+    "author": { "@type": "Organization", "name": article.authorName },
+    "publisher": {
+      "@type": "Organization",
+      "name": article.authorName,
+      "logo": { "@type": "ImageObject", "url": "https://madebydone.be/logo-done.svg" }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": article.url }
+  };
+}
+
+interface StructuredDataProps {
+  type: "localBusiness" | "website" | "breadcrumb" | "article";
+  breadcrumbs?: BreadcrumbItem[];
+  article?: ArticleData;
+}
+
+export function StructuredData({ type, breadcrumbs, article }: StructuredDataProps) {
   useEffect(() => {
     const id = `structured-data-${type}`;
     let script = document.getElementById(id) as HTMLScriptElement;
-    
+
     if (!script) {
       script = document.createElement("script");
       script.id = id;
@@ -117,6 +147,11 @@ export function StructuredData({ type, breadcrumbs }: StructuredDataProps) {
           schema = createBreadcrumbSchema(breadcrumbs);
         }
         break;
+      case "article":
+        if (article) {
+          schema = createArticleSchema(article);
+        }
+        break;
     }
 
     if (schema) {
@@ -129,7 +164,7 @@ export function StructuredData({ type, breadcrumbs }: StructuredDataProps) {
         existingScript.remove();
       }
     };
-  }, [type, breadcrumbs]);
+  }, [type, breadcrumbs, article]);
 
   return null;
 }

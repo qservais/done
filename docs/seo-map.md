@@ -69,6 +69,43 @@
 
 ---
 
+### GUIDES `/guides`
+
+| Élément | Valeur |
+|---------|--------|
+| **Title** | Guides & conseils — done. · Sites web Belgique |
+| **Meta description** | Conseils sur la création de sites web, le SEO et le digital pour indépendants et PME en Belgique, France et Luxembourg. |
+| **H1** | Nos guides. |
+| **Canonical** | https://madebydone.be/guides |
+| **Notes** | Liste des articles publiés via `GET /api/seo-pages`. Schema: BreadcrumbList |
+
+---
+
+### ARTICLE DE GUIDE `/guides/:slug`
+
+| Élément | Valeur |
+|---------|--------|
+| **Title** | `{metaTitle ?? title} — done.` |
+| **Meta description** | Générée par article (`metaDescription`, ≤170 caractères) |
+| **H1** | Titre de l'article |
+| **Canonical** | https://madebydone.be/guides/:slug |
+| **Notes** | Contenu généré automatiquement — voir "Générateur de blog SEO" ci-dessous. Schema: Article + BreadcrumbList. Pré-rendu HTML pour les bots via middleware Express (avant le bundle React). |
+
+---
+
+## Générateur de blog SEO (`/guides`)
+
+Système de génération automatique d'articles pour alimenter `/guides`, ajouté en juillet 2026.
+
+- **Génération** : `POST /api/generate-content` (Bearer `CRON_SECRET`) — Claude (`claude-sonnet-5`) génère un article via sortie structurée (`output_config.format`, pas de prefill assistant — ce dernier renvoie 400 sur les modèles actuels), validé côté client par le même schéma Zod.
+- **Image hero** : générée par Flux Schnell (fal.ai) et hébergée sur Cloudinary ; non bloquant — si `FAL_KEY`/`CLOUDINARY_URL` sont absents ou que la génération échoue, l'article est publié avec un fallback dégradé CSS.
+- **Config métier** : `server/blog-config.ts` (catégories, longueur cible, modèle, service area) + `server/blog-topics.json` (catalogue de sujets, éditable sans redéploiement).
+- **Fichiers serveur** : `server/blog-generate.ts` (génération), `server/blog-routes.ts` (routes + sitemap dynamique), `server/blog-prerender.ts` (pré-rendu bots), `server/storage.ts` (accès DB).
+- **Monitoring** : `GET /api/seo-pages/_stats` (Bearer `ADMIN_PASSWORD`) — coût total et dernière génération.
+- **Cron externe** : voir `replit.md` pour les variables d'environnement requises (`CRON_SECRET`, `FAL_KEY`, `CLOUDINARY_URL`, `SITE_URL` optionnel).
+
+---
+
 ## Pages futures (TODO)
 
 ### SERVICES `/services`
@@ -175,8 +212,8 @@
 - [ ] Canonical sur chaque page
 - [ ] OpenGraph complet
 - [ ] Twitter Cards
-- [ ] Sitemap.xml
-- [ ] Robots.txt
+- [x] Sitemap.xml (dynamique, `GET /sitemap.xml`, inclut les articles `/guides`)
+- [x] Robots.txt (`client/public/robots.txt`)
 - [ ] JSON-LD Organization
 - [ ] JSON-LD WebSite
 - [ ] Favicon complet (ico, apple-touch-icon)

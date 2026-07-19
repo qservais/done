@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, boolean, jsonb, numeric } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -106,3 +106,56 @@ export const insertBriefSchema = createInsertSchema(briefs).omit({
 
 export type InsertBrief = z.infer<typeof insertBriefSchema>;
 export type Brief = typeof briefs.$inferSelect;
+
+export type BlogSection = { heading: string; content: string };
+export type BlogInternalLink = { anchor: string; slug: string };
+
+export const seoPages = pgTable("seo_pages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  slug: text("slug").notNull().unique(),
+  date: timestamp("date").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  lastReviewedAt: timestamp("last_reviewed_at").notNull().defaultNow(),
+  title: text("title").notNull(),
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  intro: text("intro").notNull().default(""),
+  sections: jsonb("sections").$type<BlogSection[]>().notNull().default([]),
+  internalLinks: jsonb("internal_links").$type<BlogInternalLink[]>().notNull().default([]),
+  heroImageUrl: text("hero_image_url"),
+  heroImageAlt: text("hero_image_alt"),
+  heroImagePrompt: text("hero_image_prompt"),
+  category: text("category"),
+  readTime: text("read_time"),
+  tags: text("tags").array().notNull().default([]),
+  status: text("status").notNull().default("generating"), // 'generating' | 'published' | 'failed' | 'archived'
+});
+
+export const insertSeoPageSchema = createInsertSchema(seoPages).omit({
+  id: true,
+});
+
+export type InsertSeoPage = z.infer<typeof insertSeoPageSchema>;
+export type SeoPage = typeof seoPages.$inferSelect;
+
+export const generationLogs = pgTable("generation_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  topic: text("topic").notNull(),
+  slug: text("slug"),
+  status: text("status").notNull(), // 'success' | 'failed'
+  errorMessage: text("error_message"),
+  inputTokens: integer("input_tokens"),
+  outputTokens: integer("output_tokens"),
+  costUsd: numeric("cost_usd", { precision: 10, scale: 6 }),
+  imageCostUsd: numeric("image_cost_usd", { precision: 10, scale: 6 }),
+  model: text("model"),
+});
+
+export const insertGenerationLogSchema = createInsertSchema(generationLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertGenerationLog = z.infer<typeof insertGenerationLogSchema>;
+export type GenerationLog = typeof generationLogs.$inferSelect;

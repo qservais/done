@@ -30,6 +30,7 @@ export const LINKS = {
   mentions: "/mentions",
   privacy: "/privacy",
   cookies: "/cookies",
+  guides: "/guides",
 };
 
 export const SEO_DEFAULTS = {

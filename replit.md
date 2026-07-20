@@ -32,7 +32,7 @@ The site is built as a mobile-first, single-page application with smooth animati
 
 ### Data Storage
 - **Database**: PostgreSQL via Drizzle ORM
-- **Schema Location**: `shared/schema.ts` defines the leads table
+- **Schema Location**: `shared/schema.ts` defines the leads, partial_leads, briefs, seo_pages and generation_logs tables
 - **Migrations**: Managed via `drizzle-kit push`
 
 ### Key Design Patterns
@@ -88,13 +88,21 @@ Each page uses the `<SEO>` component with:
 - `wouter`: Lightweight React router
 - Radix UI components: Accessible UI primitives
 - `resend`: Email API client
+- `@anthropic-ai/sdk`: Claude API client (devis wizard description + blog article generation)
+- `@fal-ai/client`: fal.ai client for blog hero image generation (Flux Schnell)
+- `cloudinary`: Hosting/transforming generated blog hero images
+- `express-rate-limit`: Rate limiting on the blog generation endpoint
 
 ### Environment Variables Required
 - `DATABASE_URL`: PostgreSQL connection string
 - `RESEND_API_KEY`: Resend email service API key
 - `STUDIO_EMAIL`: Destination email for lead notifications (optional, defaults to hello@madebydone.be)
 - `HUBSPOT_ACCESS_TOKEN`: HubSpot Private App access token for CRM contact sync (requires `crm.objects.contacts.write` + `crm.objects.contacts.read` scopes)
-- `ANTHROPIC_API_KEY`: Anthropic API key for Claude AI description generation in /devis wizard (Step 3)
+- `ANTHROPIC_API_KEY`: Anthropic API key — used for Claude AI description generation in /devis wizard (Step 3) **and** for the `/guides` blog article generator. Already required by the existing wizard feature, so this is the same key/secret reused for both.
+- `CRON_SECRET`: Bearer token protecting `POST /api/generate-content` (the blog article generator's trigger endpoint) — required for that endpoint to work; set any long random string and configure the same value on your external cron service
+- `FAL_KEY`: fal.ai API key for blog hero image generation (optional — image generation degrades gracefully to a CSS fallback if unset or if generation fails; get one at fal.ai/dashboard/keys)
+- `CLOUDINARY_URL`: Cloudinary URL (`cloudinary://<key>:<secret>@<cloud>`) for hosting generated blog hero images (optional, same graceful degradation as `FAL_KEY`)
+- `SITE_URL`: Canonical site URL used in the blog sitemap/prerender (optional, defaults to `https://madebydone.be`)
 
 ## Routes
 
@@ -107,6 +115,16 @@ Each page uses the `<SEO>` component with:
 | `/cookies` | Politique cookies | noindex |
 | `/admin` | Dashboard admin | Protected, noindex |
 | `/devis` | Wizard brief 13 étapes | noindex |
+| `/guides` | Liste des articles de blog SEO | Indexed |
+| `/guides/:slug` | Article de blog SEO | Indexed |
+
+## Recent Changes (July 2026)
+
+- **Générateur de blog SEO (`/guides`)**: nouveau système de génération automatique d'articles — table `seo_pages` (contenu, statut, coûts) + `generation_logs` (tracking tokens/coûts); route `POST /api/generate-content` (Bearer `CRON_SECRET`) génère un article via Claude (`claude-sonnet-5`) en sortie structurée (`output_config.format` — le prefill assistant classique renvoie 400 sur les modèles actuels, donc pas utilisé ici) et une image hero via fal.ai (Flux Schnell) + Cloudinary, non bloquante
+- **Pages `/guides` et `/guides/:slug`**: liste + détail, avec composants `SEO`/`StructuredData` existants (nouveau type `article` pour le JSON-LD), maillage interne entre articles, image hero responsive avec fallback CSS si absente
+- **Pré-rendu bots**: middleware Express sert du HTML complet (meta, OG, JSON-LD) aux crawlers sur `/guides/:slug`, avant le bundle React
+- **Sitemap dynamique**: `GET /sitemap.xml` régénéré à la volée (pages statiques + articles publiés), remplace l'ancien fichier statique `public/sitemap.xml` qui n'était en fait jamais servi (hors du `publicDir` Vite) — au passage, `robots.txt` déplacé dans `client/public/` pour être réellement servi
+- **Monitoring**: `GET /api/seo-pages/_stats` (Bearer `ADMIN_PASSWORD`) pour suivre le coût cumulé de génération
 
 ## Recent Changes (April 2026)
 

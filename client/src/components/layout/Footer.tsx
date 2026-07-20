@@ -50,6 +50,11 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link href={LINKS.guides} className="hover:text-white transition-colors underline-offset-4 hover:underline" data-testid="link-footer-guides">
+                Guides
+              </Link>
+            </li>
+            <li>
               <a href="#faq" className="hover:text-white transition-colors underline-offset-4 hover:underline" data-testid="link-footer-faq">
                 FAQ
               </a>
